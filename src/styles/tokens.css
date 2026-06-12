@@ -1,0 +1,306 @@
+/* ==========================================================================
+   Bankcow Design Tokens
+   Source: Bankcow Foundation (Primitive Collection)
+   Mode: Light only (다크모드 미지원)
+   ========================================================================== */
+
+:root {
+
+  /* ==========================================================================
+     Typography
+     Font: Pretendard
+     ========================================================================== */
+
+  /* Display 40 */
+  --font-display40-bold-size: 40px;
+  --font-display40-bold-line-height: 48px;
+  --font-display40-bold-weight: 700;
+  --font-display40-bold-letter-spacing: -0.01em;
+
+  --font-display40-semibold-size: 40px;
+  --font-display40-semibold-line-height: 48px;
+  --font-display40-semibold-weight: 600;
+
+  --font-display40-regular-size: 40px;
+  --font-display40-regular-line-height: 48px;
+  --font-display40-regular-weight: 400;
+
+  /* Headline 32 */
+  --font-headline32-bold-size: 32px;
+  --font-headline32-bold-line-height: 40px;
+  --font-headline32-bold-weight: 700;
+
+  --font-headline32-semibold-size: 32px;
+  --font-headline32-semibold-line-height: 40px;
+  --font-headline32-semibold-weight: 600;
+
+  --font-headline32-medium-size: 32px;
+  --font-headline32-medium-line-height: 40px;
+  --font-headline32-medium-weight: 500;
+
+  /* Headline 28 */
+  --font-headline28-bold-size: 28px;
+  --font-headline28-bold-line-height: 36px;
+  --font-headline28-bold-weight: 700;
+
+  --font-headline28-semibold-size: 28px;
+  --font-headline28-semibold-line-height: 36px;
+  --font-headline28-semibold-weight: 600;
+
+  --font-headline28-medium-size: 28px;
+  --font-headline28-medium-line-height: 36px;
+  --font-headline28-medium-weight: 500;
+
+  /* Headline 24 */
+  --font-headline24-bold-size: 24px;
+  --font-headline24-bold-line-height: 32px;
+  --font-headline24-bold-weight: 700;
+
+  --font-headline24-semibold-size: 24px;
+  --font-headline24-semibold-line-height: 32px;
+  --font-headline24-semibold-weight: 600;
+
+  --font-headline24-medium-size: 24px;
+  --font-headline24-medium-line-height: 32px;
+  --font-headline24-medium-weight: 500;
+
+  --font-headline24-regular-size: 24px;
+  --font-headline24-regular-line-height: 32px;
+  --font-headline24-regular-weight: 400;
+
+  /* Title 20 */
+  --font-title20-bold-size: 20px;
+  --font-title20-bold-line-height: 28px;
+  --font-title20-bold-weight: 700;
+
+  --font-title20-semibold-size: 20px;
+  --font-title20-semibold-line-height: 28px;
+  --font-title20-semibold-weight: 600;
+
+  --font-title20-medium-size: 20px;
+  --font-title20-medium-line-height: 28px;
+  --font-title20-medium-weight: 500;
+
+  --font-title20-regular-size: 20px;
+  --font-title20-regular-line-height: 28px;
+  --font-title20-regular-weight: 400;
+
+  /* Body 17 */
+  --font-body17-bold-size: 17px;
+  --font-body17-bold-line-height: 25px;
+  --font-body17-bold-weight: 700;
+
+  --font-body17-semibold-size: 17px;
+  --font-body17-semibold-line-height: 25px;
+  --font-body17-semibold-weight: 600;
+
+  --font-body17-medium-size: 17px;
+  --font-body17-medium-line-height: 25px;
+  --font-body17-medium-weight: 500;
+
+  --font-body17-regular-size: 17px;
+  --font-body17-regular-line-height: 25px;
+  --font-body17-regular-weight: 400;
+
+  /* Body 15 */
+  --font-body15-bold-size: 15px;
+  --font-body15-bold-line-height: 21px;
+  --font-body15-bold-weight: 700;
+
+  --font-body15-semibold-size: 15px;
+  --font-body15-semibold-line-height: 21px;
+  --font-body15-semibold-weight: 600;
+
+  --font-body15-medium-size: 15px;
+  --font-body15-medium-line-height: 21px;
+  --font-body15-medium-weight: 500;
+
+  --font-body15-regular-size: 15px;
+  --font-body15-regular-line-height: 21px;
+  --font-body15-regular-weight: 400;
+
+  /* Label 13 */
+  --font-label13-semibold-size: 13px;
+  --font-label13-semibold-line-height: 19px;
+  --font-label13-semibold-weight: 600;
+
+  --font-label13-medium-size: 13px;
+  --font-label13-medium-line-height: 19px;
+  --font-label13-medium-weight: 500;
+
+  --font-label13-regular-size: 13px;
+  --font-label13-regular-line-height: 19px;
+  --font-label13-regular-weight: 400;
+
+  /* Label 11 */
+  --font-label11-semibold-size: 11px;
+  --font-label11-semibold-line-height: 17px;
+  --font-label11-semibold-weight: 600;
+
+  --font-label11-medium-size: 11px;
+  --font-label11-medium-line-height: 17px;
+  --font-label11-medium-weight: 500;
+
+  /* ==========================================================================
+     Colors — Brand
+     ========================================================================== */
+
+  --color-bankcow-blue: #0A64F0;
+  --color-bankcow-black: #212121;
+
+  /* ==========================================================================
+     Colors — Primary (Blue)
+     ========================================================================== */
+
+  --color-primary-900: #071733;
+  --color-primary-800: #0C357A;
+  --color-primary-700: #1652B8;
+  --color-primary-600: #1767E8;
+  --color-primary-500: #4487FF;
+  --color-primary-400: #65A2FC;
+  --color-primary-300: #88B7FC;
+  --color-primary-200: #B0CFFD;
+  --color-primary-100: #D8E7FE;
+  --color-primary-050: #E8F0FF;
+
+  /* ==========================================================================
+     Colors — Secondary (Orange)
+     ========================================================================== */
+
+  --color-secondary-900: #2E1306;
+  --color-secondary-800: #471D07;
+  --color-secondary-700: #8A481C;
+  --color-secondary-600: #CC7439;
+  --color-secondary-500: #F09656;
+  --color-secondary-400: #FAB57D;
+  --color-secondary-300: #FFD6B2;
+  --color-secondary-200: #FFE7D0;
+  --color-secondary-100: #FFEFE0;
+  --color-secondary-050: #FFF5ED;
+
+  /* ==========================================================================
+     Colors — Neutral (Gray)
+     ========================================================================== */
+
+  --color-neutral-000: #FFFFFF;
+  --color-neutral-050: #F5F6FA;
+  --color-neutral-100: #EBEDF2;
+  --color-neutral-200: #E1E4EB;
+  --color-neutral-300: #D1D7E0;
+  --color-neutral-400: #C1C8D6;
+  --color-neutral-500: #A3ADC2;
+  --color-neutral-600: #8A92A1;
+  --color-neutral-700: #606875;
+  --color-neutral-800: #373B47;
+  --color-neutral-900: #252932;
+
+  /* ==========================================================================
+     Colors — Red (Error / Warning)
+     ========================================================================== */
+
+  --color-red-900: #761336;
+  --color-red-800: #8F213D;
+  --color-red-700: #B1344A;
+  --color-red-600: #D44C57;
+  --color-red-500: #F76868;
+  --color-red-400: #FA918D;
+  --color-red-300: #FCAFA9;
+  --color-red-200: #FEC9C3;
+  --color-red-100: #FEE5E1;
+  --color-red-050: #FEF1EF;
+
+  /* ==========================================================================
+     Colors — Green (Success / Positive)
+     ========================================================================== */
+
+  --color-green-900: #027949;
+  --color-green-800: #02834F;
+  --color-green-700: #029258;
+  --color-green-600: #02A262;
+  --color-green-500: #03B06B;
+  --color-green-400: #15C67F;
+  --color-green-300: #3FD599;
+  --color-green-200: #77E4B8;
+  --color-green-100: #AEEFD5;
+  --color-green-050: #F0FAF6;
+
+  /* ==========================================================================
+     Colors — Dark
+     ========================================================================== */
+
+  --color-dark-900: #212126;
+  --color-dark-800: #333743;
+
+  /* ==========================================================================
+     Colors — Membership Tier
+     ========================================================================== */
+
+  --color-membership-lv0: #C1C8D6;
+  --color-membership-lv1: #7BC876;
+  --color-membership-lv2: #6593E6;
+  --color-membership-lv3: #D9B541;
+  --color-membership-lv4: #D56969;
+  --color-membership-lv5: #A17AD9;
+
+  /* ==========================================================================
+     Colors — Region (지역)
+     ========================================================================== */
+
+  --color-region-gyeonggi: #6A8ACD;
+  --color-region-gangwon: #EC6E50;
+  --color-region-chungbuk: #87AE56;
+  --color-region-chungnam: #E6BF3F;
+  --color-region-jeonbuk: #A42D2D;
+  --color-region-jeonnam: #365847;
+  --color-region-gyeongbuk: #A585D0;
+  --color-region-gyeongnam: #54ADE8;
+  --color-region-jeju: #F28A1B;
+
+  /* ==========================================================================
+     Colors — Chart
+     ========================================================================== */
+
+  --color-chart-blue: #6292E7;
+  --color-chart-green: #3CC798;
+  --color-chart-purple: #9C78F0;
+  --color-chart-magenta: #ED73A9;
+  --color-chart-cyan: #17B2B2;
+  --color-chart-indigo: #586CED;
+  --color-chart-yellow: #F6C552;
+  --color-chart-orange: #F09656;
+  --color-chart-sky-blue: #3BB2ED;
+  --color-chart-gray: #8A92A1;
+  --color-chart-red: #F96665;
+  --color-chart-red-orange: #F9765B;
+  --color-chart-blue-gray: #6E8CC1;
+  --color-chart-cobalt-red: #EF6E6E;
+  --color-chart-light-green: #70C67A;
+  --color-chart-brown: #CE9C82;
+
+  /* ==========================================================================
+     Colors — Farm
+     ========================================================================== */
+
+  --color-farm-bankcow: #0A64F0;
+  --color-farm-aran: #BF345F;
+  --color-farm-ahnheong: #5539BD;
+  --color-farm-beckkwang: #129AA1;
+  --color-farm-chunsa: #2B64D6;
+  --color-farm-chungman: #C19928;
+  --color-farm-christ: #CF5329;
+  --color-farm-dodam: #22226B;
+  --color-farm-deaga: #881A2F;
+  --color-farm-daeheonngjin: #2C3A42;
+  --color-farm-gyerim: #226CC2;
+  --color-farm-haesol: #0B5F65;
+  --color-farm-hyunheong: #26804B;
+  --color-farm-hyungwoo: #7C8900;
+  --color-farm-ohsung: #886A53;
+  --color-farm-ohmutsan: #1F9977;
+  --color-farm-saehyun: #A87548;
+  --color-farm-sevit: #CC4941;
+  --color-farm-eden: #B391C9;
+  --color-farm-heemang: #CB7714;
+  --color-farm-sangwon: #4B1319;
+
+}

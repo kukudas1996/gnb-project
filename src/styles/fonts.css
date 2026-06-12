@@ -1,0 +1,17 @@
+/* ==========================================================================
+   Bankcow Fonts
+   Font: Pretendard
+   Source: CDN (cdn.jsdelivr.net)
+   ========================================================================== */
+
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
+
+/* 전체 앱에 Pretendard 기본 적용 */
+* {
+  font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont,
+    'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
