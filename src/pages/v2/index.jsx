@@ -814,7 +814,7 @@ function InvestScreen({ nav, onBack, phase }) {
   return (
     <div className="v1-screen" style={S.screen}>
       <div className="v1-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
-        <SubAppBar title="내 투자" onBack={onBack} />
+        <SubAppBar title="" onBack={onBack} />
         {/* 내 투자 */}
         <div style={{ padding: '0 16px' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 3, marginBottom: 12 }}>
