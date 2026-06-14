@@ -47,14 +47,13 @@ const T = {
 // ============================================================
 const S = {
   screen: {
-    width: '100vw',
-    maxWidth: '100vw',
+    width: '100%',
+    maxWidth: '100%',
     minHeight: '100dvh',
     margin: '0 auto',
     backgroundColor: 'var(--color-neutral-000)',
     position: 'relative',
     overflow: 'hidden',
-    overflowX: 'hidden',
     fontFamily: 'Pretendard, -apple-system, sans-serif',
   },
   scrollBody: {
@@ -503,15 +502,15 @@ function HomeProductSections({ nav }) {
         <div style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)', marginBottom: 9 }}>투자 상품</div>
         <ProductCard onClick={() => nav('product_detail')} />
       </div>
-      <div style={{ padding: '24px 16px 120px' }}>
-        <div style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)', marginBottom: 12 }}>마감 상품</div>
+      <div style={{ padding: '24px 0 120px' }}>
+        <div style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)', marginBottom: 12, padding: '0 16px' }}>마감 상품</div>
         <div className="v1-hide-scrollbar" style={{
           display: 'flex', gap: 16, overflowX: 'auto',
-          paddingBottom: 16, marginRight: -16,
+          paddingBottom: 16, paddingLeft: 16,
         }}>
           <ClosedProductCard />
           <ClosedProductCard />
-          <div style={{ minWidth: 16, flexShrink: 0 }} />
+          <div style={{ minWidth: 1, flexShrink: 0 }} />
         </div>
       </div>
     </>
