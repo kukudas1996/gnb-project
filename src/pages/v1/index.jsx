@@ -1,8 +1,8 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 import {
   Home, TrendingUp, ShoppingBag, User,
-  Bell, ChevronLeft, ChevronRight, Clock,
-  Copy, MoreVertical, Users
+  Bell, ChevronLeft, ChevronRight, ChevronDown, Clock,
+  Copy, MoreVertical, Users, Delete
 } from 'lucide-react'
 
 // ============================================================
@@ -61,14 +61,8 @@ const S = {
     overflowY: 'auto',
     paddingBottom: 'calc(81px + env(safe-area-inset-bottom, 0px))',
   },
-  statusBar: {
-    height: 44,
-    padding: '0 16px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    ...T.body15('semibold'),
-    paddingTop: 'env(safe-area-inset-top, 0px)',
+  safeTop: {
+    height: 'env(safe-area-inset-top, 0px)',
   },
   appBar: {
     position: 'sticky',
@@ -138,29 +132,12 @@ const S = {
 }
 
 // ============================================================
-// StatusBar
-// ============================================================
-function StatusBar({ light = false }) {
-  const color = light ? '#fff' : 'var(--color-neutral-800)'
-  return (
-    <div style={{ ...S.statusBar, color }}>
-      <span>9:41</span>
-      <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
-        <svg width="16" height="12" viewBox="0 0 16 12"><rect x="0" y="8" width="3" height="4" rx="0.5" fill={color}/><rect x="4" y="5" width="3" height="7" rx="0.5" fill={color}/><rect x="8" y="2" width="3" height="10" rx="0.5" fill={color}/><rect x="12" y="0" width="3" height="12" rx="0.5" fill={color}/></svg>
-        <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 3.5C9.8 3.5 11.4 4.2 12.6 5.4L14 4C12.4 2.4 10.3 1.5 8 1.5S3.6 2.4 2 4l1.4 1.4C4.6 4.2 6.2 3.5 8 3.5zm-3.2 3.2L8 10l3.2-3.3C10.2 5.7 9.2 5.2 8 5.2S5.8 5.7 4.8 6.7z" fill={color}/></svg>
-        <svg width="27" height="13" viewBox="0 0 27 13"><rect x="0" y="1" width="22" height="11" rx="2" stroke={color} strokeWidth="1" fill="none"/><rect x="1.5" y="2.5" width="19" height="8" rx="1" fill={color}/><path d="M23 5v3a2 2 0 000-3z" fill={color}/></svg>
-      </div>
-    </div>
-  )
-}
-
-// ============================================================
 // AppBar Variants
 // ============================================================
 function HomeAppBar({ title = '홈' }) {
   return (
     <div style={S.appBar}>
-      <StatusBar />
+      <div style={S.safeTop} />
       <div style={S.appBarRow}>
         <span style={S.appBarTitle}>{title}</span>
         <div style={{ width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
@@ -176,7 +153,7 @@ function SubAppBar({ title, onBack, light = false }) {
   const textColor = light ? '#fff' : 'var(--color-neutral-800)'
   return (
     <div style={{ ...S.appBar, backgroundColor: bg }}>
-      <StatusBar light={light} />
+      <div style={S.safeTop} />
       <div style={{ ...S.appBarRow, position: 'relative' }}>
         <div onClick={onBack} style={{ cursor: 'pointer', zIndex: 1, width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <ChevronLeft size={24} color={textColor} />
@@ -416,7 +393,7 @@ function PendingOrderCard({ onClick }) {
             <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)' }}>A 투자 상품</span>
             <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)' }}>60,000원</span>
           </div>
-          <div style={{ ...T.body15('medium'), color: 'var(--color-neutral-500)' }}>3주</div>
+          <div style={{ ...T.body15('medium'), color: 'var(--color-neutral-500)' }}>3C</div>
         </div>
       </div>
     </div>
@@ -442,7 +419,7 @@ function SettledProductItem({ onClick }) {
           <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)' }}>A 투자 상품</span>
           <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)' }}>20,000원</span>
         </div>
-        <div style={{ ...T.body15('medium'), color: 'var(--color-neutral-500)' }}>1주</div>
+        <div style={{ ...T.body15('medium'), color: 'var(--color-neutral-500)' }}>1C</div>
       </div>
     </div>
   )
@@ -482,7 +459,7 @@ function Banner() {
 // ============================================================
 // Home Screens
 // ============================================================
-function HomeMyInvestSection({ amount, nav, goTab, children }) {
+function HomeMyInvestSection({ amount, accountAmount = '100,000원', nav, goTab, children, showMoreButton, onMore }) {
   return (
     <div style={{ padding: '24px 16px 12px' }}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 3, marginBottom: 20 }}>
@@ -496,13 +473,13 @@ function HomeMyInvestSection({ amount, nav, goTab, children }) {
         </div>
       </div>
       <div style={{ display: 'flex', gap: 8, marginBottom: children ? 16 : 0 }}>
-        <div onClick={() => nav('account')} style={{
+        <div onClick={() => nav('asset')} style={{
           flex: 1, padding: 16,
           backgroundColor: 'var(--color-neutral-100)', borderRadius: 16,
           cursor: 'pointer',
         }}>
           <div style={{ ...T.body15('medium'), color: 'var(--color-neutral-600)', marginBottom: 2 }}>내 계좌</div>
-          <div style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>100,000원</div>
+          <div style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{accountAmount}</div>
         </div>
         <div onClick={() => nav('history')} style={{
           flex: 1, padding: 16,
@@ -514,6 +491,15 @@ function HomeMyInvestSection({ amount, nav, goTab, children }) {
         </div>
       </div>
       {children}
+      {showMoreButton && (
+        <div onClick={onMore} style={{
+          height: 48, borderRadius: 12,
+          backgroundColor: 'var(--color-neutral-100)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          ...T.body15('semibold'), color: 'var(--color-neutral-700)',
+          cursor: 'pointer', marginTop: 16,
+        }}>더보기</div>
+      )}
     </div>
   )
 }
@@ -573,8 +559,15 @@ function HomeApplyingScreen({ nav, goTab, onJumpToSettled }) {
           }}>체결 당일로 이동하기</div>
         </div>
         <Banner />
-        <HomeMyInvestSection amount="60,000원" nav={nav} goTab={goTab}>
-          <PendingOrderCard />
+        <HomeMyInvestSection
+          amount="0원"
+          accountAmount="40,000원"
+          nav={nav}
+          goTab={goTab}
+          showMoreButton
+          onMore={() => goTab('invest')}
+        >
+          <PendingOrderCard onClick={() => nav('history_detail_applying')} />
         </HomeMyInvestSection>
         <HomeProductSections nav={nav} />
       </div>
@@ -618,10 +611,145 @@ function ProductDetailScreen({ onBack, onApply, phase }) {
   )
 }
 
+// ============================================================
+// Quantity Input Screen (수량입력)
+// ============================================================
+function QuantityInputScreen({ onBack, onInvest }) {
+  const [quantity, setQuantity] = useState(0)
+  const pricePerC = 20000
+  const maxAmount = 100000
+  const maxC = Math.floor(maxAmount / pricePerC)
+
+  const totalPrice = quantity * pricePerC
+  const formattedPrice = totalPrice.toLocaleString() + '원'
+
+  const handleNumber = (num) => {
+    const next = quantity * 10 + num
+    if (next <= maxC) setQuantity(next)
+  }
+  const handleDelete = () => setQuantity(Math.floor(quantity / 10))
+  const handleQuick = (val) => {
+    if (val === 'max') {
+      setQuantity(maxC)
+    } else {
+      const next = Math.min(quantity + val, maxC)
+      setQuantity(next)
+    }
+  }
+
+  return (
+    <div className="v1-screen" style={{ ...S.screen, display: 'flex', flexDirection: 'column', height: '100dvh' }}>
+      <SubAppBar title="A 투자 상품" onBack={onBack} />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        {/* Account pill */}
+        <div style={{ padding: '8px 16px 0', display: 'flex', justifyContent: 'center' }}>
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: 6,
+            padding: '6px 14px', borderRadius: 20,
+            backgroundColor: 'var(--color-neutral-050)',
+            ...T.label13('medium'), color: 'var(--color-neutral-700)',
+          }}>
+            <div style={{ width: 18, height: 18, borderRadius: '50%', backgroundColor: 'var(--color-neutral-200)' }} />
+            NH농협은행
+          </div>
+        </div>
+
+        {/* Quantity display */}
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 8 }}>
+            <span style={{ ...T.display40('bold'), color: quantity > 0 ? 'var(--color-neutral-900)' : 'var(--color-neutral-300)' }}>
+              {quantity > 0 ? quantity : '0'}
+            </span>
+            <span style={{ ...T.headline24('bold'), color: quantity > 0 ? 'var(--color-neutral-900)' : 'var(--color-neutral-300)' }}>C</span>
+          </div>
+          <span style={{ ...T.body17('semibold'), color: quantity > 0 ? 'var(--color-primary-500)' : 'var(--color-neutral-400)' }}>
+            {quantity > 0 ? formattedPrice : '0원'}
+          </span>
+        </div>
+
+        {/* Info row */}
+        <div style={{ padding: '0 16px 12px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+            <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-600)' }}>구매가능금액</span>
+            <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)' }}>{maxAmount.toLocaleString()}원</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-600)' }}>이용료</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span style={{
+                padding: '2px 8px', borderRadius: 4,
+                backgroundColor: 'var(--color-primary-050)',
+                ...T.label11('semibold'), color: 'var(--color-primary-500)',
+              }}>수수료 뱅카우 지원</span>
+              <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)' }}>0원</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Quick buttons */}
+        <div style={{ display: 'flex', gap: 8, padding: '8px 16px 12px' }}>
+          {[
+            { label: '1C', val: 1 },
+            { label: '10C', val: 10 },
+            { label: '100C', val: 100 },
+            { label: '최대', val: 'max' },
+          ].map(({ label, val }) => (
+            <div key={label} onClick={() => handleQuick(val)} style={{
+              flex: 1, height: 40, borderRadius: 10,
+              backgroundColor: 'var(--color-neutral-050)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              ...T.body15('semibold'), color: 'var(--color-neutral-700)',
+              cursor: 'pointer',
+            }}>{label}</div>
+          ))}
+        </div>
+
+        {/* Number pad */}
+        <div style={{ padding: '0 16px' }}>
+          {[[1, 2, 3], [4, 5, 6], [7, 8, 9], ['', 0, 'del']].map((row, ri) => (
+            <div key={ri} style={{ display: 'flex' }}>
+              {row.map((key, ci) => (
+                <div
+                  key={ci}
+                  onClick={() => {
+                    if (key === 'del') handleDelete()
+                    else if (key !== '') handleNumber(key)
+                  }}
+                  style={{
+                    flex: 1, height: 56,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    cursor: key !== '' ? 'pointer' : 'default',
+                    ...T.title20('semibold'), color: 'var(--color-neutral-900)',
+                  }}
+                >
+                  {key === 'del' ? <Delete size={24} color="var(--color-neutral-700)" /> : key}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+
+        {/* CTA */}
+        <div style={{
+          padding: '8px 16px', paddingBottom: 'calc(16px + env(safe-area-inset-bottom, 0px))',
+        }}>
+          <div onClick={quantity > 0 ? onInvest : undefined} style={{
+            height: 56, borderRadius: 14,
+            backgroundColor: quantity > 0 ? 'var(--color-primary-500)' : 'var(--color-neutral-200)',
+            color: quantity > 0 ? '#fff' : 'var(--color-neutral-400)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            ...T.body17('semibold'), cursor: quantity > 0 ? 'pointer' : 'default',
+          }}>투자하기</div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function ApplyCompleteScreen({ onConfirm }) {
   return (
     <div className="v1-screen" style={{ ...S.screen, display: 'flex', flexDirection: 'column' }}>
-      <StatusBar />
+      <div style={S.safeTop} />
       <div style={{
         flex: 1, display: 'flex', flexDirection: 'column',
         alignItems: 'center', justifyContent: 'center',
@@ -653,7 +781,7 @@ function PushNotificationScreen({ onTap }) {
       ...S.screen, backgroundColor: 'var(--color-dark-900)',
       display: 'flex', flexDirection: 'column',
     }}>
-      <StatusBar light />
+      <div style={S.safeTop} />
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
         <div onClick={onTap} style={{
           width: '100%', padding: '14px 16px',
@@ -711,7 +839,7 @@ function InvestScreen({ nav, goTab, phase }) {
         <div style={{ padding: '12px 16px 0' }}>
           <div style={{ ...T.body17('semibold'), color: 'var(--color-neutral-900)', marginBottom: 12 }}>계좌</div>
           <div style={{ display: 'flex', gap: 8, marginBottom: 24 }}>
-            <div onClick={() => nav('account')} style={{
+            <div onClick={() => nav('asset')} style={{
               flex: 1, padding: 16,
               backgroundColor: 'var(--color-neutral-100)', borderRadius: 16,
               cursor: 'pointer',
@@ -737,8 +865,8 @@ function InvestScreen({ nav, goTab, phase }) {
               <div style={{ ...T.body17('medium'), color: 'var(--color-neutral-600)' }}>투자중인 상품이 없어요</div>
             </div>
           )}
-          {phase === 'applying' && <PendingOrderCard />}
-          {phase === 'settled' && <SettledProductItem />}
+          {phase === 'applying' && <PendingOrderCard onClick={() => nav('history_detail_applying')} />}
+          {phase === 'settled' && <SettledProductItem onClick={() => nav('history_detail_settled')} />}
         </div>
         <div style={{ ...S.divider, marginTop: 24 }} />
         <div>
@@ -913,7 +1041,7 @@ function HistoryDetailApplyingScreen({ onBack, nav }) {
     <div className="v1-screen" style={{ ...S.screen, position: 'relative' }}>
       <div className="v1-scroll" style={{ height: '100dvh', overflowY: 'auto', paddingBottom: 120 }}>
         <div style={S.appBar}>
-          <StatusBar />
+          <div style={S.safeTop} />
           <div style={{ ...S.appBarRow, position: 'relative' }}>
             <div onClick={onBack} style={{ cursor: 'pointer', zIndex: 1, width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <ChevronLeft size={24} />
@@ -921,23 +1049,24 @@ function HistoryDetailApplyingScreen({ onBack, nav }) {
             <div style={{ width: 44 }} />
           </div>
         </div>
-        <div style={{ padding: '12px 16px 0' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24 }}>
-            <div style={{
-              width: 48, height: 48, borderRadius: 12,
-              backgroundColor: 'var(--color-primary-100)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              overflow: 'hidden',
-            }}>
-              <img src="/product.png" alt="" style={{ width: 36, height: 36, objectFit: 'contain' }} />
-            </div>
-            <span style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)' }}>A 투자 상품 신청</span>
+        {/* Header with product avatar */}
+        <div style={{ padding: '12px 16px 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <div style={{
+            width: 64, height: 64, borderRadius: 16,
+            backgroundColor: 'var(--color-primary-100)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            overflow: 'hidden', marginBottom: 12,
+          }}>
+            <img src="/product.png" alt="" style={{ width: 48, height: 48, objectFit: 'contain' }} />
           </div>
-          {/* Progress */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 32 }}>
+          <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 4 }}>A 투자 상품</div>
+          <div style={{ ...T.body15('medium'), color: 'var(--color-neutral-500)', marginBottom: 24 }}>체결까지 11일 남음</div>
+
+          {/* Progress steps */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 32, width: '100%' }}>
             <div style={{ textAlign: 'center' }}>
               <IconCheck filled />
-              <div style={{ ...T.body17('semibold'), color: 'var(--color-neutral-900)', marginTop: 8 }}>신청</div>
+              <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)', marginTop: 8 }}>신청</div>
               <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>취소 가능</div>
             </div>
             <div style={{ width: 60, height: 2, backgroundColor: 'var(--color-neutral-200)', margin: '0 8px', marginBottom: 36 }} />
@@ -949,12 +1078,14 @@ function HistoryDetailApplyingScreen({ onBack, nav }) {
                 ...T.body15('semibold'), color: 'var(--color-neutral-600)',
                 margin: '0 auto',
               }}>2</div>
-              <div style={{ ...T.body17('semibold'), color: 'var(--color-neutral-600)', marginTop: 8 }}>체결</div>
+              <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-600)', marginTop: 8 }}>체결</div>
               <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>취소 불가능</div>
             </div>
           </div>
+
+          {/* Product detail button */}
           <div onClick={() => nav('product_detail')} style={{
-            height: 48, borderRadius: 12,
+            width: '100%', height: 48, borderRadius: 12,
             border: '1px solid var(--color-neutral-200)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             ...T.body15('semibold'), color: 'var(--color-neutral-700)',
@@ -963,27 +1094,13 @@ function HistoryDetailApplyingScreen({ onBack, nav }) {
         </div>
         <div style={S.divider} />
         <div style={{ padding: '20px 16px' }}>
-          <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 4 }}>신청 내역</div>
           <div style={{ ...T.label13('medium'), color: 'var(--color-primary-500)', marginBottom: 20 }}>모집율에 따라, 모두 체결되지 않을 수 있어요</div>
           {[
+            ['투자 신청일', '2026.06.01'],
             ['투자 신청 금액', '60,000원'],
-            ['신청 수량', '3주'],
-            ['투자 신청 시간', '2026.06.01 22:21'],
-          ].map(([l, v]) => (
-            <div key={l} style={{
-              display: 'flex', justifyContent: 'space-between', padding: '20px 0',
-              borderBottom: '1px solid var(--color-neutral-050)',
-            }}>
-              <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-600)' }}>{l}</span>
-              <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)' }}>{v}</span>
-            </div>
-          ))}
-        </div>
-        <div style={S.divider} />
-        <div style={{ padding: '0 16px' }}>
-          {[
-            ['체결 예정일', '2026.06.02'],
-            ['취소 시 수수료', '1,000원'],
+            ['신청 수량', '3C'],
+            ['체결 예정일', '2026.06.12'],
+            ['플랫폼 이용료', '무료'],
           ].map(([l, v]) => (
             <div key={l} style={{
               display: 'flex', justifyContent: 'space-between', padding: '20px 0',
@@ -1001,6 +1118,7 @@ function HistoryDetailApplyingScreen({ onBack, nav }) {
 }
 
 function HistoryDetailSettledScreen({ onBack, nav }) {
+  const [showApplyDetail, setShowApplyDetail] = useState(false)
   const IconCheck = ({ filled = false }) => (
     <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
       <circle cx="17" cy="17" r="16" fill={filled ? 'var(--color-primary-500)' : 'var(--color-neutral-200)'} />
@@ -1012,7 +1130,7 @@ function HistoryDetailSettledScreen({ onBack, nav }) {
     <div className="v1-screen" style={S.screen}>
       <div className="v1-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
         <div style={S.appBar}>
-          <StatusBar />
+          <div style={S.safeTop} />
           <div style={{ ...S.appBarRow, position: 'relative' }}>
             <div onClick={onBack} style={{ cursor: 'pointer', zIndex: 1, width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <ChevronLeft size={24} />
@@ -1020,47 +1138,53 @@ function HistoryDetailSettledScreen({ onBack, nav }) {
             <div style={{ width: 44 }} />
           </div>
         </div>
-        <div style={{ padding: '12px 16px 0' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24 }}>
-            <div style={{
-              width: 48, height: 48, borderRadius: 12,
-              backgroundColor: 'var(--color-primary-100)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              overflow: 'hidden',
-            }}>
-              <img src="/product.png" alt="" style={{ width: 36, height: 36, objectFit: 'contain' }} />
-            </div>
-            <span style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)' }}>A 투자 상품 체결</span>
+        {/* Header with product avatar */}
+        <div style={{ padding: '12px 16px 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <div style={{
+            width: 64, height: 64, borderRadius: 16,
+            backgroundColor: 'var(--color-primary-100)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            overflow: 'hidden', marginBottom: 12,
+          }}>
+            <img src="/product.png" alt="" style={{ width: 48, height: 48, objectFit: 'contain' }} />
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 32 }}>
+          <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 24 }}>A 투자 상품</div>
+
+          {/* Progress steps - both filled */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 32, width: '100%' }}>
             <div style={{ textAlign: 'center' }}>
               <IconCheck filled />
-              <div style={{ ...T.body17('semibold'), color: 'var(--color-neutral-900)', marginTop: 8 }}>신청</div>
+              <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)', marginTop: 8 }}>신청</div>
               <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>취소 가능</div>
             </div>
-            <div style={{ width: 60, height: 2, backgroundColor: 'var(--color-neutral-200)', margin: '0 8px', marginBottom: 36 }} />
+            <div style={{ width: 60, height: 2, backgroundColor: 'var(--color-primary-500)', margin: '0 8px', marginBottom: 36 }} />
             <div style={{ textAlign: 'center' }}>
               <IconCheck filled />
-              <div style={{ ...T.body17('semibold'), color: 'var(--color-neutral-900)', marginTop: 8 }}>체결</div>
+              <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)', marginTop: 8 }}>체결</div>
               <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>취소 불가능</div>
             </div>
           </div>
+
+          {/* Product info button */}
           <div onClick={() => nav('product_detail')} style={{
-            height: 48, borderRadius: 12,
+            width: '100%', height: 48, borderRadius: 12,
             border: '1px solid var(--color-neutral-200)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             ...T.body15('semibold'), color: 'var(--color-neutral-700)',
             cursor: 'pointer', marginBottom: 16,
-          }}>상품 상세 보기</div>
+          }}>상품 정보 보기</div>
         </div>
         <div style={S.divider} />
+
+        {/* 체결 내역 */}
         <div style={{ padding: '20px 16px' }}>
-          <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 4 }}>체결 완료</div>
-          <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)', marginBottom: 20 }}>2026.06.12 09:30</div>
+          <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 20 }}>체결 내역</div>
           {[
+            ['투자 체결일', '2026.06.12'],
+            ['투자 신청 금액', '60,000원'],
             ['투자 체결 금액', '20,000원'],
-            ['체결 수량', '1주'],
-            ['투자 신청 시간', '2026.06.01 22:21'],
+            ['체결 수량', '1C'],
+            ['환불 금액', '40,000원'],
           ].map(([l, v]) => (
             <div key={l} style={{
               display: 'flex', justifyContent: 'space-between', padding: '20px 0',
@@ -1071,6 +1195,44 @@ function HistoryDetailSettledScreen({ onBack, nav }) {
             </div>
           ))}
         </div>
+        <div style={S.divider} />
+
+        {/* 신청 내역 (collapsible) */}
+        <div style={{ padding: '20px 16px' }}>
+          <div
+            onClick={() => setShowApplyDetail(!showApplyDetail)}
+            style={{
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              cursor: 'pointer',
+            }}
+          >
+            <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>신청 내역</span>
+            <ChevronDown
+              size={24}
+              color="var(--color-neutral-400)"
+              style={{ transform: showApplyDetail ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}
+            />
+          </div>
+          {showApplyDetail && (
+            <div style={{ marginTop: 8 }}>
+              {[
+                ['투자 신청일', '2026.06.01'],
+                ['투자 신청 금액', '60,000원'],
+                ['신청 수량', '3C'],
+                ['플랫폼 이용료', '무료'],
+              ].map(([l, v]) => (
+                <div key={l} style={{
+                  display: 'flex', justifyContent: 'space-between', padding: '20px 0',
+                  borderBottom: '1px solid var(--color-neutral-050)',
+                }}>
+                  <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-600)' }}>{l}</span>
+                  <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)' }}>{v}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        <div style={{ height: 60 }} />
       </div>
     </div>
   )
@@ -1100,7 +1262,7 @@ function AccountDetailScreen({ onBack, phase }) {
     <div className="v1-screen" style={S.screen}>
       <div className="v1-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
         <div style={{ backgroundColor: 'var(--color-primary-500)' }}>
-          <StatusBar light />
+          <div style={S.safeTop} />
           <div style={{ ...S.appBarRow, position: 'relative' }}>
             <div onClick={onBack} style={{ cursor: 'pointer', zIndex: 1, width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <ChevronLeft size={24} color="#fff" />
@@ -1198,6 +1360,11 @@ export default function V1() {
     }
   }, [])
 
+  const handleGoToQuantity = () => {
+    setHistory(prev => [...prev, screen])
+    setScreen('quantity_input')
+  }
+
   const handleApply = () => {
     setHistory(prev => [...prev, screen])
     setScreen('apply_complete')
@@ -1233,7 +1400,10 @@ export default function V1() {
       return <AssetScreen onBack={goBack} phase={phase} />
 
     case 'product_detail':
-      return <ProductDetailScreen onBack={goBack} onApply={handleApply} phase={phase} />
+      return <ProductDetailScreen onBack={goBack} onApply={handleGoToQuantity} phase={phase} />
+
+    case 'quantity_input':
+      return <QuantityInputScreen onBack={goBack} onInvest={handleApply} />
 
     case 'apply_complete':
       return <ApplyCompleteScreen onConfirm={handleApplyConfirm} />
