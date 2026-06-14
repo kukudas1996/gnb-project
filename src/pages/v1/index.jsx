@@ -1142,39 +1142,43 @@ function HistoryDetailSettledScreen({ onBack, nav }) {
             <div style={{ width: 44 }} />
           </div>
         </div>
-        {/* Header with product avatar */}
-        <div style={{ padding: '12px 16px 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <div style={{
-            width: 64, height: 64, borderRadius: 16,
-            backgroundColor: 'var(--color-primary-100)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            overflow: 'hidden', marginBottom: 12,
-          }}>
-            <img src="/product.png" alt="" style={{ width: 48, height: 48, objectFit: 'contain' }} />
+        {/* Header - left aligned */}
+        <div style={{ padding: '12px 16px 0' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 13, marginBottom: 24 }}>
+            <div style={{
+              width: 48, height: 48, borderRadius: '50%',
+              backgroundColor: '#dae7ff',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              overflow: 'hidden', flexShrink: 0,
+            }}>
+              <img src="/product.png" alt="" style={{ width: 52, height: 39, objectFit: 'contain' }} />
+            </div>
+            <div>
+              <div style={{ ...T.headline24('semibold'), color: 'var(--color-neutral-900)' }}>A 투자 상품</div>
+            </div>
           </div>
-          <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 24 }}>A 투자 상품</div>
 
           {/* Progress steps - both filled */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 32, width: '100%' }}>
             <div style={{ textAlign: 'center' }}>
               <IconCheck filled />
-              <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)', marginTop: 8 }}>신청</div>
-              <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>취소 가능</div>
+              <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-800)', marginTop: 11 }}>신청</div>
+              <div style={{ ...T.body15('medium'), color: 'var(--color-neutral-600)' }}>취소 가능</div>
             </div>
-            <div style={{ width: 60, height: 2, backgroundColor: 'var(--color-primary-500)', margin: '0 8px', marginBottom: 36 }} />
+            <div style={{ width: 114, height: 2, backgroundColor: 'var(--color-primary-500)', margin: '0 8px', marginBottom: 50 }} />
             <div style={{ textAlign: 'center' }}>
               <IconCheck filled />
-              <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)', marginTop: 8 }}>체결</div>
-              <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>취소 불가능</div>
+              <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-800)', marginTop: 11 }}>체결</div>
+              <div style={{ ...T.body15('medium'), color: 'var(--color-neutral-600)' }}>취소 불가능</div>
             </div>
           </div>
 
           {/* Product info button */}
           <div onClick={() => nav('product_detail')} style={{
             width: '100%', height: 48, borderRadius: 12,
-            border: '1px solid var(--color-neutral-200)',
+            backgroundColor: 'var(--color-neutral-100)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            ...T.body15('semibold'), color: 'var(--color-neutral-700)',
+            ...T.body17('semibold'), color: 'var(--color-neutral-700)',
             cursor: 'pointer', marginBottom: 16,
           }}>상품 정보 보기</div>
         </div>
@@ -1182,20 +1186,19 @@ function HistoryDetailSettledScreen({ onBack, nav }) {
 
         {/* 체결 내역 */}
         <div style={{ padding: '20px 16px' }}>
-          <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 20 }}>체결 내역</div>
+          <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)', marginBottom: 20 }}>체결 내역</div>
           {[
-            ['투자 체결일', '2026.06.12'],
+            ['투자 체결일', '2026.06.12 09:00'],
             ['투자 신청 금액', '60,000원'],
             ['투자 체결 금액', '20,000원'],
-            ['체결 수량', '1C'],
+            ['체결 수량', '1주'],
             ['환불 금액', '40,000원'],
           ].map(([l, v]) => (
             <div key={l} style={{
               display: 'flex', justifyContent: 'space-between', padding: '20px 0',
-              borderBottom: '1px solid var(--color-neutral-050)',
             }}>
-              <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-600)' }}>{l}</span>
-              <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)' }}>{v}</span>
+              <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-900)' }}>{l}</span>
+              <span style={{ ...T.body17('regular'), color: 'var(--color-neutral-700)' }}>{v}</span>
             </div>
           ))}
         </div>
@@ -1210,7 +1213,7 @@ function HistoryDetailSettledScreen({ onBack, nav }) {
               cursor: 'pointer',
             }}
           >
-            <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>신청 내역</span>
+            <span style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)' }}>신청 내역</span>
             <ChevronDown
               size={24}
               color="var(--color-neutral-400)"
@@ -1220,17 +1223,17 @@ function HistoryDetailSettledScreen({ onBack, nav }) {
           {showApplyDetail && (
             <div style={{ marginTop: 8 }}>
               {[
-                ['투자 신청일', '2026.06.01'],
+                ['투자 신청일', '2026.06.01 22:21'],
                 ['투자 신청 금액', '60,000원'],
-                ['신청 수량', '3C'],
+                ['신청 수량', '3주'],
+                ['체결 예정일', '2026.06.12'],
                 ['플랫폼 이용료', '무료'],
               ].map(([l, v]) => (
                 <div key={l} style={{
                   display: 'flex', justifyContent: 'space-between', padding: '20px 0',
-                  borderBottom: '1px solid var(--color-neutral-050)',
                 }}>
-                  <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-600)' }}>{l}</span>
-                  <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)' }}>{v}</span>
+                  <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-900)' }}>{l}</span>
+                  <span style={{ ...T.body17('regular'), color: 'var(--color-neutral-700)' }}>{v}</span>
                 </div>
               ))}
             </div>
