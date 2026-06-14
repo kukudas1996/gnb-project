@@ -1094,9 +1094,9 @@ function HistoryDetailApplyingScreen({ onBack, nav }) {
         </div>
         <div style={S.divider} />
         <div style={{ padding: '20px 16px' }}>
-          <div style={{ ...T.label13('medium'), color: 'var(--color-primary-500)', marginBottom: 20 }}>모집율에 따라, 모두 체결되지 않을 수 있어요</div>
+          <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 20 }}>신청 내역</div>
           {[
-            ['투자 신청일', '2026.06.01'],
+            ['투자 신청일', '2026.06.01 22:21'],
             ['투자 신청 금액', '60,000원'],
             ['신청 수량', '3C'],
             ['체결 예정일', '2026.06.12'],
