@@ -536,16 +536,15 @@ function HomeApplyingScreen({ nav, goTab, onJumpToSettled }) {
       <div className="v1-scroll" style={S.scrollBody}>
         <HomeAppBar />
         <div style={{
-          display: 'flex', justifyContent: 'center',
-          position: 'sticky', top: 104, zIndex: 15,
-          marginTop: -10, marginBottom: -46, pointerEvents: 'none',
+          position: 'fixed', bottom: 'calc(55px + env(safe-area-inset-bottom, 0px))', left: 0, right: 0,
+          display: 'flex', justifyContent: 'center', zIndex: 15, pointerEvents: 'none',
         }}>
           <div onClick={onJumpToSettled} style={{
-            padding: '12px 24px',
+            padding: '6px 14px',
             backgroundColor: 'var(--color-neutral-800)', color: '#fff',
-            borderRadius: 24, ...T.body15('semibold'),
+            borderRadius: 16, ...T.label13('semibold'),
             cursor: 'pointer', pointerEvents: 'auto',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
           }}>체결 당일로 이동하기</div>
         </div>
         <HomeMyInvestSection
