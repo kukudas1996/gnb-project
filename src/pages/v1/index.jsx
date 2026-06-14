@@ -14,7 +14,7 @@ if (typeof document !== 'undefined' && !document.getElementById(globalStyleId)) 
   style.id = globalStyleId
   style.textContent = `
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    body { overscroll-behavior: none; }
+    html, body { overscroll-behavior: none; overflow-x: hidden; width: 100%; }
     .v1-screen { user-select: none; -webkit-user-select: none; }
     .v1-scroll { -webkit-overflow-scrolling: touch; overscroll-behavior: none; }
     .v1-scroll::-webkit-scrollbar { display: none; }
@@ -54,6 +54,7 @@ const S = {
     backgroundColor: 'var(--color-neutral-000)',
     position: 'relative',
     overflow: 'hidden',
+    overflowX: 'hidden',
     fontFamily: 'Pretendard, -apple-system, sans-serif',
   },
   scrollBody: {
