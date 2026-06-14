@@ -522,8 +522,8 @@ function HomePreScreen({ nav, goTab }) {
     <div className="v1-screen" style={S.screen}>
       <div className="v1-scroll" style={S.scrollBody}>
         <HomeAppBar />
-        <Banner />
         <HomeMyInvestSection amount="0원" nav={nav} goTab={goTab} />
+        <Banner />
         <HomeProductSections nav={nav} />
       </div>
       <TabBar activeTab="home" onTabChange={goTab} />
@@ -549,7 +549,6 @@ function HomeApplyingScreen({ nav, goTab, onJumpToSettled }) {
             boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
           }}>체결 당일로 이동하기</div>
         </div>
-        <Banner />
         <HomeMyInvestSection
           amount="0원"
           accountAmount="40,000원"
@@ -558,6 +557,7 @@ function HomeApplyingScreen({ nav, goTab, onJumpToSettled }) {
         >
           <PendingOrderCard onClick={() => nav('history_detail_applying')} />
         </HomeMyInvestSection>
+        <Banner />
         <HomeProductSections nav={nav} />
       </div>
       <TabBar activeTab="home" onTabChange={goTab} />
@@ -570,10 +570,10 @@ function HomeSettledScreen({ nav, goTab }) {
     <div className="v1-screen" style={S.screen}>
       <div className="v1-scroll" style={S.scrollBody}>
         <HomeAppBar />
-        <Banner />
         <HomeMyInvestSection amount="20,000원" nav={nav} goTab={goTab}>
           <SettledProductItem />
         </HomeMyInvestSection>
+        <Banner />
         <HomeProductSections nav={nav} />
       </div>
       <TabBar activeTab="home" onTabChange={goTab} />
