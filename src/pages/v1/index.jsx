@@ -239,7 +239,7 @@ function ProductCard({ onClick }) {
       <div style={{
         backgroundColor: 'var(--color-neutral-000)',
         borderRadius: 8,
-        padding: '20px 24px',
+        padding: '20px 16px',
         boxShadow: '0px 1px 2px rgba(0,0,0,0.08), 0px 2px 4px rgba(0,0,0,0.06)',
       }}>
         <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)', marginBottom: 4 }}>A 투자 상품</div>
@@ -302,7 +302,7 @@ function ClosedProductCard() {
       </div>
       <div style={{
         backgroundColor: 'var(--color-neutral-000)', borderRadius: 8,
-        padding: '20px 24px', marginTop: 8,
+        padding: '20px 16px', marginTop: 8,
         boxShadow: '0px 1px 2px rgba(0,0,0,0.08), 0px 2px 4px rgba(0,0,0,0.06)',
       }}>
         <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)', marginBottom: 4 }}>유전지수 높은 상품</div>
@@ -459,7 +459,7 @@ function Banner() {
 // ============================================================
 // Home Screens
 // ============================================================
-function HomeMyInvestSection({ amount, accountAmount = '100,000원', nav, goTab, children, showMoreButton, onMore }) {
+function HomeMyInvestSection({ amount, accountAmount = '100,000원', nav, goTab, children }) {
   return (
     <div style={{ padding: '24px 16px 12px' }}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 3, marginBottom: 20 }}>
@@ -491,15 +491,6 @@ function HomeMyInvestSection({ amount, accountAmount = '100,000원', nav, goTab,
         </div>
       </div>
       {children}
-      {showMoreButton && (
-        <div onClick={onMore} style={{
-          height: 48, borderRadius: 12,
-          backgroundColor: 'var(--color-neutral-100)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          ...T.body15('semibold'), color: 'var(--color-neutral-700)',
-          cursor: 'pointer', marginTop: 16,
-        }}>더보기</div>
-      )}
     </div>
   )
 }
@@ -564,8 +555,6 @@ function HomeApplyingScreen({ nav, goTab, onJumpToSettled }) {
           accountAmount="40,000원"
           nav={nav}
           goTab={goTab}
-          showMoreButton
-          onMore={() => goTab('invest')}
         >
           <PendingOrderCard onClick={() => nav('history_detail_applying')} />
         </HomeMyInvestSection>
@@ -753,7 +742,7 @@ function ApplyCompleteScreen({ onConfirm }) {
       <div style={{
         flex: 1, display: 'flex', flexDirection: 'column',
         alignItems: 'center', justifyContent: 'center',
-        padding: '0 24px', marginTop: -80,
+        padding: '0 16px', marginTop: -80,
       }}>
         <div style={{
           width: 60, height: 60, borderRadius: 30,
@@ -886,10 +875,10 @@ function InvestScreen({ nav, goTab, phase }) {
 // ============================================================
 // Asset Screen (자산)
 // ============================================================
-function AssetScreen({ onBack, phase }) {
+function AssetScreen({ onBack, nav, goTab, phase }) {
   const data = {
     pre:      { total: '100,000원', bank: '100,000원', invest: '0원' },
-    applying: { total: '100,000원', bank: '40,000원', invest: '60,000원' },
+    applying: { total: '40,000원', bank: '40,000원', invest: '0원' },
     settled:  { total: '100,000원', bank: '80,000원', invest: '20,000원' },
   }
   const d = data[phase]
@@ -905,8 +894,8 @@ function AssetScreen({ onBack, phase }) {
             <span style={{ ...T.headline28('bold'), color: 'var(--color-neutral-900)' }}>{d.total}</span>
           </div>
         </div>
-        {/* 계좌 목록 */}
-        <div style={{ padding: '12px 16px' }}>
+        {/* NH농협은행 → 계좌 상세 */}
+        <div onClick={() => nav('account')} style={{ padding: '12px 16px', cursor: 'pointer' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 12 }}>
               <div style={{
@@ -922,11 +911,11 @@ function AssetScreen({ onBack, phase }) {
               padding: '6px 14px', borderRadius: 8,
               backgroundColor: 'var(--color-neutral-100)',
               ...T.label13('semibold'), color: 'var(--color-neutral-700)',
-              cursor: 'pointer',
             }}>출금</div>
           </div>
         </div>
-        <div style={{ padding: '16px 16px' }}>
+        {/* 한우 투자 → 투자 탭 */}
+        <div onClick={() => goTab('invest')} style={{ padding: '16px 16px', cursor: 'pointer' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <div style={{
               width: 52, height: 52, borderRadius: '50%',
@@ -950,13 +939,25 @@ function HistoryEmptyScreen({ onBack }) {
   return (
     <div className="v1-screen" style={S.screen}>
       <SubAppBar title="투자내역" onBack={onBack} />
-      <div style={{
-        display: 'flex', flexDirection: 'column',
-        alignItems: 'center', justifyContent: 'center',
-        height: 500,
-      }}>
-        <img src="/empty.png" alt="" style={{ width: 100, height: 100, objectFit: 'contain', marginBottom: 8 }} />
-        <div style={{ ...T.body17('medium'), color: 'var(--color-neutral-600)' }}>투자내역이 없어요</div>
+      {/* 신청중인 주문 - 항상 표시 */}
+      <div style={{ padding: '20px 16px' }}>
+        <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>신청중인 주문</div>
+        <div style={{ textAlign: 'center', padding: '24px 0' }}>
+          <div style={{ ...T.body15('medium'), color: 'var(--color-neutral-500)' }}>신청중인 주문이 없어요</div>
+        </div>
+      </div>
+      <div style={S.divider} />
+      {/* 완료된 주문 */}
+      <div style={{ padding: '20px 16px' }}>
+        <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>완료된 주문</div>
+        <div style={{
+          display: 'flex', flexDirection: 'column',
+          alignItems: 'center', justifyContent: 'center',
+          padding: '40px 0',
+        }}>
+          <img src="/empty.png" alt="" style={{ width: 100, height: 100, objectFit: 'contain', marginBottom: 8 }} />
+          <div style={{ ...T.body15('medium'), color: 'var(--color-neutral-500)' }}>투자내역이 없어요</div>
+        </div>
       </div>
     </div>
   )
@@ -967,25 +968,17 @@ function HistoryApplyingScreen({ onBack, nav }) {
     <div className="v1-screen" style={S.screen}>
       <div className="v1-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
         <SubAppBar title="투자내역" onBack={onBack} />
-        <div style={{ padding: '0 16px' }}>
-          <div style={{ marginBottom: 8 }}>
-            <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 4 }}>신청 중인 주문</div>
-            <div style={{ ...T.body15('medium'), color: 'var(--color-neutral-500)', marginBottom: 16 }}>내 투자가 신청중인 이유</div>
-          </div>
+        {/* 신청중인 주문 */}
+        <div style={{ padding: '20px 16px' }}>
+          <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>신청중인 주문</div>
           <PendingOrderCard onClick={() => nav('history_detail_applying')} />
         </div>
-        <div style={{ ...S.divider, marginTop: 24 }} />
+        <div style={S.divider} />
+        {/* 완료된 주문 - 아직 없음 */}
         <div style={{ padding: '20px 16px' }}>
-          <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 20 }}>완료된 주문</div>
-          <div onClick={() => nav('history_detail_applying')} style={{
-            display: 'flex', alignItems: 'flex-start', gap: 24, padding: '16px 0',
-            borderBottom: '1px solid var(--color-neutral-100)', cursor: 'pointer',
-          }}>
-            <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-600)', width: 44 }}>6.1</span>
-            <div>
-              <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)' }}>A 투자 상품</div>
-              <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>3주 투자 신청 완료</div>
-            </div>
+          <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>완료된 주문</div>
+          <div style={{ textAlign: 'center', padding: '24px 0' }}>
+            <div style={{ ...T.body15('medium'), color: 'var(--color-neutral-500)' }}>완료된 주문이 없어요</div>
           </div>
         </div>
       </div>
@@ -998,27 +991,34 @@ function HistorySettledScreen({ onBack, nav }) {
     <div className="v1-screen" style={S.screen}>
       <div className="v1-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
         <SubAppBar title="투자내역" onBack={onBack} />
+        {/* 신청중인 주문 - 상태 변경되어 비어있음 */}
         <div style={{ padding: '20px 16px' }}>
-          <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 20 }}>완료된 주문</div>
-          <div onClick={() => nav('history_detail_applying')} style={{
-            display: 'flex', alignItems: 'flex-start', gap: 24, padding: '16px 0',
-            borderBottom: '1px solid var(--color-neutral-100)', cursor: 'pointer',
-          }}>
-            <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-600)', width: 44 }}>6.1</span>
-            <div>
-              <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)' }}>A 투자 상품</div>
-              <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>3주 투자 신청 완료</div>
-            </div>
+          <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>신청중인 주문</div>
+          <div style={{ textAlign: 'center', padding: '24px 0' }}>
+            <div style={{ ...T.body15('medium'), color: 'var(--color-neutral-500)' }}>신청중인 주문이 없어요</div>
           </div>
+        </div>
+        <div style={S.divider} />
+        {/* 완료된 주문 - 신청이 체결로 상태 변경됨 */}
+        <div style={{ padding: '20px 16px' }}>
+          <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>완료된 주문</div>
           <div onClick={() => nav('history_detail_settled')} style={{
-            display: 'flex', alignItems: 'flex-start', gap: 24, padding: '16px 0',
+            display: 'flex', alignItems: 'center', gap: 12, padding: '16px 0',
             borderBottom: '1px solid var(--color-neutral-100)', cursor: 'pointer',
           }}>
-            <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-600)', width: 44 }}>6.12</span>
-            <div>
-              <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)' }}>A 투자 상품</div>
-              <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>1주 투자 체결 완료 / 2주 환불 처리</div>
+            <div style={{
+              width: 44, height: 44, borderRadius: 12,
+              backgroundColor: 'var(--color-primary-100)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              overflow: 'hidden',
+            }}>
+              <img src="/product.png" alt="" style={{ width: 32, height: 32, objectFit: 'contain' }} />
             </div>
+            <div style={{ flex: 1 }}>
+              <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)', marginBottom: 2 }}>A 투자 상품</div>
+              <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>1C 투자 체결 완료</div>
+            </div>
+            <span style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>6.12</span>
           </div>
         </div>
       </div>
@@ -1271,7 +1271,7 @@ function AccountDetailScreen({ onBack, phase }) {
             <div style={{ width: 44 }} />
           </div>
         </div>
-        <div style={{ backgroundColor: 'var(--color-primary-500)', padding: '8px 24px 24px' }}>
+        <div style={{ backgroundColor: 'var(--color-primary-500)', padding: '8px 16px 24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
             <span style={{ ...T.body15('medium'), color: 'rgba(255,255,255,0.8)' }}>2123456-78-9101112</span>
             <span style={{
@@ -1295,7 +1295,7 @@ function AccountDetailScreen({ onBack, phase }) {
             ))}
           </div>
         </div>
-        <div style={{ display: 'flex', padding: '0 24px', borderBottom: '1px solid var(--color-neutral-100)' }}>
+        <div style={{ display: 'flex', padding: '0 16px', borderBottom: '1px solid var(--color-neutral-100)' }}>
           {['전체', '입금', '출금'].map((t, i) => (
             <div key={t} style={{
               padding: '16px 0',
@@ -1306,7 +1306,7 @@ function AccountDetailScreen({ onBack, phase }) {
             }}>{t}</div>
           ))}
         </div>
-        <div style={{ padding: '20px 24px' }}>
+        <div style={{ padding: '20px 16px' }}>
           <div style={{ ...T.body15('medium'), color: 'var(--color-neutral-600)', marginBottom: 20 }}>총 {d.count}건</div>
           {d.items.map((item, i) => (
             <div key={i}>
@@ -1397,7 +1397,7 @@ export default function V1() {
       return <InvestScreen nav={navigate} goTab={goTab} phase={phase} />
 
     case 'asset':
-      return <AssetScreen onBack={goBack} phase={phase} />
+      return <AssetScreen onBack={goBack} nav={navigate} goTab={goTab} phase={phase} />
 
     case 'product_detail':
       return <ProductDetailScreen onBack={goBack} onApply={handleGoToQuantity} phase={phase} />
