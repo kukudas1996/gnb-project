@@ -639,9 +639,11 @@ function HomeSettledScreen({ nav, goTab, onJumpToPreSettlement }) {
       <div className="v1-scroll" style={S.scrollBody}>
         <HomeAppBar />
         <PhaseTransitionButton label="정산 7일 전으로 이동하기" onClick={onJumpToPreSettlement} />
-        <HomeMyInvestSection amount="20,000원" nav={nav} goTab={goTab}>
-          <SettledProductItem />
-        </HomeMyInvestSection>
+        <HomeMyInvestSection amount="20,000원" accountAmount="80,000원" nav={nav} goTab={goTab} />
+        <div style={{ padding: '0 16px 12px' }}>
+          <div style={{ ...T.body17('semibold'), color: 'var(--color-neutral-600)', marginBottom: 12 }}>사육중 상품</div>
+          <SettledProductItem label="A 투자 상품" amount="20,000원" sub="1주" />
+        </div>
         <Banner />
         <HomeProductSections nav={nav} />
       </div>
