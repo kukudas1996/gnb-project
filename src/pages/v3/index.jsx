@@ -1,6 +1,6 @@
 import { createElement, useState, useCallback } from 'react'
 import {
-  Home, TrendingUp, ShoppingBag, User,
+  Home, ShoppingBag, User,
   Bell, ChevronLeft, ChevronRight, ChevronDown, Clock,
   Copy, MoreVertical, Users, Delete, Check
 } from 'lucide-react'
@@ -171,7 +171,6 @@ function SubAppBar({ title, onBack, light = false }) {
 function TabBar({ activeTab, onTabChange }) {
   const tabs = [
     { key: 'home', label: '홈', TabIcon: Home },
-    { key: 'invest', label: '투자', TabIcon: TrendingUp },
     { key: 'shopping', label: '쇼핑', TabIcon: ShoppingBag },
     { key: 'my', label: '마이', TabIcon: User },
   ]
@@ -1163,7 +1162,7 @@ function PushNotificationScreen({ title, message, onTap }) {
   )
 }
 
-function InvestScreen({ nav, goTab, phase }) {
+function InvestScreen({ nav, onBack, phase }) {
   const config = {
     pre:              { amount: '0원', account: '100,000원' },
     applying:         { amount: '60,000원', account: '40,000원' },
@@ -1175,19 +1174,11 @@ function InvestScreen({ nav, goTab, phase }) {
   const c = config[phase]
 
   const showSettlementHistory = phase === 'post_settlement'
-  const nextNotice = {
-    pre: 'product_detail',
-    applying: 'push_settled',
-    settled: 'push_pre_settlement',
-    pre_settlement: 'push_settlement_day',
-    settlement_day: 'push_post_settlement',
-    post_settlement: 'product_settlement_result',
-  }[phase]
 
   return (
     <div className="v3-screen" style={S.screen}>
       <div className="v3-scroll" style={S.scrollBody}>
-        <HomeAppBar title="투자" onBell={nextNotice ? () => nav(nextNotice) : undefined} />
+        <SubAppBar title="" onBack={onBack} />
         <div style={{ padding: '0 16px' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 3, marginBottom: 12 }}>
             <span style={{ ...T.body17('medium'), color: 'var(--color-neutral-600)' }}>내 투자</span>
@@ -1283,7 +1274,6 @@ function InvestScreen({ nav, goTab, phase }) {
         </div>
         <div style={{ height: 60 }} />
       </div>
-      <TabBar activeTab="invest" onTabChange={goTab} />
     </div>
   )
 }
@@ -2230,7 +2220,7 @@ function SimpleTabScreen({ title, activeTab, goTab }) {
 export default function V3() {
   const [phase, setPhase] = useState('pre')
   // phases: pre → applying → settled → pre_settlement → settlement_day → post_settlement
-  const [screen, setScreen] = useState('invest')
+  const [screen, setScreen] = useState('home')
   const [history, setHistory] = useState([])
 
   const navigate = useCallback((target) => {
@@ -2319,7 +2309,7 @@ export default function V3() {
       return <HomePreScreen nav={navigate} goTab={goTab} />
 
     case 'invest':
-      return <InvestScreen nav={navigate} goTab={goTab} phase={phase} />
+      return <InvestScreen nav={navigate} onBack={goBack} phase={phase} />
 
     case 'shopping':
       return <SimpleTabScreen title="쇼핑" activeTab="shopping" goTab={goTab} />
@@ -2383,6 +2373,6 @@ export default function V3() {
       return <SettlementHistoryScreen onBack={goBack} nav={navigate} />
 
     default:
-      return <InvestScreen nav={navigate} goTab={goTab} phase={phase} />
+      return <HomePreScreen nav={navigate} goTab={goTab} />
   }
 }
