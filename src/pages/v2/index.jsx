@@ -2129,7 +2129,7 @@ function AccountDetailScreen({ onBack, phase }) {
       { date: '5월 15일', label: '윤현우', time: '18:00', type: '입금', amount: '+ 100,000원', color: 'var(--color-primary-500)' },
     ]},
     post_settlement: { balance: '102,000', count: 4, items: [
-      { date: '7월 19일', label: 'A 투자 상품 정산금', time: '10:00', type: '입금', amount: '+ 22,000원', color: 'var(--color-primary-500)' },
+      { date: '6월 12일', label: 'A 투자 상품 정산', time: '12:31', type: '입금', amount: '+ 22,000원', color: 'var(--color-primary-500)' },
       { date: '6월 12일', label: 'A 투자 상품 체결 환불', time: '12:31', type: '입금', amount: '+ 40,000원', color: 'var(--color-primary-500)' },
       { date: '6월 1일', label: 'A 투자 상품 투자 신청', time: '12:31', type: '출금', amount: '- 60,000원', color: 'var(--color-neutral-900)' },
       { date: '5월 15일', label: '윤현우', time: '18:00', type: '입금', amount: '+ 100,000원', color: 'var(--color-primary-500)' },
