@@ -118,3 +118,9 @@ src/
      - (Vercel URL)/v1
      - (Vercel URL)/v2
      - (존재하는 버전만 표시)
+
+---
+
+## 참고
+
+- `AGENTS.md`는 Codex 전용 설정 파일이다. Claude Code는 이 파일을 읽지 않으며 참고하지 않는다.
