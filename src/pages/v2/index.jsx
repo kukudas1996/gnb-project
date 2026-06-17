@@ -1223,7 +1223,7 @@ function InvestScreen({ nav, onBack, phase, goTab }) {
         {phase === 'settlement_day' && (
           <div style={{ padding: '0 16px' }}>
             <div style={{ ...T.body17('semibold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>투자중 상품 1</div>
-            <SettledProductItem label="A 투자 상품" amount="20,000원" sub="1주" onClick={() => nav('history_detail_settlement_day')} />
+            <SettledProductItem label="A 투자 상품" amount="20,000원" sub="1주" onClick={() => nav('history_detail_pre_settlement')} />
           </div>
         )}
         {/* post_settlement: no 투자중 상품 section */}
@@ -1567,7 +1567,7 @@ function HistorySettlementDayScreen({ onBack, nav }) {
             )}
           </div>
           {/* 정산 당일 카드 - row format */}
-          <div onClick={() => nav('history_detail_settlement_day')} style={{
+          <div onClick={() => nav('history_detail_pre_settlement')} style={{
             display: 'flex', alignItems: 'center', gap: 12,
             padding: '16px 0', cursor: 'pointer',
           }}>
