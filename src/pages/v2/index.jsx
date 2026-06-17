@@ -1,8 +1,9 @@
 import { createElement, useState, useCallback } from 'react'
 import {
-  Home, ShoppingBag, User,
+  Home, ShoppingBag, User, Compass,
   Bell, ChevronLeft, ChevronRight, ChevronDown, Clock,
-  Copy, MoreVertical, Users, Delete, Check, X
+  Copy, MoreVertical, Users, Delete, Check, X,
+  ThumbsUp, ThumbsDown, MessageSquare, Share2, Play
 } from 'lucide-react'
 
 // ============================================================
@@ -173,6 +174,7 @@ function SubAppBar({ title, onBack, light = false }) {
 function TabBar({ activeTab, onTabChange }) {
   const tabs = [
     { key: 'home', label: '홈', TabIcon: Home },
+    { key: 'insight', label: '인사이트', TabIcon: Compass },
     { key: 'shopping', label: '쇼핑', TabIcon: ShoppingBag },
     { key: 'my', label: '마이', TabIcon: User },
   ]
@@ -2359,6 +2361,343 @@ function SimpleTabScreen({ title, activeTab, goTab }) {
 }
 
 // ============================================================
+// Insight Screen (인사이트)
+// ============================================================
+const SHORTS_DATA = [
+  { id: 1, title: '#먹방 #한우 #송아지 #건초 #귀여움', color: '#8B6914' },
+  { id: 2, title: '뱅카우 출장 V-LOG', color: '#2D5A27' },
+  { id: 3, title: '한우명가 화산 25년 추석 EXIT(가축투자계약증권 2호)', color: '#4A3728' },
+]
+
+const CONTENT_DATA = [
+  { id: 1, title: '한우 투자, 이제 시작해도 늦지 않다', color: '#C4D4A0' },
+  { id: 2, title: '한우 투자, 이제 시작해도 늦지 않다', color: '#D4A070' },
+  { id: 3, title: '한우 투자로 얻는 수익과 리스크 분석', color: '#A0B4D4' },
+  { id: 4, title: '한우 투자로 얻는 수익과 리스크 분석', color: '#5090D0' },
+  { id: 5, title: '초보자를 위한 한우 투자 가이드', color: '#70C490' },
+  { id: 6, title: '초보자를 위한 한우 투자 가이드', color: '#B0D4E0' },
+]
+
+const NEWS_DATA = [
+  { id: 1, title: '한우 투자, 새로운 기회', desc: '최근 한우 시장의 변화와 투자 전략에 대한 분석이 필요합니다. 전문가들은 한우 투자에 대한 긍정적인 전망을 내놓고 있으며, 이는 농가의 수익성 향상으로 이어질 것으로 기대됩니다.', color: '#90B070' },
+  { id: 2, title: '한우 투자, 성공적인 사례', desc: '한우 투자에 성공한 사례를 통해 많은 투자자들이 긍정적인 결과를 얻고 있습니다. 이들은 지속적인 관리와 시장 분석을 통해 안정적인 수익을 창출하고 있습니다.', color: '#70A0D0' },
+  { id: 3, title: '한우 투자, 전문가의 조언', desc: '전문가들은 한우 투자를 고려하는 이들에게 시장 동향을 주의 깊게 살펴볼 것을 권장합니다. 또한, 장기적인 관점에서의 투자 계획이 중요하다고 강조하고 있습니다.', color: '#D0A070' },
+]
+
+function InsightScreen({ nav, goTab }) {
+  const [activeCategory, setActiveCategory] = useState('전체')
+  const categories = ['전체', '카테고리', '카테고리']
+
+  return (
+    <div className="v5-screen" style={S.screen}>
+      <div className="v5-scroll" style={S.scrollBody}>
+        <div style={S.appBar}>
+          <div style={S.safeTop} />
+          <div style={S.appBarRow}>
+            <span style={S.appBarTitle}>인사이트</span>
+            <div style={{ width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Bell size={24} color="var(--color-neutral-400)" />
+            </div>
+          </div>
+        </div>
+
+        {/* 뱅카우 숏츠 */}
+        <div style={{ padding: '32px 0' }}>
+          <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', padding: '0 16px', marginBottom: 12 }}>
+            뱅카우 숏츠
+          </div>
+          <div className="v5-hide-scrollbar" style={{
+            display: 'flex', gap: 12, overflowX: 'auto', paddingLeft: 16, paddingRight: 16,
+          }}>
+            {SHORTS_DATA.map((s) => (
+              <div key={s.id} onClick={() => nav('shorts_detail')} style={{
+                flexShrink: 0, cursor: 'pointer',
+              }}>
+                <div style={{
+                  width: 200, height: 356, borderRadius: 12, backgroundColor: s.color,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  position: 'relative', overflow: 'hidden',
+                }}>
+                  <Play size={48} color="rgba(255,255,255,0.7)" fill="rgba(255,255,255,0.5)" />
+                </div>
+                <p style={{
+                  ...T.body15('medium'), color: 'var(--color-neutral-800)',
+                  marginTop: 8, width: 200,
+                  display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
+                }}>
+                  {s.title}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 뱅카우 콘텐츠 */}
+        <div style={{ padding: '32px 16px' }}>
+          <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>
+            뱅카우 콘텐츠
+          </div>
+          <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
+            {categories.map((cat, i) => {
+              const isActive = i === 0 ? activeCategory === '전체' : false
+              return (
+                <div key={i} onClick={() => setActiveCategory(cat)} style={{
+                  padding: '10px 20px', borderRadius: 99,
+                  backgroundColor: isActive ? 'var(--color-neutral-900)' : 'var(--color-neutral-050)',
+                  cursor: 'pointer',
+                }}>
+                  <span style={{
+                    ...T.body15('semibold'),
+                    color: isActive ? '#fff' : 'var(--color-neutral-700)',
+                  }}>
+                    {cat}
+                  </span>
+                </div>
+              )
+            })}
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+            {[0, 1, 2].map((row) => (
+              <div key={row} style={{ display: 'flex', gap: 12 }}>
+                {CONTENT_DATA.slice(row * 2, row * 2 + 2).map((c) => (
+                  <div key={c.id} onClick={() => nav('content_detail')} style={{ flex: 1, cursor: 'pointer' }}>
+                    <div style={{
+                      width: '100%', aspectRatio: '160/90', borderRadius: 12,
+                      backgroundColor: c.color,
+                    }} />
+                    <p style={{
+                      ...T.body15('medium'), color: 'var(--color-neutral-800)',
+                      marginTop: 8,
+                      display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
+                    }}>
+                      {c.title}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+          <div onClick={() => {}} style={{
+            marginTop: 16, width: '100%', minHeight: 48,
+            backgroundColor: 'var(--color-neutral-100)', borderRadius: 12,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            ...T.body17('semibold'), color: 'var(--color-neutral-700)',
+            cursor: 'pointer',
+          }}>
+            더보기
+          </div>
+        </div>
+
+        {/* 언론 보도 */}
+        <div style={{ padding: '32px 16px 120px' }}>
+          <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>
+            언론 보도
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            {NEWS_DATA.map((n) => (
+              <div key={n.id} style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)', marginBottom: 4 }}>
+                    {n.title}
+                  </p>
+                  <p style={{
+                    ...T.body15('medium'), color: 'var(--color-neutral-700)',
+                    overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                  }}>
+                    {n.desc}
+                  </p>
+                </div>
+                <div style={{
+                  width: 93, height: 93, borderRadius: 12, backgroundColor: n.color,
+                  flexShrink: 0,
+                }} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <TabBar activeTab="insight" onTabChange={goTab} />
+    </div>
+  )
+}
+
+// ============================================================
+// Shorts Detail Screen (숏츠 상세)
+// ============================================================
+function ShortsDetailScreen({ onBack }) {
+  return (
+    <div className="v5-screen" style={{
+      ...S.screen, backgroundColor: '#1a1a1a',
+    }}>
+      <div style={{
+        position: 'relative', width: '100%', height: '100dvh',
+        display: 'flex', flexDirection: 'column',
+      }}>
+        {/* AppBar */}
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 }}>
+          <div style={{ height: 'env(safe-area-inset-top, 0px)' }} />
+          <div style={{ height: 60, display: 'flex', alignItems: 'center', padding: '0 6px' }}>
+            <div onClick={onBack} style={{
+              width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer',
+            }}>
+              <X size={24} color="#fff" />
+            </div>
+          </div>
+        </div>
+
+        {/* Full screen content area */}
+        <div style={{
+          flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
+          backgroundColor: '#8B6914', position: 'relative',
+        }}>
+          <Play size={64} color="rgba(255,255,255,0.6)" fill="rgba(255,255,255,0.4)" />
+
+          {/* Right side actions */}
+          <div style={{
+            position: 'absolute', right: 16, bottom: 200,
+            display: 'flex', flexDirection: 'column', gap: 20, alignItems: 'center',
+          }}>
+            {[
+              { Icon: ThumbsUp, label: '10' },
+              { Icon: ThumbsDown, label: '싫어요' },
+              { Icon: MessageSquare, label: '1' },
+              { Icon: Share2, label: '공유' },
+            ].map(({ Icon, label }, i) => (
+              <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+                <Icon size={28} color="#fff" />
+                <span style={{ ...T.label11('medium'), color: '#fff' }}>{label}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Bottom info */}
+          <div style={{
+            position: 'absolute', left: 16, right: 80, bottom: 120,
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+              <div style={{
+                width: 32, height: 32, borderRadius: 16,
+                backgroundColor: 'var(--color-primary-500)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <span style={{ ...T.label11('semibold'), color: '#fff' }}>B</span>
+              </div>
+              <span style={{ ...T.body15('semibold'), color: '#fff' }}>@bankcow</span>
+            </div>
+            <p style={{ ...T.body15('medium'), color: '#fff', marginBottom: 8 }}>
+              #먹방 #한우 #송아지 #건초 #귀여움
+            </p>
+            <p style={{ ...T.label13('medium'), color: 'rgba(255,255,255,0.7)' }}>
+              ♪ 진짜 맛있는데... 왜 인기가 없을까? 🤔 #mukbang #...
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ============================================================
+// Content Detail Screen (콘텐츠 상세)
+// ============================================================
+function ContentDetailScreen({ onBack }) {
+  return (
+    <div className="v5-screen" style={S.screen}>
+      <div className="v5-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
+        {/* AppBar */}
+        <div style={S.appBar}>
+          <div style={S.safeTop} />
+          <div style={{ ...S.appBarRow, justifyContent: 'flex-start' }}>
+            <div onClick={onBack} style={{
+              width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer',
+            }}>
+              <X size={24} color="var(--color-neutral-800)" />
+            </div>
+          </div>
+        </div>
+
+        {/* Article content */}
+        <div style={{ padding: '0 16px' }}>
+          <div style={{
+            ...T.label13('medium'), color: 'var(--color-neutral-500)',
+            marginBottom: 8,
+          }}>
+            분기별 리포트_QLR
+          </div>
+          <h1 style={{
+            ...T.headline24('bold'), color: 'var(--color-neutral-900)',
+            marginBottom: 20, marginTop: 0,
+          }}>
+            [가축투자계약증권 6-2호] 희망농장 한우 성장 일기
+          </h1>
+
+          <div style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            paddingBottom: 20, borderBottom: '1px solid var(--color-neutral-100)',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <div style={{
+                width: 32, height: 32, borderRadius: 16,
+                backgroundColor: '#7BC876',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <span style={{ ...T.label11('semibold'), color: '#fff' }}>B</span>
+              </div>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)' }}>뱅카우</span>
+                  <span style={{ color: 'var(--color-primary-500)', fontSize: 12 }}>✓</span>
+                </div>
+                <span style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>2026. 6. 6. 19:02</span>
+              </div>
+            </div>
+            <div style={{
+              padding: '6px 12px', border: '1px solid var(--color-primary-500)',
+              borderRadius: 20, ...T.label13('semibold'), color: 'var(--color-primary-500)',
+              cursor: 'pointer',
+            }}>
+              + 이웃추가
+            </div>
+          </div>
+
+          <div style={{ padding: '24px 0' }}>
+            <p style={{ ...T.body15('medium'), color: 'var(--color-neutral-800)', marginBottom: 16 }}>
+              희망농장 송아지들의 이번 달 근황을 전해드립니다.
+            </p>
+            <p style={{ ...T.body15('medium'), color: 'var(--color-neutral-800)', marginBottom: 24 }}>
+              건강하게 잘 자라고 있는 모습, 함께 확인해보세요.
+            </p>
+            <div style={{
+              width: '100%', aspectRatio: '343/280', borderRadius: 12,
+              backgroundColor: '#8B6914', position: 'relative',
+              display: 'flex', alignItems: 'flex-end', padding: 12,
+            }}>
+              <span style={{ ...T.label13('semibold'), color: '#fff', display: 'flex', alignItems: 'center', gap: 4 }}>
+                🐄 bankcow
+              </span>
+            </div>
+          </div>
+
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 16,
+            padding: '16px 0', borderTop: '1px solid var(--color-neutral-100)',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              <span style={{ fontSize: 20 }}>♡</span>
+              <span style={{ fontSize: 14 }}>❤️🐮</span>
+              <span style={{ ...T.label13('medium'), color: 'var(--color-neutral-700)' }}>6</span>
+            </div>
+            <Share2 size={20} color="var(--color-neutral-600)" />
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ============================================================
 // MAIN V5 COMPONENT
 // ============================================================
 export default function V5() {
@@ -2462,6 +2801,15 @@ export default function V5() {
 
     case 'invest':
       return <InvestScreen nav={navigate} onBack={goBack} phase={phase} goTab={goTab} />
+
+    case 'insight':
+      return <InsightScreen nav={navigate} goTab={goTab} />
+
+    case 'shorts_detail':
+      return <ShortsDetailScreen onBack={goBack} />
+
+    case 'content_detail':
+      return <ContentDetailScreen onBack={goBack} />
 
     case 'shopping':
       return <SimpleTabScreen title="쇼핑" activeTab="shopping" goTab={goTab} />
