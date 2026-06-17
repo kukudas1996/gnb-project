@@ -1,30 +1,29 @@
-import { useState, useCallback, useRef, useEffect } from 'react'
+import { createElement, useState, useCallback } from 'react'
 import {
-  Home, TrendingUp, ShoppingBag, User,
+  Home, ShoppingBag, User,
   Bell, ChevronLeft, ChevronRight, ChevronDown, Clock,
-  Copy, MoreVertical, Users, Delete, Check
+  Copy, MoreVertical, Users, Delete, Check, X
 } from 'lucide-react'
 
 // ============================================================
 // Global Styles (applied once)
 // ============================================================
-const globalStyleId = 'v2-global-styles'
+const globalStyleId = 'v5-global-styles'
 if (typeof document !== 'undefined' && !document.getElementById(globalStyleId)) {
   const style = document.createElement('style')
   style.id = globalStyleId
   style.textContent = `
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    html, body { overscroll-behavior: none; overflow-x: hidden; width: 100%; }
-    .v1-screen { user-select: none; -webkit-user-select: none; }
-    .v1-scroll { -webkit-overflow-scrolling: touch; overscroll-behavior: none; }
-    .v1-scroll::-webkit-scrollbar { display: none; }
-    .v1-hide-scrollbar::-webkit-scrollbar { display: none; }
-    @keyframes v1-slide-in { from { transform: translateX(100%); } to { transform: translateX(0); } }
-    @keyframes v1-slide-out { from { transform: translateX(0); } to { transform: translateX(100%); } }
-    @keyframes v1-fade-in { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes v1-spin { to { transform: rotate(360deg); } }
-    @keyframes v2-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-    .v2-blink-dot { animation: v2-blink 1.5s ease-in-out infinite; }
+    html, body, #root { margin: 0; min-height: 100%; overscroll-behavior: none; overflow-x: hidden; width: 100%; }
+    .v5-screen { user-select: none; -webkit-user-select: none; }
+    .v5-scroll { -webkit-overflow-scrolling: touch; overscroll-behavior: none; }
+    .v5-scroll::-webkit-scrollbar { display: none; }
+    .v5-hide-scrollbar::-webkit-scrollbar { display: none; }
+    @keyframes v5-slide-in { from { transform: translateX(100%); } to { transform: translateX(0); } }
+    @keyframes v5-fade-in { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes v5-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    .v5-blink-dot { animation: v5-blink 1.5s ease-in-out infinite; }
+    .v5-message-enter { transition: max-height 0.3s ease, opacity 0.3s ease, margin 0.3s ease; overflow: hidden; }
   `
   document.head.appendChild(style)
 }
@@ -136,13 +135,13 @@ const S = {
 // ============================================================
 // AppBar Variants
 // ============================================================
-function HomeAppBar({ title = '홈' }) {
+function HomeAppBar({ title = '홈', onBell }) {
   return (
     <div style={S.appBar}>
       <div style={S.safeTop} />
       <div style={S.appBarRow}>
         <span style={S.appBarTitle}>{title}</span>
-        <div style={{ width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+        <div onClick={onBell} style={{ width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: onBell ? 'pointer' : 'default' }}>
           <Bell size={24} color="var(--color-neutral-400)" />
         </div>
       </div>
@@ -172,21 +171,21 @@ function SubAppBar({ title, onBack, light = false }) {
 // ============================================================
 function TabBar({ activeTab, onTabChange }) {
   const tabs = [
-    { key: 'home', label: '홈', Icon: Home },
-    { key: 'shopping', label: '쇼핑', Icon: ShoppingBag },
-    { key: 'my', label: '마이', Icon: User },
+    { key: 'home', label: '홈', TabIcon: Home },
+    { key: 'invest', label: '투자', TabIcon: ShoppingBag },
+    { key: 'my', label: '마이', TabIcon: User },
   ]
   return (
     <div style={S.tabBar}>
       <div style={S.tabBarInner}>
-        {tabs.map(({ key, label, Icon }) => (
+        {tabs.map(({ key, label, TabIcon }) => (
           <div key={key} style={S.tabItem} onClick={() => onTabChange(key)}>
-            <Icon
-              size={24}
-              color={activeTab === key ? 'var(--color-neutral-800)' : 'var(--color-neutral-600)'}
-              fill={activeTab === key ? 'var(--color-neutral-800)' : 'none'}
-              strokeWidth={activeTab === key ? 2 : 1.5}
-            />
+            {createElement(TabIcon, {
+              size: 24,
+              color: activeTab === key ? 'var(--color-neutral-800)' : 'var(--color-neutral-600)',
+              fill: activeTab === key ? 'var(--color-neutral-800)' : 'none',
+              strokeWidth: activeTab === key ? 2 : 1.5,
+            })}
             <span style={S.tabLabel(activeTab === key)}>{label}</span>
           </div>
         ))}
@@ -212,6 +211,67 @@ function PhaseTransitionButton({ label, onClick }) {
         cursor: 'pointer', pointerEvents: 'auto',
         boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
       }}>{label}</div>
+    </div>
+  )
+}
+
+// ============================================================
+// Dynamic Message Banner
+// ============================================================
+function DynamicMessage({ phase, dismissed, onDismiss, nav }) {
+  if (dismissed || phase === 'pre') return null
+
+  const messageConfig = {
+    applying: { title: 'A 투자 상품', subtitle: '6월 12일에 체결 예정이에요', target: 'history_detail_applying' },
+    settled: { title: 'A 투자 상품', subtitle: '투자하신 상품이 체결됐어요!', target: 'history_detail_settled' },
+    pre_settlement: { title: 'A 투자 상품', subtitle: '7일 뒤 정산 예정이에요', target: 'history_detail_pre_settlement' },
+    settlement_day: { title: 'A 투자 상품', subtitle: '오늘 정산 예정이에요', target: 'history_detail_pre_settlement' },
+    post_settlement: { title: 'A 투자 상품', subtitle: '정산이 완료되었어요!', target: 'history_detail_post_settlement' },
+  }
+
+  const config = messageConfig[phase]
+  if (!config) return null
+
+  return (
+    <div className="v5-message-enter" style={{
+      padding: '0 16px',
+      maxHeight: 100,
+      opacity: 1,
+      marginTop: 8,
+      marginBottom: 8,
+    }}>
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 12,
+        backgroundColor: 'var(--color-primary-050)',
+        borderRadius: 12,
+        padding: '12px 12px 12px 14px',
+      }}>
+        <div onClick={() => nav(config.target)} style={{
+          display: 'flex', alignItems: 'center', gap: 12,
+          flex: 1, cursor: 'pointer',
+        }}>
+          <div style={{
+            width: 36, height: 36, borderRadius: 10,
+            backgroundColor: 'var(--color-primary-100)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            overflow: 'hidden', flexShrink: 0,
+          }}>
+            <img src="/product.png" alt="" style={{ width: 28, height: 28, objectFit: 'contain' }} />
+          </div>
+          <div style={{ flex: 1 }}>
+            <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)' }}>{config.title}</div>
+            <div style={{ ...T.label13('medium'), color: 'var(--color-primary-600)' }}>{config.subtitle}</div>
+          </div>
+        </div>
+        <div onClick={(e) => { e.stopPropagation(); onDismiss(); }} style={{
+          width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center',
+          cursor: 'pointer', flexShrink: 0,
+        }}>
+          <X size={18} color="var(--color-neutral-500)" />
+        </div>
+      </div>
     </div>
   )
 }
@@ -393,9 +453,12 @@ function PendingOrderCard({ onClick }) {
       backgroundColor: 'var(--color-neutral-050)', borderRadius: 16,
       padding: '20px 16px', cursor: onClick ? 'pointer' : 'default',
     }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-        <div className="v2-blink-dot" style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: 'var(--color-primary-500)' }} />
-        <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)' }}>신청중인 주문 1건</span>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div className="v5-blink-dot" style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: 'var(--color-primary-500)' }} />
+          <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)' }}>11일 뒤 체결 예정</span>
+        </div>
+        <span style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>더보기</span>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
         <div style={{
@@ -467,7 +530,7 @@ function SettlementPendingCard({ daysLeft = '7일 남음', onClick }) {
       padding: '20px 16px', cursor: onClick ? 'pointer' : 'default',
     }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-        <div className="v2-blink-dot" style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: 'var(--color-primary-500)' }} />
+        <div className="v5-blink-dot" style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: 'var(--color-primary-500)' }} />
         <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)' }}>정산 예정 상품 1건</span>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -537,9 +600,26 @@ function StepNumber({ num, active = false }) {
 }
 
 // ============================================================
+// Blue Badge for 투자 내역 button
+// ============================================================
+function BlueBadge() {
+  return (
+    <div style={{
+      position: 'absolute', top: -4, right: -4,
+      width: 18, height: 18, borderRadius: 9,
+      backgroundColor: 'var(--color-primary-500)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      ...T.label11('semibold'), color: '#fff',
+      fontSize: 10,
+    }}>1</div>
+  )
+}
+
+// ============================================================
 // Home Screens
 // ============================================================
-function HomeMyInvestSection({ amount, accountAmount = '100,000원', nav, goTab, children }) {
+function HomeMyInvestSection({ amount, accountAmount = '100,000원', nav, children, phase }) {
+  const showBadge = phase === 'applying' || phase === 'pre_settlement' || phase === 'settlement_day'
   return (
     <div style={{ padding: '24px 16px 12px' }}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 3, marginBottom: 20 }}>
@@ -566,7 +646,9 @@ function HomeMyInvestSection({ amount, accountAmount = '100,000원', nav, goTab,
           backgroundColor: 'var(--color-neutral-100)', borderRadius: 16,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           cursor: 'pointer',
+          position: 'relative',
         }}>
+          {showBadge && <BlueBadge />}
           <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>투자 내역</span>
         </div>
       </div>
@@ -584,7 +666,7 @@ function HomeProductSections({ nav }) {
       </div>
       <div style={{ padding: '24px 0 120px' }}>
         <div style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)', marginBottom: 12, padding: '0 16px' }}>마감 상품</div>
-        <div className="v1-hide-scrollbar" style={{
+        <div className="v5-hide-scrollbar" style={{
           display: 'flex', gap: 16, overflowX: 'auto',
           paddingBottom: 16, paddingLeft: 16,
         }}>
@@ -597,14 +679,14 @@ function HomeProductSections({ nav }) {
   )
 }
 
-// --- Existing Home Screens ---
+// --- Home Screens ---
 
 function HomePreScreen({ nav, goTab }) {
   return (
-    <div className="v1-screen" style={S.screen}>
-      <div className="v1-scroll" style={S.scrollBody}>
+    <div className="v5-screen" style={S.screen}>
+      <div className="v5-scroll" style={S.scrollBody}>
         <HomeAppBar />
-        <HomeMyInvestSection amount="0원" nav={nav} goTab={goTab} />
+        <HomeMyInvestSection amount="0원" nav={nav} goTab={goTab} phase="pre" />
         <Banner />
         <HomeProductSections nav={nav} />
       </div>
@@ -613,17 +695,19 @@ function HomePreScreen({ nav, goTab }) {
   )
 }
 
-function HomeApplyingScreen({ nav, goTab, onJumpToSettled }) {
+function HomeApplyingScreen({ nav, goTab, onJumpToSettled, messageDismissed, onDismissMessage }) {
   return (
-    <div className="v1-screen" style={S.screen}>
-      <div className="v1-scroll" style={S.scrollBody}>
+    <div className="v5-screen" style={S.screen}>
+      <div className="v5-scroll" style={S.scrollBody}>
         <HomeAppBar />
+        <DynamicMessage phase="applying" dismissed={messageDismissed} onDismiss={onDismissMessage} nav={nav} />
         <PhaseTransitionButton label="체결 당일로 이동하기" onClick={onJumpToSettled} />
         <HomeMyInvestSection
           amount="0원"
           accountAmount="40,000원"
           nav={nav}
           goTab={goTab}
+          phase="applying"
         >
           <PendingOrderCard onClick={() => nav('history_detail_applying')} />
         </HomeMyInvestSection>
@@ -635,13 +719,14 @@ function HomeApplyingScreen({ nav, goTab, onJumpToSettled }) {
   )
 }
 
-function HomeSettledScreen({ nav, goTab, onJumpToPreSettlement }) {
+function HomeSettledScreen({ nav, goTab, onJumpToPreSettlement, messageDismissed, onDismissMessage }) {
   return (
-    <div className="v1-screen" style={S.screen}>
-      <div className="v1-scroll" style={S.scrollBody}>
+    <div className="v5-screen" style={S.screen}>
+      <div className="v5-scroll" style={S.scrollBody}>
         <HomeAppBar />
+        <DynamicMessage phase="settled" dismissed={messageDismissed} onDismiss={onDismissMessage} nav={nav} />
         <PhaseTransitionButton label="정산 7일 전으로 이동하기" onClick={onJumpToPreSettlement} />
-        <HomeMyInvestSection amount="20,000원" accountAmount="80,000원" nav={nav} goTab={goTab} />
+        <HomeMyInvestSection amount="20,000원" accountAmount="80,000원" nav={nav} goTab={goTab} phase="settled" />
         <div style={{ padding: '0 16px 12px' }}>
           <div style={{ ...T.body17('semibold'), color: 'var(--color-neutral-600)', marginBottom: 12 }}>사육중 상품</div>
           <SettledProductItem label="A 투자 상품" amount="20,000원" sub="1주" />
@@ -654,15 +739,14 @@ function HomeSettledScreen({ nav, goTab, onJumpToPreSettlement }) {
   )
 }
 
-// --- NEW Home Screens ---
-
-function HomePreSettlementScreen({ nav, goTab, onJumpToSettlementDay }) {
+function HomePreSettlementScreen({ nav, goTab, onJumpToSettlementDay, messageDismissed, onDismissMessage }) {
   return (
-    <div className="v1-screen" style={S.screen}>
-      <div className="v1-scroll" style={S.scrollBody}>
+    <div className="v5-screen" style={S.screen}>
+      <div className="v5-scroll" style={S.scrollBody}>
         <HomeAppBar />
+        <DynamicMessage phase="pre_settlement" dismissed={messageDismissed} onDismiss={onDismissMessage} nav={nav} />
         <PhaseTransitionButton label="정산 당일로 이동하기" onClick={onJumpToSettlementDay} />
-        <HomeMyInvestSection amount="20,000원" accountAmount="80,000원" nav={nav} goTab={goTab}>
+        <HomeMyInvestSection amount="20,000원" accountAmount="80,000원" nav={nav} goTab={goTab} phase="pre_settlement">
           <SettlementPendingCard daysLeft="7일 남음" onClick={() => nav('history_detail_pre_settlement')} />
         </HomeMyInvestSection>
         {/* 사육중 상품 */}
@@ -678,17 +762,18 @@ function HomePreSettlementScreen({ nav, goTab, onJumpToSettlementDay }) {
   )
 }
 
-function HomeSettlementDayScreen({ nav, goTab, onJumpToPostSettlement }) {
+function HomeSettlementDayScreen({ nav, goTab, onJumpToPostSettlement, messageDismissed, onDismissMessage }) {
   return (
-    <div className="v1-screen" style={S.screen}>
-      <div className="v1-scroll" style={S.scrollBody}>
+    <div className="v5-screen" style={S.screen}>
+      <div className="v5-scroll" style={S.scrollBody}>
         <HomeAppBar />
+        <DynamicMessage phase="settlement_day" dismissed={messageDismissed} onDismiss={onDismissMessage} nav={nav} />
         <PhaseTransitionButton label="정산 완료로 이동하기" onClick={onJumpToPostSettlement} />
-        <HomeMyInvestSection amount="20,000원" accountAmount="80,000원" nav={nav} goTab={goTab}>
+        <HomeMyInvestSection amount="20,000원" accountAmount="80,000원" nav={nav} goTab={goTab} phase="settlement_day">
           {/* 정산 당일 - 정산 진행중 표시 */}
-          <div style={{
+          <div onClick={() => nav('history_detail_settlement_day')} style={{
             backgroundColor: 'var(--color-neutral-050)', borderRadius: 16,
-            padding: '20px 16px',
+            padding: '20px 16px', cursor: 'pointer',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
               <div style={{
@@ -728,11 +813,12 @@ function HomeSettlementDayScreen({ nav, goTab, onJumpToPostSettlement }) {
   )
 }
 
-function HomePostSettlementScreen({ nav, goTab }) {
+function HomePostSettlementScreen({ nav, goTab, messageDismissed, onDismissMessage }) {
   return (
-    <div className="v1-screen" style={S.screen}>
-      <div className="v1-scroll" style={S.scrollBody}>
+    <div className="v5-screen" style={S.screen}>
+      <div className="v5-scroll" style={S.scrollBody}>
         <HomeAppBar />
+        <DynamicMessage phase="post_settlement" dismissed={messageDismissed} onDismiss={onDismissMessage} nav={nav} />
         <div style={{ padding: '24px 16px 12px' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 3, marginBottom: 20 }}>
             <span style={{ ...T.body17('medium'), color: 'var(--color-neutral-600)' }}>내 투자</span>
@@ -758,6 +844,7 @@ function HomePostSettlementScreen({ nav, goTab }) {
               backgroundColor: 'var(--color-neutral-100)', borderRadius: 16,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               cursor: 'pointer',
+              position: 'relative',
             }}>
               <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>투자 내역</span>
             </div>
@@ -806,7 +893,7 @@ function HomePostSettlementScreen({ nav, goTab }) {
 // ============================================================
 function ProductDetailScreen({ onBack, onApply, phase }) {
   return (
-    <div className="v1-screen" style={{ ...S.screen, display: 'flex', flexDirection: 'column' }}>
+    <div className="v5-screen" style={{ ...S.screen, display: 'flex', flexDirection: 'column' }}>
       <SubAppBar title="" onBack={onBack} />
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <span style={{ ...T.headline28('semibold'), color: 'var(--color-neutral-900)', opacity: 0.2 }}>투자 상품 상세</span>
@@ -827,26 +914,38 @@ function ProductSettlementResultScreen({ onBack }) {
   const [activeTab, setActiveTab] = useState('result')
 
   return (
-    <div className="v1-screen" style={S.screen}>
-      <div className="v1-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
-        {/* Blue gradient header */}
+    <div className="v5-screen" style={S.screen}>
+      <div className="v5-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
+        {/* Figma: 투자중상품상세_정산 결과 Header */}
         <div style={{
-          background: 'linear-gradient(180deg, var(--color-primary-600) 0%, var(--color-primary-500) 100%)',
-          padding: '0 0 24px',
+          backgroundColor: 'rgba(68, 135, 255, 0.20)',
+          padding: '0 0 0',
+          minHeight: 354,
         }}>
-          <SubAppBar title="" onBack={onBack} light />
-          <div style={{ padding: '0 16px' }}>
-            <div style={{ ...T.headline24('bold'), color: '#fff', marginBottom: 4 }}>A 투자 상품</div>
-            <div style={{ ...T.body15('medium'), color: 'rgba(255,255,255,0.7)', marginBottom: 24 }}>10마리 투자상품</div>
-            <div style={{ display: 'flex', gap: 16 }}>
-              <div style={{ flex: 1 }}>
-                <div style={{ ...T.label13('medium'), color: 'rgba(255,255,255,0.7)', marginBottom: 4 }}>내 보유 C</div>
-                <div style={{ ...T.title20('bold'), color: '#fff' }}>1/100C</div>
+          <SubAppBar title="" onBack={onBack} />
+          <div style={{ padding: '10px 0 0' }}>
+            <div style={{ padding: '0 24px', ...T.headline32('semibold'), color: 'var(--color-primary-900)', marginBottom: 0 }}>
+              A 투자 상품
+            </div>
+            <div style={{ display: 'flex', alignItems: 'flex-start', paddingLeft: 24, minHeight: 200 }}>
+              <div style={{ flex: 1, paddingTop: 30, display: 'flex', flexDirection: 'column', gap: 20 }}>
+                <div>
+                  <div style={{ fontSize: 14, lineHeight: '20px', fontWeight: 500, color: 'var(--color-neutral-900)', opacity: 0.8, marginBottom: 2 }}>내 보유 C</div>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 2, color: 'var(--color-neutral-900)' }}>
+                    <span style={{ ...T.title20('semibold') }}>1</span>
+                    <span style={{ fontSize: 14, lineHeight: '20px', fontWeight: 500 }}>/ 100C</span>
+                  </div>
+                </div>
+                <div>
+                  <div style={{ fontSize: 14, lineHeight: '20px', fontWeight: 500, color: 'var(--color-neutral-900)', opacity: 0.8, marginBottom: 2 }}>내 투자금</div>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 2, color: 'var(--color-neutral-900)' }}>
+                    <span style={{ ...T.headline24('semibold') }}>20,000</span>
+                    <span style={{ fontSize: 14, lineHeight: '20px', fontWeight: 500 }}>원</span>
+                  </div>
+                </div>
               </div>
-              <div style={{ width: 1, backgroundColor: 'rgba(255,255,255,0.2)' }} />
-              <div style={{ flex: 1 }}>
-                <div style={{ ...T.label13('medium'), color: 'rgba(255,255,255,0.7)', marginBottom: 4 }}>내 투자금</div>
-                <div style={{ ...T.title20('bold'), color: '#fff' }}>20,000원</div>
+              <div style={{ width: 200, height: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                <img src="/product.png" alt="A 투자 상품" style={{ width: 186, height: 140, objectFit: 'contain' }} />
               </div>
             </div>
           </div>
@@ -985,7 +1084,7 @@ function QuantityInputScreen({ onBack, onInvest }) {
   }
 
   return (
-    <div className="v1-screen" style={{ ...S.screen, display: 'flex', flexDirection: 'column', height: '100dvh' }}>
+    <div className="v5-screen" style={{ ...S.screen, display: 'flex', flexDirection: 'column', height: '100dvh' }}>
       <SubAppBar title="A 투자 상품" onBack={onBack} />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <div style={{ padding: '8px 16px 0', display: 'flex', justifyContent: 'center' }}>
@@ -1084,7 +1183,7 @@ function QuantityInputScreen({ onBack, onInvest }) {
 
 function ApplyCompleteScreen({ onConfirm }) {
   return (
-    <div className="v1-screen" style={{ ...S.screen, display: 'flex', flexDirection: 'column' }}>
+    <div className="v5-screen" style={{ ...S.screen, display: 'flex', flexDirection: 'column' }}>
       <div style={S.safeTop} />
       <div style={{
         flex: 1, display: 'flex', flexDirection: 'column',
@@ -1116,7 +1215,7 @@ function ApplyCompleteScreen({ onConfirm }) {
 // ============================================================
 function PushNotificationScreen({ title, message, onTap }) {
   return (
-    <div className="v1-screen" style={{
+    <div className="v5-screen" style={{
       ...S.screen, backgroundColor: 'var(--color-dark-900)',
       display: 'flex', flexDirection: 'column',
     }}>
@@ -1153,12 +1252,12 @@ function PushNotificationScreen({ title, message, onTap }) {
 }
 
 // ============================================================
-// Invest Tab Screen
+// Invest Screen (Redesigned for v5)
 // ============================================================
-function InvestScreen({ nav, onBack, phase }) {
+function InvestScreen({ nav, onBack, phase, goTab }) {
   const config = {
     pre:              { amount: '0원', account: '100,000원' },
-    applying:         { amount: '60,000원', account: '40,000원' },
+    applying:         { amount: '0원', account: '40,000원' },
     settled:          { amount: '20,000원', account: '80,000원' },
     pre_settlement:   { amount: '20,000원', account: '80,000원' },
     settlement_day:   { amount: '20,000원', account: '80,000원' },
@@ -1166,11 +1265,12 @@ function InvestScreen({ nav, onBack, phase }) {
   }
   const c = config[phase]
 
+  const showBadge = phase === 'applying' || phase === 'pre_settlement' || phase === 'settlement_day'
   const showSettlementHistory = phase === 'post_settlement'
 
   return (
-    <div className="v1-screen" style={S.screen}>
-      <div className="v1-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
+    <div className="v5-screen" style={S.screen}>
+      <div className="v5-scroll" style={S.scrollBody}>
         <SubAppBar title="" onBack={onBack} />
         <div style={{ padding: '0 16px' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 3, marginBottom: 12 }}>
@@ -1189,84 +1289,100 @@ function InvestScreen({ nav, onBack, phase }) {
               <div style={{ ...T.body15('medium'), color: 'var(--color-neutral-600)', marginBottom: 2 }}>내 계좌</div>
               <div style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{c.account}</div>
             </div>
-            <div style={{
+            <div onClick={() => nav('history')} style={{
               flex: 1, padding: 16,
               backgroundColor: 'var(--color-neutral-100)', borderRadius: 16,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer',
+              position: 'relative',
             }}>
-              <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-600)' }}>계좌 개설하기</span>
+              {showBadge && <BlueBadge />}
+              <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>투자 내역</span>
             </div>
           </div>
         </div>
-        {/* 투자중 상품 */}
-        <div style={{ padding: '0 16px' }}>
-          <div style={{ ...T.body17('semibold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>투자중 상품</div>
-          {phase === 'pre' && (
+        {/* 투자중 상품 - conditional display */}
+        {phase === 'pre' && (
+          <div style={{ padding: '0 16px' }}>
+            <div style={{ ...T.body17('semibold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>투자중 상품</div>
             <div style={{ textAlign: 'center', padding: '40px 0 60px' }}>
               <img src="/empty.png" alt="" style={{ width: 100, height: 100, objectFit: 'contain', marginBottom: 8 }} />
               <div style={{ ...T.body17('medium'), color: 'var(--color-neutral-600)' }}>투자중인 상품이 없어요</div>
             </div>
-          )}
-          {phase === 'applying' && <PendingOrderCard onClick={() => nav('history_detail_applying')} />}
-          {phase === 'settled' && <SettledProductItem onClick={() => nav('history_detail_settled')} />}
-          {phase === 'pre_settlement' && (
-            <>
-              <SettlementPendingCard daysLeft="7일 남음" onClick={() => nav('history_detail_pre_settlement')} />
-              <div style={{ marginTop: 24 }}>
-                <div style={{ ...T.body17('semibold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>투자중 상품 1</div>
-                <SettledProductItem label="A 투자 상품" amount="20,000원" sub="1주" onClick={() => nav('history_detail_settled')} />
-              </div>
-            </>
-          )}
-          {phase === 'settlement_day' && (
-            <div onClick={() => nav('history_detail_settlement_day')} style={{
-              backgroundColor: 'var(--color-neutral-050)', borderRadius: 16,
-              padding: '20px 16px', cursor: 'pointer',
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-                <div className="v2-blink-dot" style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: 'var(--color-green-500)' }} />
-                <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)' }}>정산 진행중 1건</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <div style={{
-                  width: 52, height: 52, borderRadius: 12,
-                  backgroundColor: 'var(--color-primary-100)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  overflow: 'hidden',
-                }}>
-                  <img src="/product.png" alt="" style={{ width: 40, height: 40, objectFit: 'contain' }} />
-                </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2 }}>
-                    <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)' }}>A 투자 상품</span>
-                    <span style={{
-                      padding: '2px 8px', borderRadius: 6,
-                      backgroundColor: 'var(--color-green-050)',
-                      ...T.label13('semibold'), color: 'var(--color-green-600)',
-                    }}>오늘 지급 예정</span>
-                  </div>
-                  <div style={{ ...T.body15('medium'), color: 'var(--color-neutral-500)' }}>1C · 20,000원</div>
-                </div>
-              </div>
-            </div>
-          )}
-          {phase === 'post_settlement' && (
-            <div style={{ textAlign: 'center', padding: '40px 0 60px' }}>
-              <img src="/empty.png" alt="" style={{ width: 100, height: 100, objectFit: 'contain', marginBottom: 8 }} />
-              <div style={{ ...T.body17('medium'), color: 'var(--color-neutral-600)' }}>투자중인 상품이 없어요</div>
-            </div>
-          )}
-        </div>
+          </div>
+        )}
+        {/* applying: no 투자중 상품 section at all */}
+        {phase === 'settled' && (
+          <div style={{ padding: '0 16px' }}>
+            <div style={{ ...T.body17('semibold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>투자중 상품</div>
+            <SettledProductItem onClick={() => nav('history_detail_settled')} />
+          </div>
+        )}
+        {phase === 'pre_settlement' && (
+          <div style={{ padding: '0 16px' }}>
+            <div style={{ ...T.body17('semibold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>투자중 상품 1</div>
+            <SettledProductItem label="A 투자 상품" amount="20,000원" sub="1주" onClick={() => nav('history_detail_settled')} />
+          </div>
+        )}
+        {phase === 'settlement_day' && (
+          <div style={{ padding: '0 16px' }}>
+            <div style={{ ...T.body17('semibold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>투자중 상품 1</div>
+            <SettledProductItem label="A 투자 상품" amount="20,000원" sub="1주" onClick={() => nav('history_detail_settlement_day')} />
+          </div>
+        )}
+        {/* post_settlement: no 투자중 상품 section */}
         <div style={{ ...S.divider, marginTop: 24 }} />
+        {/* Bottom menu */}
         <div>
-          <MenuItem label="투자 내역" onClick={() => nav('history')} />
-          <MenuItem label="정산 내역" onClick={showSettlementHistory ? () => nav('settlement_history') : undefined} />
-          <MenuItem label="자산 보호 내역" />
-          <MenuItem label="세금" />
-          <MenuItem label="중도해지 취소내역" />
+          <div onClick={() => nav('history')} style={{
+            padding: '0 16px', height: 56,
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            borderBottom: '1px solid var(--color-neutral-100)',
+            cursor: 'pointer', minHeight: 44,
+          }}>
+            <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>투자 내역</span>
+            <ChevronRight size={24} color="var(--color-neutral-400)" />
+          </div>
+          <div onClick={showSettlementHistory ? () => nav('settlement_history') : undefined} style={{
+            padding: '0 16px', height: 56,
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            borderBottom: '1px solid var(--color-neutral-100)',
+            cursor: showSettlementHistory ? 'pointer' : 'default', minHeight: 44,
+          }}>
+            <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>정산 내역</span>
+            <ChevronRight size={24} color="var(--color-neutral-400)" />
+          </div>
+          <div style={{
+            padding: '0 16px', height: 56,
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            borderBottom: '1px solid var(--color-neutral-100)',
+            minHeight: 44,
+          }}>
+            <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>자산 보호 내역</span>
+            <ChevronRight size={24} color="var(--color-neutral-400)" />
+          </div>
+          <div style={{
+            padding: '0 16px', height: 56,
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            borderBottom: '1px solid var(--color-neutral-100)',
+            minHeight: 44,
+          }}>
+            <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>세금</span>
+            <ChevronRight size={24} color="var(--color-neutral-400)" />
+          </div>
+          <div style={{
+            padding: '0 16px', height: 56,
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            borderBottom: '1px solid var(--color-neutral-100)',
+            minHeight: 44,
+          }}>
+            <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>중도해지 취소내역</span>
+            <ChevronRight size={24} color="var(--color-neutral-400)" />
+          </div>
         </div>
         <div style={{ height: 60 }} />
       </div>
+      <TabBar activeTab="invest" onTabChange={goTab} />
     </div>
   )
 }
@@ -1274,7 +1390,7 @@ function InvestScreen({ nav, onBack, phase }) {
 // ============================================================
 // Asset Screen (자산)
 // ============================================================
-function AssetScreen({ onBack, nav, goTab, phase }) {
+function AssetScreen({ onBack, nav, phase }) {
   const data = {
     pre:              { total: '100,000원', bank: '100,000원', invest: '0원' },
     applying:         { total: '40,000원', bank: '40,000원', invest: '0원' },
@@ -1286,9 +1402,9 @@ function AssetScreen({ onBack, nav, goTab, phase }) {
   const d = data[phase]
 
   return (
-    <div className="v1-screen" style={S.screen}>
-      <div className="v1-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
-        <SubAppBar title="자산" onBack={onBack} />
+    <div className="v5-screen" style={S.screen}>
+      <div className="v5-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
+        <SubAppBar title="내 계좌" onBack={onBack} />
         <div style={{ padding: '0 16px' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 3, padding: '16px 0' }}>
             <span style={{ ...T.body17('medium'), color: 'var(--color-neutral-600)' }}>총 자산</span>
@@ -1326,6 +1442,15 @@ function AssetScreen({ onBack, nav, goTab, phase }) {
             </div>
           </div>
         </div>
+        {/* 계좌 개설하기 button */}
+        <div style={{ padding: '24px 16px' }}>
+          <div style={{
+            height: 56, borderRadius: 14,
+            backgroundColor: 'var(--color-neutral-100)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            ...T.body17('semibold'), color: 'var(--color-neutral-700)',
+          }}>계좌 개설하기</div>
+        </div>
       </div>
     </div>
   )
@@ -1336,44 +1461,75 @@ function AssetScreen({ onBack, nav, goTab, phase }) {
 // ============================================================
 function HistoryEmptyScreen({ onBack }) {
   return (
-    <div className="v1-screen" style={S.screen}>
-      <SubAppBar title="투자내역" onBack={onBack} />
-      <div style={{ padding: '20px 16px' }}>
-        <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>신청중인 주문</div>
-        <div style={{ textAlign: 'center', padding: '24px 0' }}>
-          <div style={{ ...T.body15('medium'), color: 'var(--color-neutral-500)' }}>신청중인 주문이 없어요</div>
-        </div>
-      </div>
-      <div style={S.divider} />
-      <div style={{ padding: '20px 16px' }}>
-        <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>완료된 주문</div>
-        <div style={{
-          display: 'flex', flexDirection: 'column',
-          alignItems: 'center', justifyContent: 'center',
-          padding: '40px 0',
-        }}>
-          <img src="/empty.png" alt="" style={{ width: 100, height: 100, objectFit: 'contain', marginBottom: 8 }} />
-          <div style={{ ...T.body15('medium'), color: 'var(--color-neutral-500)' }}>투자내역이 없어요</div>
-        </div>
+    <div className="v5-screen" style={S.screen}>
+      <SubAppBar title="" onBack={onBack} />
+      <div style={{
+        display: 'flex', flexDirection: 'column',
+        alignItems: 'center', justifyContent: 'center',
+        height: 'calc(100dvh - 120px)',
+      }}>
+        <img src="/empty.png" alt="" style={{ width: 120, height: 120, objectFit: 'contain', marginBottom: 12 }} />
+        <div style={{ ...T.body17('medium'), color: 'var(--color-neutral-500)' }}>투자내역이 없어요</div>
       </div>
     </div>
   )
 }
 
 function HistoryApplyingScreen({ onBack, nav }) {
+  const [showTooltip, setShowTooltip] = useState(false)
   return (
-    <div className="v1-screen" style={S.screen}>
-      <div className="v1-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
-        <SubAppBar title="투자내역" onBack={onBack} />
+    <div className="v5-screen" style={S.screen}>
+      <div className="v5-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
+        <SubAppBar title="" onBack={onBack} />
         <div style={{ padding: '20px 16px' }}>
-          <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>신청중인 주문</div>
-          <PendingOrderCard onClick={() => nav('history_detail_applying')} />
-        </div>
-        <div style={S.divider} />
-        <div style={{ padding: '20px 16px' }}>
-          <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>완료된 주문</div>
-          <div style={{ textAlign: 'center', padding: '24px 0' }}>
-            <div style={{ ...T.body15('medium'), color: 'var(--color-neutral-500)' }}>완료된 주문이 없어요</div>
+          <div style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)', marginBottom: 4 }}>신청 중</div>
+          <div style={{ position: 'relative', display: 'inline-block', marginBottom: 20 }}>
+            <div
+              onClick={() => setShowTooltip(!showTooltip)}
+              style={{ display: 'flex', alignItems: 'center', gap: 4, cursor: 'pointer' }}
+            >
+              <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-500)' }}>내 투자가 신청중인 이유</span>
+              <div style={{
+                width: 16, height: 16, borderRadius: '50%',
+                backgroundColor: 'var(--color-neutral-200)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                ...T.label11('semibold'), color: 'var(--color-neutral-500)',
+              }}>i</div>
+            </div>
+            {showTooltip && (
+              <div style={{
+                position: 'absolute', top: 28, left: 0, right: -40,
+                backgroundColor: 'var(--color-neutral-800)', borderRadius: 12,
+                padding: '12px 16px', zIndex: 10,
+              }}>
+                <div style={{ ...T.label13('medium'), color: '#fff', lineHeight: '1.5' }}>
+                  투자 신청 후 체결까지 일정 시간이 소요됩니다. 체결이 완료되면 알림을 보내드릴게요.
+                </div>
+              </div>
+            )}
+          </div>
+          {/* 신청 중 카드 - row format */}
+          <div onClick={() => nav('history_detail_applying')} style={{
+            display: 'flex', alignItems: 'center', gap: 12,
+            padding: '16px 0', cursor: 'pointer',
+          }}>
+            <div style={{
+              width: 44, height: 44, borderRadius: '50%',
+              backgroundColor: 'var(--color-primary-100)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              overflow: 'hidden', flexShrink: 0,
+            }}>
+              <img src="/product.png" alt="" style={{ width: 32, height: 32, objectFit: 'contain' }} />
+            </div>
+            <div style={{ flex: 1 }}>
+              <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)', marginBottom: 2 }}>A 투자 상품</div>
+              <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>3주 | 60,000</div>
+            </div>
+            <div style={{
+              padding: '4px 10px', borderRadius: 20,
+              border: '1px solid var(--color-primary-500)',
+              ...T.label13('semibold'), color: 'var(--color-primary-500)',
+            }}>11일남음</div>
           </div>
         </div>
       </div>
@@ -1383,35 +1539,20 @@ function HistoryApplyingScreen({ onBack, nav }) {
 
 function HistorySettledScreen({ onBack, nav }) {
   return (
-    <div className="v1-screen" style={S.screen}>
-      <div className="v1-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
-        <SubAppBar title="투자내역" onBack={onBack} />
+    <div className="v5-screen" style={S.screen}>
+      <div className="v5-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
+        <SubAppBar title="" onBack={onBack} />
         <div style={{ padding: '20px 16px' }}>
-          <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>신청중인 주문</div>
-          <div style={{ textAlign: 'center', padding: '24px 0' }}>
-            <div style={{ ...T.body15('medium'), color: 'var(--color-neutral-500)' }}>신청중인 주문이 없어요</div>
-          </div>
-        </div>
-        <div style={S.divider} />
-        <div style={{ padding: '20px 16px' }}>
-          <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>완료된 주문</div>
+          <div style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)', marginBottom: 20 }}>완료 내역</div>
           <div onClick={() => nav('history_detail_settled')} style={{
-            display: 'flex', alignItems: 'center', gap: 12, padding: '16px 0',
-            borderBottom: '1px solid var(--color-neutral-100)', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', gap: 12, padding: '12px 0',
+            cursor: 'pointer',
           }}>
-            <div style={{
-              width: 44, height: 44, borderRadius: 12,
-              backgroundColor: 'var(--color-primary-100)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              overflow: 'hidden',
-            }}>
-              <img src="/product.png" alt="" style={{ width: 32, height: 32, objectFit: 'contain' }} />
-            </div>
+            <span style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)', minWidth: 52 }}>24.06.12</span>
             <div style={{ flex: 1 }}>
-              <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)', marginBottom: 2 }}>A 투자 상품</div>
-              <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>1C 투자 체결 완료</div>
+              <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)' }}>A 투자 상품</div>
+              <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>20,000원 체결 완료</div>
             </div>
-            <span style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>6.12</span>
           </div>
         </div>
       </div>
@@ -1419,60 +1560,153 @@ function HistorySettledScreen({ onBack, nav }) {
   )
 }
 
-// --- NEW History Screens ---
+// --- History Screens ---
 
 function HistoryPreSettlementScreen({ onBack, nav }) {
+  const [showTooltip, setShowTooltip] = useState(false)
   return (
-    <div className="v1-screen" style={S.screen}>
-      <div className="v1-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
-        <SubAppBar title="투자내역" onBack={onBack} />
-        {/* 정산 예정 */}
-        <div style={{ padding: '20px 16px' }}>
-          <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>정산 예정</div>
+    <div className="v5-screen" style={S.screen}>
+      <div className="v5-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
+        <SubAppBar title="" onBack={onBack} />
+        <div style={{ padding: '20px 16px 32px' }}>
+          <div style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)', marginBottom: 4 }}>정산 예정</div>
+          <div style={{ position: 'relative', display: 'inline-block', marginBottom: 20 }}>
+            <div
+              onClick={() => setShowTooltip(!showTooltip)}
+              style={{ display: 'flex', alignItems: 'center', gap: 4, cursor: 'pointer' }}
+            >
+              <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-500)' }}>내 상품이 정산 예정인 이유</span>
+              <div style={{
+                width: 16, height: 16, borderRadius: '50%',
+                backgroundColor: 'var(--color-neutral-200)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                ...T.label11('semibold'), color: 'var(--color-neutral-500)',
+              }}>i</div>
+            </div>
+            {showTooltip && (
+              <div style={{
+                position: 'absolute', top: 28, left: 0, right: -40,
+                backgroundColor: 'var(--color-neutral-800)', borderRadius: 12,
+                padding: '12px 16px', zIndex: 10,
+              }}>
+                <div style={{ ...T.label13('medium'), color: '#fff', lineHeight: '1.5' }}>
+                  정산 예정일이 확정되면 해당 날짜에 정산금이 지급됩니다.
+                </div>
+              </div>
+            )}
+          </div>
+          {/* 정산 예정 카드 - row format */}
           <div onClick={() => nav('history_detail_pre_settlement')} style={{
-            display: 'flex', alignItems: 'center', gap: 12, padding: '16px 0',
-            borderBottom: '1px solid var(--color-neutral-100)', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', gap: 12,
+            padding: '16px 0', cursor: 'pointer',
           }}>
             <div style={{
-              width: 44, height: 44, borderRadius: 12,
+              width: 44, height: 44, borderRadius: '50%',
               backgroundColor: 'var(--color-primary-100)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              overflow: 'hidden',
+              overflow: 'hidden', flexShrink: 0,
             }}>
               <img src="/product.png" alt="" style={{ width: 32, height: 32, objectFit: 'contain' }} />
             </div>
             <div style={{ flex: 1 }}>
               <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)', marginBottom: 2 }}>A 투자 상품</div>
-              <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>1C · 정산 예정</div>
+              <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>3주 | 60,000</div>
             </div>
-            <span style={{
-              padding: '2px 8px', borderRadius: 6,
-              backgroundColor: 'var(--color-secondary-050)',
-              ...T.label13('semibold'), color: 'var(--color-secondary-600)',
-            }}>7일 남음</span>
+            <div style={{
+              padding: '4px 10px', borderRadius: 20,
+              border: '1px solid var(--color-primary-500)',
+              ...T.label13('semibold'), color: 'var(--color-primary-500)',
+            }}>7일남음</div>
           </div>
         </div>
         <div style={S.divider} />
-        {/* 완료된 주문 */}
         <div style={{ padding: '20px 16px' }}>
-          <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>완료된 주문</div>
+          <div style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)', marginBottom: 20 }}>완료 내역</div>
           <div onClick={() => nav('history_detail_settled')} style={{
-            display: 'flex', alignItems: 'center', gap: 12, padding: '16px 0',
-            borderBottom: '1px solid var(--color-neutral-100)', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', gap: 12, padding: '12px 0',
+            cursor: 'pointer',
+          }}>
+            <span style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)', minWidth: 52 }}>24.06.12</span>
+            <div style={{ flex: 1 }}>
+              <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)' }}>A 투자 상품</div>
+              <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>20,000원 체결 완료</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function HistorySettlementDayScreen({ onBack, nav }) {
+  const [showTooltip, setShowTooltip] = useState(false)
+  return (
+    <div className="v5-screen" style={S.screen}>
+      <div className="v5-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
+        <SubAppBar title="" onBack={onBack} />
+        <div style={{ padding: '20px 16px 32px' }}>
+          <div style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)', marginBottom: 4 }}>정산 예정</div>
+          <div style={{ position: 'relative', display: 'inline-block', marginBottom: 20 }}>
+            <div
+              onClick={() => setShowTooltip(!showTooltip)}
+              style={{ display: 'flex', alignItems: 'center', gap: 4, cursor: 'pointer' }}
+            >
+              <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-500)' }}>내 상품이 정산 예정인 이유</span>
+              <div style={{
+                width: 16, height: 16, borderRadius: '50%',
+                backgroundColor: 'var(--color-neutral-200)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                ...T.label11('semibold'), color: 'var(--color-neutral-500)',
+              }}>i</div>
+            </div>
+            {showTooltip && (
+              <div style={{
+                position: 'absolute', top: 28, left: 0, right: -40,
+                backgroundColor: 'var(--color-neutral-800)', borderRadius: 12,
+                padding: '12px 16px', zIndex: 10,
+              }}>
+                <div style={{ ...T.label13('medium'), color: '#fff', lineHeight: '1.5' }}>
+                  정산 예정일이 확정되면 해당 날짜에 정산금이 지급됩니다.
+                </div>
+              </div>
+            )}
+          </div>
+          {/* 정산 당일 카드 - row format */}
+          <div onClick={() => nav('history_detail_settlement_day')} style={{
+            display: 'flex', alignItems: 'center', gap: 12,
+            padding: '16px 0', cursor: 'pointer',
           }}>
             <div style={{
-              width: 44, height: 44, borderRadius: 12,
+              width: 44, height: 44, borderRadius: '50%',
               backgroundColor: 'var(--color-primary-100)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              overflow: 'hidden',
+              overflow: 'hidden', flexShrink: 0,
             }}>
               <img src="/product.png" alt="" style={{ width: 32, height: 32, objectFit: 'contain' }} />
             </div>
             <div style={{ flex: 1 }}>
               <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)', marginBottom: 2 }}>A 투자 상품</div>
-              <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>1C 투자 체결 완료</div>
+              <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>3주 | 60,000</div>
             </div>
-            <span style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>6.12</span>
+            <div style={{
+              padding: '4px 10px', borderRadius: 20,
+              border: '1px solid var(--color-primary-500)',
+              ...T.label13('semibold'), color: 'var(--color-primary-500)',
+            }}>오늘 정산 예정</div>
+          </div>
+        </div>
+        <div style={S.divider} />
+        <div style={{ padding: '20px 16px' }}>
+          <div style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)', marginBottom: 20 }}>완료 내역</div>
+          <div onClick={() => nav('history_detail_settled')} style={{
+            display: 'flex', alignItems: 'center', gap: 12, padding: '12px 0',
+            cursor: 'pointer',
+          }}>
+            <span style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)', minWidth: 52 }}>24.06.12</span>
+            <div style={{ flex: 1 }}>
+              <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)' }}>A 투자 상품</div>
+              <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>20,000원 체결 완료</div>
+            </div>
           </div>
         </div>
       </div>
@@ -1482,52 +1716,32 @@ function HistoryPreSettlementScreen({ onBack, nav }) {
 
 function HistoryPostSettlementScreen({ onBack, nav }) {
   return (
-    <div className="v1-screen" style={S.screen}>
-      <div className="v1-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
-        <SubAppBar title="투자내역" onBack={onBack} />
-        {/* 정산 완료 */}
+    <div className="v5-screen" style={S.screen}>
+      <div className="v5-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
+        <SubAppBar title="" onBack={onBack} />
         <div style={{ padding: '20px 16px' }}>
-          <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>정산 완료</div>
+          <div style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)', marginBottom: 20 }}>완료 내역</div>
+          {/* 정산 완료 row */}
           <div onClick={() => nav('history_detail_post_settlement')} style={{
-            display: 'flex', alignItems: 'center', gap: 12, padding: '16px 0',
+            display: 'flex', alignItems: 'center', gap: 12, padding: '12px 0',
             borderBottom: '1px solid var(--color-neutral-100)', cursor: 'pointer',
           }}>
-            <div style={{
-              width: 44, height: 44, borderRadius: 12,
-              backgroundColor: 'var(--color-primary-100)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              overflow: 'hidden',
-            }}>
-              <img src="/product.png" alt="" style={{ width: 32, height: 32, objectFit: 'contain' }} />
-            </div>
+            <span style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)', minWidth: 52 }}>26.08.14</span>
             <div style={{ flex: 1 }}>
-              <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)', marginBottom: 2 }}>A 투자 상품</div>
-              <div style={{ ...T.label13('medium'), color: 'var(--color-green-600)' }}>정산 완료 · +2,000원</div>
+              <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)' }}>A 투자 상품</div>
+              <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>22,000원 정산 완료</div>
             </div>
-            <span style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>7.19</span>
           </div>
-        </div>
-        <div style={S.divider} />
-        {/* 완료된 주문 */}
-        <div style={{ padding: '20px 16px' }}>
-          <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>완료된 주문</div>
+          {/* 체결 완료 row */}
           <div onClick={() => nav('history_detail_settled')} style={{
-            display: 'flex', alignItems: 'center', gap: 12, padding: '16px 0',
-            borderBottom: '1px solid var(--color-neutral-100)', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', gap: 12, padding: '12px 0',
+            cursor: 'pointer',
           }}>
-            <div style={{
-              width: 44, height: 44, borderRadius: 12,
-              backgroundColor: 'var(--color-primary-100)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              overflow: 'hidden',
-            }}>
-              <img src="/product.png" alt="" style={{ width: 32, height: 32, objectFit: 'contain' }} />
-            </div>
+            <span style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)', minWidth: 52 }}>24.06.12</span>
             <div style={{ flex: 1 }}>
-              <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)', marginBottom: 2 }}>A 투자 상품</div>
-              <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>1C 투자 체결 완료</div>
+              <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)' }}>A 투자 상품</div>
+              <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>20,000원 체결 완료</div>
             </div>
-            <span style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>6.12</span>
           </div>
         </div>
       </div>
@@ -1540,8 +1754,8 @@ function HistoryPostSettlementScreen({ onBack, nav }) {
 // ============================================================
 function HistoryDetailApplyingScreen({ onBack, nav }) {
   return (
-    <div className="v1-screen" style={{ ...S.screen, position: 'relative' }}>
-      <div className="v1-scroll" style={{ height: '100dvh', overflowY: 'auto', paddingBottom: 120 }}>
+    <div className="v5-screen" style={{ ...S.screen, position: 'relative' }}>
+      <div className="v5-scroll" style={{ height: '100dvh', overflowY: 'auto', paddingBottom: 120 }}>
         <div style={S.appBar}>
           <div style={S.safeTop} />
           <div style={{ ...S.appBarRow, position: 'relative' }}>
@@ -1579,12 +1793,12 @@ function HistoryDetailApplyingScreen({ onBack, nav }) {
               <div style={{ ...T.body15('medium'), color: 'var(--color-neutral-400)' }}>취소 불가능</div>
             </div>
           </div>
-          <div onClick={() => nav('product_detail')} style={{
+          <div style={{
             width: '100%', height: 48, borderRadius: 12,
             backgroundColor: 'var(--color-neutral-100)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             ...T.body17('semibold'), color: 'var(--color-neutral-700)',
-            cursor: 'pointer', marginBottom: 16,
+            marginBottom: 16,
           }}>상품 상세 보기</div>
         </div>
         <div style={S.divider} />
@@ -1615,8 +1829,8 @@ function HistoryDetailApplyingScreen({ onBack, nav }) {
 function HistoryDetailSettledScreen({ onBack, nav }) {
   const [showApplyDetail, setShowApplyDetail] = useState(false)
   return (
-    <div className="v1-screen" style={S.screen}>
-      <div className="v1-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
+    <div className="v5-screen" style={S.screen}>
+      <div className="v5-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
         <div style={S.appBar}>
           <div style={S.safeTop} />
           <div style={{ ...S.appBarRow, position: 'relative' }}>
@@ -1653,13 +1867,6 @@ function HistoryDetailSettledScreen({ onBack, nav }) {
               <div style={{ ...T.body15('medium'), color: 'var(--color-neutral-600)' }}>취소 불가능</div>
             </div>
           </div>
-          <div onClick={() => nav('product_detail')} style={{
-            width: '100%', height: 48, borderRadius: 12,
-            backgroundColor: 'var(--color-neutral-100)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            ...T.body17('semibold'), color: 'var(--color-neutral-700)',
-            cursor: 'pointer', marginBottom: 16,
-          }}>상품 정보 보기</div>
         </div>
         <div style={S.divider} />
         <div style={{ padding: '20px 16px' }}>
@@ -1720,12 +1927,12 @@ function HistoryDetailSettledScreen({ onBack, nav }) {
   )
 }
 
-// --- NEW History Detail Screens ---
+// --- History Detail Screens ---
 
 function HistoryDetailPreSettlementScreen({ onBack, nav }) {
   return (
-    <div className="v1-screen" style={S.screen}>
-      <div className="v1-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
+    <div className="v5-screen" style={S.screen}>
+      <div className="v5-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
         <div style={S.appBar}>
           <div style={S.safeTop} />
           <div style={{ ...S.appBarRow, position: 'relative' }}>
@@ -1750,7 +1957,7 @@ function HistoryDetailPreSettlementScreen({ onBack, nav }) {
               <div style={{ ...T.body17('medium'), color: 'var(--color-primary-500)' }}>정산 예정</div>
             </div>
           </div>
-          {/* 2-step progress: 정산 예정 ✓ — 정산 (pending, 7일남음) */}
+          {/* 2-step progress: 정산 예정 - 정산 (pending, 7일남음) */}
           <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', marginBottom: 32, width: '100%' }}>
             <div style={{ textAlign: 'center' }}>
               <IconCheck filled />
@@ -1771,13 +1978,6 @@ function HistoryDetailPreSettlementScreen({ onBack, nav }) {
               </div>
             </div>
           </div>
-          <div onClick={() => nav('product_detail')} style={{
-            width: '100%', height: 48, borderRadius: 12,
-            backgroundColor: 'var(--color-neutral-100)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            ...T.body17('semibold'), color: 'var(--color-neutral-700)',
-            cursor: 'pointer', marginBottom: 16,
-          }}>상품 상세 보기</div>
         </div>
         <div style={S.divider} />
         {/* 정산 내역 */}
@@ -1805,8 +2005,8 @@ function HistoryDetailPreSettlementScreen({ onBack, nav }) {
 
 function HistoryDetailSettlementDayScreen({ onBack, nav }) {
   return (
-    <div className="v1-screen" style={S.screen}>
-      <div className="v1-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
+    <div className="v5-screen" style={S.screen}>
+      <div className="v5-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
         <div style={S.appBar}>
           <div style={S.safeTop} />
           <div style={{ ...S.appBarRow, position: 'relative' }}>
@@ -1838,7 +2038,7 @@ function HistoryDetailSettlementDayScreen({ onBack, nav }) {
               </div>
             </div>
           </div>
-          {/* 2-step progress: 정산 예정 ✓ — 정산 (active, 오늘 지급 예정) */}
+          {/* 2-step progress: 정산 예정 - 정산 (active, 오늘 지급 예정) */}
           <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', marginBottom: 32, width: '100%' }}>
             <div style={{ textAlign: 'center' }}>
               <IconCheck filled />
@@ -1858,13 +2058,6 @@ function HistoryDetailSettlementDayScreen({ onBack, nav }) {
               </div>
             </div>
           </div>
-          <div onClick={() => nav('product_detail')} style={{
-            width: '100%', height: 48, borderRadius: 12,
-            backgroundColor: 'var(--color-neutral-100)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            ...T.body17('semibold'), color: 'var(--color-neutral-700)',
-            cursor: 'pointer', marginBottom: 16,
-          }}>상품 정보 보기</div>
         </div>
         <div style={S.divider} />
         <div style={{ padding: '20px 16px' }}>
@@ -1895,8 +2088,8 @@ function HistoryDetailSettlementDayScreen({ onBack, nav }) {
 function HistoryDetailPostSettlementScreen({ onBack, nav }) {
   const [showSettledDetail, setShowSettledDetail] = useState(false)
   return (
-    <div className="v1-screen" style={S.screen}>
-      <div className="v1-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
+    <div className="v5-screen" style={S.screen}>
+      <div className="v5-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
         <div style={S.appBar}>
           <div style={S.safeTop} />
           <div style={{ ...S.appBarRow, position: 'relative' }}>
@@ -2009,8 +2202,8 @@ function HistoryDetailPostSettlementScreen({ onBack, nav }) {
 // ============================================================
 function SettlementHistoryScreen({ onBack, nav }) {
   return (
-    <div className="v1-screen" style={S.screen}>
-      <div className="v1-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
+    <div className="v5-screen" style={S.screen}>
+      <div className="v5-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
         <SubAppBar title="정산 내역" onBack={onBack} />
         {/* Filter tabs */}
         <div style={{ display: 'flex', gap: 8, padding: '8px 16px 16px' }}>
@@ -2109,8 +2302,8 @@ function AccountDetailScreen({ onBack, phase }) {
   const d = data[phase]
 
   return (
-    <div className="v1-screen" style={S.screen}>
-      <div className="v1-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
+    <div className="v5-screen" style={S.screen}>
+      <div className="v5-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
         <div style={{ backgroundColor: 'var(--color-primary-500)' }}>
           <div style={S.safeTop} />
           <div style={{ ...S.appBarRow, position: 'relative' }}>
@@ -2179,14 +2372,43 @@ function AccountDetailScreen({ onBack, phase }) {
   )
 }
 
+function SimpleTabScreen({ title, activeTab, goTab }) {
+  return (
+    <div className="v5-screen" style={S.screen}>
+      <div className="v5-scroll" style={S.scrollBody}>
+        <HomeAppBar title={title} />
+        <div style={{
+          minHeight: 'calc(100dvh - 185px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: 16,
+          textAlign: 'center',
+        }}>
+          <div>
+            <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)', marginBottom: 8 }}>
+              {title}
+            </div>
+            <div style={{ ...T.body15('medium'), color: 'var(--color-neutral-600)' }}>
+              이번 v5 프로토타입에서는 투자 신청부터 정산까지의 GNB 흐름을 확인합니다.
+            </div>
+          </div>
+        </div>
+      </div>
+      <TabBar activeTab={activeTab} onTabChange={goTab} />
+    </div>
+  )
+}
+
 // ============================================================
-// MAIN V2 COMPONENT
+// MAIN V5 COMPONENT
 // ============================================================
-export default function V2() {
+export default function V5() {
   const [phase, setPhase] = useState('pre')
-  // phases: pre → applying → settled → pre_settlement → settlement_day → post_settlement
+  // phases: pre -> applying -> settled -> pre_settlement -> settlement_day -> post_settlement
   const [screen, setScreen] = useState('home')
   const [history, setHistory] = useState([])
+  const [messageDismissed, setMessageDismissed] = useState(false)
 
   const navigate = useCallback((target) => {
     setHistory(prev => [...prev, screen])
@@ -2202,10 +2424,8 @@ export default function V2() {
   }, [history])
 
   const goTab = useCallback((tab) => {
-    if (tab === 'home') {
-      setScreen('home')
-      setHistory([])
-    }
+    setScreen(tab)
+    setHistory([])
   }, [])
 
   const handleGoToQuantity = () => {
@@ -2265,18 +2485,26 @@ export default function V2() {
     setHistory([])
   }
 
+  const dismissMessage = useCallback(() => setMessageDismissed(true), [])
+
   switch (screen) {
     case 'home':
       if (phase === 'pre') return <HomePreScreen nav={navigate} goTab={goTab} />
-      if (phase === 'applying') return <HomeApplyingScreen nav={navigate} goTab={goTab} onJumpToSettled={handleJumpToSettled} />
-      if (phase === 'settled') return <HomeSettledScreen nav={navigate} goTab={goTab} onJumpToPreSettlement={handleJumpToPreSettlement} />
-      if (phase === 'pre_settlement') return <HomePreSettlementScreen nav={navigate} goTab={goTab} onJumpToSettlementDay={handleJumpToSettlementDay} />
-      if (phase === 'settlement_day') return <HomeSettlementDayScreen nav={navigate} goTab={goTab} onJumpToPostSettlement={handleJumpToPostSettlement} />
-      if (phase === 'post_settlement') return <HomePostSettlementScreen nav={navigate} goTab={goTab} />
+      if (phase === 'applying') return <HomeApplyingScreen nav={navigate} goTab={goTab} onJumpToSettled={handleJumpToSettled} messageDismissed={messageDismissed} onDismissMessage={dismissMessage} />
+      if (phase === 'settled') return <HomeSettledScreen nav={navigate} goTab={goTab} onJumpToPreSettlement={handleJumpToPreSettlement} messageDismissed={messageDismissed} onDismissMessage={dismissMessage} />
+      if (phase === 'pre_settlement') return <HomePreSettlementScreen nav={navigate} goTab={goTab} onJumpToSettlementDay={handleJumpToSettlementDay} messageDismissed={messageDismissed} onDismissMessage={dismissMessage} />
+      if (phase === 'settlement_day') return <HomeSettlementDayScreen nav={navigate} goTab={goTab} onJumpToPostSettlement={handleJumpToPostSettlement} messageDismissed={messageDismissed} onDismissMessage={dismissMessage} />
+      if (phase === 'post_settlement') return <HomePostSettlementScreen nav={navigate} goTab={goTab} messageDismissed={messageDismissed} onDismissMessage={dismissMessage} />
       return <HomePreScreen nav={navigate} goTab={goTab} />
 
     case 'invest':
-      return <InvestScreen nav={navigate} onBack={goBack} phase={phase} />
+      return <InvestScreen nav={navigate} onBack={goBack} phase={phase} goTab={goTab} />
+
+    case 'shopping':
+      return <SimpleTabScreen title="쇼핑" activeTab="shopping" goTab={goTab} />
+
+    case 'my':
+      return <SimpleTabScreen title="마이" activeTab="my" goTab={goTab} />
 
     case 'asset':
       return <AssetScreen onBack={goBack} nav={navigate} goTab={goTab} phase={phase} />
@@ -2311,7 +2539,7 @@ export default function V2() {
       if (phase === 'applying') return <HistoryApplyingScreen onBack={goBack} nav={navigate} />
       if (phase === 'settled') return <HistorySettledScreen onBack={goBack} nav={navigate} />
       if (phase === 'pre_settlement') return <HistoryPreSettlementScreen onBack={goBack} nav={navigate} />
-      if (phase === 'settlement_day') return <HistoryPreSettlementScreen onBack={goBack} nav={navigate} />
+      if (phase === 'settlement_day') return <HistorySettlementDayScreen onBack={goBack} nav={navigate} />
       if (phase === 'post_settlement') return <HistoryPostSettlementScreen onBack={goBack} nav={navigate} />
       return <HistoryEmptyScreen onBack={goBack} />
 
