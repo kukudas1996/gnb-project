@@ -174,7 +174,6 @@ function SubAppBar({ title, onBack, light = false }) {
 function TabBar({ activeTab, onTabChange }) {
   const tabs = [
     { key: 'home', label: '홈', TabIcon: Home },
-    { key: 'insight', label: '인사이트', TabIcon: Compass },
     { key: 'shopping', label: '쇼핑', TabIcon: ShoppingBag },
     { key: 'my', label: '마이', TabIcon: User },
   ]
