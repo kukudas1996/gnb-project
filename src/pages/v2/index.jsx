@@ -2364,14 +2364,14 @@ function SimpleTabScreen({ title, activeTab, goTab }) {
 // Insight Screen (인사이트)
 // ============================================================
 const SHORTS_DATA = [
-  { id: 1, title: '#먹방 #한우 #송아지 #건초 #귀여움', color: '#8B6914' },
-  { id: 2, title: '뱅카우 출장 V-LOG', color: '#2D5A27' },
-  { id: 3, title: '한우명가 화산 25년 추석 EXIT(가축투자계약증권 2호)', color: '#4A3728' },
+  { id: 1, youtubeId: 'D7pmSguHstg', title: '#먹방 #한우 #송아지 #건초 #귀여움' },
+  { id: 2, youtubeId: '3ChS-u6j4ag', title: '뱅카우 출장 V-LOG' },
+  { id: 3, youtubeId: 'L_oE4jxoCzU', title: '한우명가 화산 25년 추석 EXIT(가축투자계약증권 2호)' },
 ]
 
 const CONTENT_DATA = [
-  { id: 1, title: '한우 투자, 이제 시작해도 늦지 않다', color: '#C4D4A0' },
-  { id: 2, title: '한우 투자, 이제 시작해도 늦지 않다', color: '#D4A070' },
+  { id: 1, title: '한우 투자, 이제 시작해도 늦지 않다', color: '#C4D4A0', url: 'https://blog.naver.com/bancow-official/223486068255' },
+  { id: 2, title: '한우 투자, 이제 시작해도 늦지 않다', color: '#D4A070', url: 'https://blog.naver.com/bancow-official/223851285239' },
   { id: 3, title: '한우 투자로 얻는 수익과 리스크 분석', color: '#A0B4D4' },
   { id: 4, title: '한우 투자로 얻는 수익과 리스크 분석', color: '#5090D0' },
   { id: 5, title: '초보자를 위한 한우 투자 가이드', color: '#70C490' },
@@ -2410,15 +2410,25 @@ function InsightScreen({ nav, goTab }) {
             display: 'flex', gap: 12, overflowX: 'auto', paddingLeft: 16, paddingRight: 16,
           }}>
             {SHORTS_DATA.map((s) => (
-              <div key={s.id} onClick={() => nav('shorts_detail')} style={{
+              <div key={s.id} onClick={() => nav('shorts_detail_' + s.id)} style={{
                 flexShrink: 0, cursor: 'pointer',
               }}>
                 <div style={{
-                  width: 200, height: 356, borderRadius: 12, backgroundColor: s.color,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  width: 200, height: 356, borderRadius: 12, backgroundColor: '#000',
                   position: 'relative', overflow: 'hidden',
                 }}>
-                  <Play size={48} color="rgba(255,255,255,0.7)" fill="rgba(255,255,255,0.5)" />
+                  <img
+                    src={`https://img.youtube.com/vi/${s.youtubeId}/mqdefault.jpg`}
+                    alt={s.title}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                  <div style={{
+                    position: 'absolute', inset: 0,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    background: 'rgba(0,0,0,0.15)',
+                  }}>
+                    <Play size={48} color="rgba(255,255,255,0.9)" fill="rgba(255,255,255,0.7)" />
+                  </div>
                 </div>
                 <p style={{
                   ...T.body15('medium'), color: 'var(--color-neutral-800)',
@@ -2460,7 +2470,10 @@ function InsightScreen({ nav, goTab }) {
             {[0, 1, 2].map((row) => (
               <div key={row} style={{ display: 'flex', gap: 12 }}>
                 {CONTENT_DATA.slice(row * 2, row * 2 + 2).map((c) => (
-                  <div key={c.id} onClick={() => nav('content_detail')} style={{ flex: 1, cursor: 'pointer' }}>
+                  <div key={c.id} onClick={() => {
+                    if (c.url) window.open(c.url, '_blank')
+                    else nav('content_detail')
+                  }} style={{ flex: 1, cursor: 'pointer' }}>
                     <div style={{
                       width: '100%', aspectRatio: '160/90', borderRadius: 12,
                       backgroundColor: c.color,
@@ -2522,18 +2535,17 @@ function InsightScreen({ nav, goTab }) {
 }
 
 // ============================================================
-// Shorts Detail Screen (숏츠 상세)
+// Shorts Detail Screen (숏츠 상세 - YouTube 임베드)
 // ============================================================
-function ShortsDetailScreen({ onBack }) {
+function ShortsDetailScreen({ onBack, shortsItem }) {
   return (
     <div className="v5-screen" style={{
-      ...S.screen, backgroundColor: '#1a1a1a',
+      ...S.screen, backgroundColor: '#000',
     }}>
       <div style={{
         position: 'relative', width: '100%', height: '100dvh',
-        display: 'flex', flexDirection: 'column',
       }}>
-        {/* AppBar */}
+        {/* Close button */}
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 }}>
           <div style={{ height: 'env(safe-area-inset-top, 0px)' }} />
           <div style={{ height: 60, display: 'flex', alignItems: 'center', padding: '0 6px' }}>
@@ -2546,53 +2558,15 @@ function ShortsDetailScreen({ onBack }) {
           </div>
         </div>
 
-        {/* Full screen content area */}
-        <div style={{
-          flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
-          backgroundColor: '#8B6914', position: 'relative',
-        }}>
-          <Play size={64} color="rgba(255,255,255,0.6)" fill="rgba(255,255,255,0.4)" />
-
-          {/* Right side actions */}
-          <div style={{
-            position: 'absolute', right: 16, bottom: 200,
-            display: 'flex', flexDirection: 'column', gap: 20, alignItems: 'center',
-          }}>
-            {[
-              { Icon: ThumbsUp, label: '10' },
-              { Icon: ThumbsDown, label: '싫어요' },
-              { Icon: MessageSquare, label: '1' },
-              { Icon: Share2, label: '공유' },
-            ].map(({ Icon, label }, i) => (
-              <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
-                <Icon size={28} color="#fff" />
-                <span style={{ ...T.label11('medium'), color: '#fff' }}>{label}</span>
-              </div>
-            ))}
-          </div>
-
-          {/* Bottom info */}
-          <div style={{
-            position: 'absolute', left: 16, right: 80, bottom: 120,
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-              <div style={{
-                width: 32, height: 32, borderRadius: 16,
-                backgroundColor: 'var(--color-primary-500)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}>
-                <span style={{ ...T.label11('semibold'), color: '#fff' }}>B</span>
-              </div>
-              <span style={{ ...T.body15('semibold'), color: '#fff' }}>@bankcow</span>
-            </div>
-            <p style={{ ...T.body15('medium'), color: '#fff', marginBottom: 8 }}>
-              #먹방 #한우 #송아지 #건초 #귀여움
-            </p>
-            <p style={{ ...T.label13('medium'), color: 'rgba(255,255,255,0.7)' }}>
-              ♪ 진짜 맛있는데... 왜 인기가 없을까? 🤔 #mukbang #...
-            </p>
-          </div>
-        </div>
+        {/* YouTube embed */}
+        <iframe
+          src={`https://www.youtube.com/embed/${shortsItem.youtubeId}?autoplay=1&loop=1&playlist=${shortsItem.youtubeId}&playsinline=1&rel=0&modestbranding=1`}
+          style={{
+            position: 'absolute', inset: 0, width: '100%', height: '100%', border: 'none',
+          }}
+          allow="autoplay; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
       </div>
     </div>
   )
@@ -2805,8 +2779,12 @@ export default function V5() {
     case 'insight':
       return <InsightScreen nav={navigate} goTab={goTab} />
 
-    case 'shorts_detail':
-      return <ShortsDetailScreen onBack={goBack} />
+    case 'shorts_detail_1':
+      return <ShortsDetailScreen onBack={goBack} shortsItem={SHORTS_DATA[0]} />
+    case 'shorts_detail_2':
+      return <ShortsDetailScreen onBack={goBack} shortsItem={SHORTS_DATA[1]} />
+    case 'shorts_detail_3':
+      return <ShortsDetailScreen onBack={goBack} shortsItem={SHORTS_DATA[2]} />
 
     case 'content_detail':
       return <ContentDetailScreen onBack={goBack} />
