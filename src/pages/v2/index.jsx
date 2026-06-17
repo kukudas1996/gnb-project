@@ -2370,18 +2370,18 @@ const SHORTS_DATA = [
 ]
 
 const CONTENT_DATA = [
-  { id: 1, title: '한우 투자, 이제 시작해도 늦지 않다', color: '#C4D4A0', url: 'https://blog.naver.com/bancow-official/223486068255' },
-  { id: 2, title: '한우 투자, 이제 시작해도 늦지 않다', color: '#D4A070', url: 'https://blog.naver.com/bancow-official/223851285239' },
-  { id: 3, title: '한우 투자로 얻는 수익과 리스크 분석', color: '#A0B4D4' },
-  { id: 4, title: '한우 투자로 얻는 수익과 리스크 분석', color: '#5090D0' },
-  { id: 5, title: '초보자를 위한 한우 투자 가이드', color: '#70C490' },
-  { id: 6, title: '초보자를 위한 한우 투자 가이드', color: '#B0D4E0' },
+  { id: 1, title: '한우 투자, 이제 시작해도 늦지 않다', img: '/insight/content-1.png', url: 'https://blog.naver.com/bancow-official/223486068255' },
+  { id: 2, title: '한우 투자, 이제 시작해도 늦지 않다', img: '/insight/content-2.png', url: 'https://blog.naver.com/bancow-official/223851285239' },
+  { id: 3, title: '한우 투자로 얻는 수익과 리스크 분석', img: '/insight/content-3.png', url: 'https://blog.naver.com/bancow-official/224307947231' },
+  { id: 4, title: '한우 투자로 얻는 수익과 리스크 분석', img: '/insight/content-4.png' },
+  { id: 5, title: '초보자를 위한 한우 투자 가이드', img: '/insight/content-5.png' },
+  { id: 6, title: '초보자를 위한 한우 투자 가이드', img: '/insight/content-6.png' },
 ]
 
 const NEWS_DATA = [
-  { id: 1, title: '한우 투자, 새로운 기회', desc: '최근 한우 시장의 변화와 투자 전략에 대한 분석이 필요합니다. 전문가들은 한우 투자에 대한 긍정적인 전망을 내놓고 있으며, 이는 농가의 수익성 향상으로 이어질 것으로 기대됩니다.', color: '#90B070' },
-  { id: 2, title: '한우 투자, 성공적인 사례', desc: '한우 투자에 성공한 사례를 통해 많은 투자자들이 긍정적인 결과를 얻고 있습니다. 이들은 지속적인 관리와 시장 분석을 통해 안정적인 수익을 창출하고 있습니다.', color: '#70A0D0' },
-  { id: 3, title: '한우 투자, 전문가의 조언', desc: '전문가들은 한우 투자를 고려하는 이들에게 시장 동향을 주의 깊게 살펴볼 것을 권장합니다. 또한, 장기적인 관점에서의 투자 계획이 중요하다고 강조하고 있습니다.', color: '#D0A070' },
+  { id: 1, title: '한우 투자, 새로운 기회', desc: '최근 한우 시장의 변화와 투자 전략에 대한 분석이 필요합니다. 전문가들은 한우 투자에 대한 긍정적인 전망을 내놓고 있으며, 이는 농가의 수익성 향상으로 이어질 것으로 기대됩니다.', img: '/insight/news-1.png' },
+  { id: 2, title: '한우 투자, 성공적인 사례', desc: '한우 투자에 성공한 사례를 통해 많은 투자자들이 긍정적인 결과를 얻고 있습니다. 이들은 지속적인 관리와 시장 분석을 통해 안정적인 수익을 창출하고 있습니다.', img: '/insight/news-2.png' },
+  { id: 3, title: '한우 투자, 전문가의 조언', desc: '전문가들은 한우 투자를 고려하는 이들에게 시장 동향을 주의 깊게 살펴볼 것을 권장합니다. 또한, 장기적인 관점에서의 투자 계획이 중요하다고 강조하고 있습니다.', img: '/insight/news-3.png' },
 ]
 
 function InsightScreen({ nav, goTab }) {
@@ -2476,8 +2476,10 @@ function InsightScreen({ nav, goTab }) {
                   }} style={{ flex: 1, cursor: 'pointer' }}>
                     <div style={{
                       width: '100%', aspectRatio: '160/90', borderRadius: 12,
-                      backgroundColor: c.color,
-                    }} />
+                      backgroundColor: 'var(--color-neutral-100)', overflow: 'hidden',
+                    }}>
+                      <img src={c.img} alt={c.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </div>
                     <p style={{
                       ...T.body15('medium'), color: 'var(--color-neutral-800)',
                       marginTop: 8,
@@ -2521,9 +2523,11 @@ function InsightScreen({ nav, goTab }) {
                   </p>
                 </div>
                 <div style={{
-                  width: 93, height: 93, borderRadius: 12, backgroundColor: n.color,
-                  flexShrink: 0,
-                }} />
+                  width: 93, height: 93, borderRadius: 12, backgroundColor: 'var(--color-neutral-100)',
+                  flexShrink: 0, overflow: 'hidden',
+                }}>
+                  <img src={n.img} alt={n.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
               </div>
             ))}
           </div>
