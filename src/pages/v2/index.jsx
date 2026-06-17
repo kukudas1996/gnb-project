@@ -1981,7 +1981,7 @@ function HistoryDetailSettlementDayScreen({ onBack, nav }) {
 }
 
 function HistoryDetailPostSettlementScreen({ onBack, nav }) {
-  const [showSettledDetail, setShowSettledDetail] = useState(false)
+  const [showPreSettlement, setShowPreSettlement] = useState(false)
   return (
     <div className="v5-screen" style={S.screen}>
       <div className="v5-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
@@ -2006,14 +2006,7 @@ function HistoryDetailPostSettlementScreen({ onBack, nav }) {
             </div>
             <div>
               <div style={{ ...T.headline24('semibold'), color: 'var(--color-neutral-900)' }}>A 투자 상품</div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{ ...T.body17('medium'), color: 'var(--color-neutral-700)' }}>A 투자 상품</span>
-                <span style={{
-                  padding: '2px 8px', borderRadius: 6,
-                  backgroundColor: 'var(--color-green-050)',
-                  ...T.label13('semibold'), color: 'var(--color-green-600)',
-                }}>정산 완료</span>
-              </div>
+              <div style={{ ...T.body17('medium'), color: 'var(--color-primary-500)' }}>정산 완료</div>
             </div>
           </div>
           {/* 2-step progress: both complete */}
@@ -2021,66 +2014,136 @@ function HistoryDetailPostSettlementScreen({ onBack, nav }) {
             <div style={{ textAlign: 'center' }}>
               <IconCheck filled />
               <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-800)', marginTop: 8 }}>정산 예정</div>
+              <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>6.1</div>
             </div>
             <div style={{ width: 100, height: 2, backgroundColor: 'var(--color-primary-500)', marginTop: 17 }} />
             <div style={{ textAlign: 'center' }}>
               <IconCheck filled />
               <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-800)', marginTop: 8 }}>정산</div>
+              <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>6.12</div>
             </div>
           </div>
-          {/* 정산 결과 보기 버튼 */}
-          <div onClick={() => nav('product_settlement_result')} style={{
+          <div style={{
             width: '100%', height: 48, borderRadius: 12,
-            backgroundColor: 'var(--color-primary-500)',
+            backgroundColor: 'var(--color-neutral-100)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            ...T.body17('semibold'), color: '#fff',
-            cursor: 'pointer', marginBottom: 16,
-          }}>정산 결과 보기</div>
+            ...T.body17('semibold'), color: 'var(--color-neutral-700)',
+            marginBottom: 16,
+          }}>상품 정보 보기</div>
         </div>
         <div style={S.divider} />
         {/* 정산 내역 */}
         <div style={{ padding: '20px 16px' }}>
-          <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)', marginBottom: 20 }}>정산 내역</div>
+          <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>정산 내역</div>
           {[
-            ['정산일', '2026.07.19'],
+            ['정산일', '2026.08.14 09:00'],
             ['정산금', '22,000원'],
             ['투자금', '20,000원'],
-            ['이익금', '+2,000원'],
-            ['세후 이익금', '+1,692원'],
+            ['수익금', '2,000원'],
           ].map(([l, v]) => (
             <div key={l} style={{
-              display: 'flex', justifyContent: 'space-between', padding: '16px 0',
+              display: 'flex', justifyContent: 'space-between', padding: '14px 0',
             }}>
-              <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-900)' }}>{l}</span>
-              <span style={{
-                ...T.body17('regular'),
-                color: (v.startsWith('+')) ? 'var(--color-red-500)' : 'var(--color-neutral-700)',
-              }}>{v}</span>
+              <span style={{ ...T.body17('medium'), color: 'var(--color-neutral-900)' }}>{l}</span>
+              <span style={{ ...T.body17('medium'), color: 'var(--color-neutral-700)' }}>{v}</span>
             </div>
           ))}
+          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '14px 0' }}>
+            <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-900)' }}>수익률</span>
+            <span style={{ ...T.body17('semibold'), color: 'var(--color-red-500)' }}>+20.00%</span>
+          </div>
+          {/* 배당소득세 */}
+          <div style={{
+            backgroundColor: 'var(--color-neutral-050)', borderRadius: 12,
+            padding: '14px 16px', marginTop: 8,
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+              <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-600)' }}>배당소득세 <span style={{ ...T.label13('medium'), color: 'var(--color-neutral-400)' }}>미세</span></span>
+              <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-600)' }}>(30,800)원</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+              <span style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>· 세후 수익금</span>
+              <span style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>+169,200원</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <span style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>· 세후 수익률</span>
+              <span style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>+16.92%</span>
+            </div>
+          </div>
         </div>
         <div style={S.divider} />
-        {/* 체결 내역 (collapsible) */}
+        {/* 정산 히스토리 */}
+        <div style={{ padding: '20px 16px' }}>
+          <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)', marginBottom: 4 }}>정산 히스토리</div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', borderBottom: '1px solid var(--color-neutral-100)' }}>
+            <span style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>(500미리 정보 내역)</span>
+            <span style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>금액</span>
+          </div>
+          {[
+            ['경매금', '{100,000,000}원'],
+            ['가축 구매비', '-{100,000,000}원'],
+            ['사료 구매비', '-{100,000,000}원'],
+            ['사육 관리비', '-{100,000,000}원'],
+            ['증권 관리비', '0원'],
+            ['경매 결과', '{100,000,000}원'],
+          ].map(([l, v]) => (
+            <div key={l} style={{
+              display: 'flex', justifyContent: 'space-between', padding: '12px 0',
+              borderBottom: '1px solid var(--color-neutral-050)',
+            }}>
+              <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-800)' }}>{l}</span>
+              <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-700)' }}>{v}</span>
+            </div>
+          ))}
+          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', borderBottom: '1px solid var(--color-neutral-050)' }}>
+            <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-800)' }}>보상금 <span style={{ ...T.label11('medium'), color: 'var(--color-neutral-400)' }}>이상</span></span>
+            <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-700)' }}>+{'{1,000,000,000}'}원</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', borderBottom: '1px solid var(--color-neutral-050)' }}>
+            <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-800)' }}>농가 장려금 <span style={{ ...T.label11('medium'), color: 'var(--color-neutral-400)' }}>이하</span></span>
+            <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-700)' }}>-{'{100,000,000}'}원</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', borderBottom: '1px solid var(--color-neutral-100)' }}>
+            <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-800)' }}>운영 성과금</span>
+            <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-700)' }}></span>
+          </div>
+          {/* 합계 */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '14px 0', borderBottom: '1px solid var(--color-neutral-100)' }}>
+            <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)' }}>전체 수익금 (21,876C)</span>
+            <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)' }}>+2,000,000,000원</span>
+          </div>
+          <div style={{ padding: '14px 0' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-800)' }}>· 내 수익금 (1C)</span>
+              <div style={{ textAlign: 'right' }}>
+                <div style={{ ...T.body15('semibold'), color: 'var(--color-red-500)' }}>+22,000원</div>
+                <div style={{ ...T.label13('medium'), color: 'var(--color-red-500)' }}>+20.00%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style={S.divider} />
+        {/* 정산 예정 내역 (아코디언) */}
         <div style={{ padding: '20px 16px' }}>
           <div
-            onClick={() => setShowSettledDetail(!showSettledDetail)}
+            onClick={() => setShowPreSettlement(!showPreSettlement)}
             style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
           >
-            <span style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)' }}>체결 내역</span>
+            <span style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)' }}>정산 예정 내역</span>
             <ChevronDown size={24} color="var(--color-neutral-400)"
-              style={{ transform: showSettledDetail ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}
+              style={{ transform: showPreSettlement ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}
             />
           </div>
-          {showSettledDetail && (
+          {showPreSettlement && (
             <div style={{ marginTop: 8 }}>
               {[
-                ['투자 체결일', '2026.06.12 09:00'],
-                ['투자 체결 금액', '20,000원'],
-                ['체결 수량', '1주'],
+                ['정산 예정일', '2026.08.14'],
+                ['투자금', '20,000원'],
+                ['정산 수량', '1주'],
               ].map(([l, v]) => (
-                <div key={l} style={{ display: 'flex', justifyContent: 'space-between', padding: '16px 0' }}>
-                  <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-900)' }}>{l}</span>
-                  <span style={{ ...T.body17('regular'), color: 'var(--color-neutral-700)' }}>{v}</span>
+                <div key={l} style={{ display: 'flex', justifyContent: 'space-between', padding: '14px 0' }}>
+                  <span style={{ ...T.body17('medium'), color: 'var(--color-neutral-900)' }}>{l}</span>
+                  <span style={{ ...T.body17('medium'), color: 'var(--color-neutral-700)' }}>{v}</span>
                 </div>
               ))}
             </div>
