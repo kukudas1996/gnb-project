@@ -2337,6 +2337,7 @@ export default function V5() {
     setPhase('applying')
     setScreen('home')
     setHistory([])
+    setMessageDismissed(false)
   }
 
   // Phase transitions via push notifications
@@ -2348,6 +2349,7 @@ export default function V5() {
     setPhase('settled')
     setScreen('home')
     setHistory([])
+    setMessageDismissed(false)
   }
 
   const handleJumpToPreSettlement = () => {
@@ -2358,6 +2360,7 @@ export default function V5() {
     setPhase('pre_settlement')
     setScreen('home')
     setHistory([])
+    setMessageDismissed(false)
   }
 
   const handleJumpToSettlementDay = () => {
@@ -2368,6 +2371,7 @@ export default function V5() {
     setPhase('settlement_day')
     setScreen('home')
     setHistory([])
+    setMessageDismissed(false)
   }
 
   const handleJumpToPostSettlement = () => {
@@ -2378,6 +2382,7 @@ export default function V5() {
     setPhase('post_settlement')
     setScreen('home')
     setHistory([])
+    setMessageDismissed(false)
   }
 
   const dismissMessage = useCallback(() => setMessageDismissed(true), [])
