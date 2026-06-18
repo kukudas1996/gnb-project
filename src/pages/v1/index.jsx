@@ -763,36 +763,6 @@ function HomePostSettlementScreen({ nav, goTab }) {
               <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>투자 내역</span>
             </div>
           </div>
-          {/* 정산 완료 알림 카드 */}
-          <div onClick={() => nav('settlement_history')} style={{
-            backgroundColor: 'var(--color-green-050)', borderRadius: 16,
-            padding: '20px 16px', cursor: 'pointer',
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-              <div style={{
-                width: 10, height: 10, borderRadius: '50%',
-                backgroundColor: 'var(--color-green-500)',
-              }} />
-              <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)' }}>정산 완료 1건</span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <div style={{
-                width: 52, height: 52, borderRadius: 12,
-                backgroundColor: 'var(--color-primary-100)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                overflow: 'hidden',
-              }}>
-                <img src="/product.png" alt="" style={{ width: 40, height: 40, objectFit: 'contain' }} />
-              </div>
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2 }}>
-                  <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)' }}>A 투자 상품</span>
-                  <span style={{ ...T.body15('semibold'), color: 'var(--color-green-600)' }}>+2,000원</span>
-                </div>
-                <div style={{ ...T.body15('medium'), color: 'var(--color-neutral-500)' }}>정산금 22,000원 지급 완료</div>
-              </div>
-            </div>
-          </div>
         </div>
         <Banner />
         <HomeProductSections nav={nav} />
