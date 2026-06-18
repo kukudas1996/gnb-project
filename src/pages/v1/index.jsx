@@ -2296,7 +2296,7 @@ function MyPageScreen({ nav, goTab }) {
         <div style={{ ...S.appBar, backgroundColor: 'var(--color-neutral-050)' }}>
           <div style={S.safeTop} />
           <div style={S.appBarRow}>
-            <div style={{ ...S.appBarTitle, ...T.title20('semibold') }}>마이페이지</div>
+            <div style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)' }}>마이페이지</div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
               <div style={{ width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Settings size={24} color="var(--color-neutral-900)" />
@@ -2308,15 +2308,15 @@ function MyPageScreen({ nav, goTab }) {
           </div>
         </div>
 
-        <div style={{ padding: '0 16px', paddingBottom: 'calc(81px + env(safe-area-inset-bottom, 0px))' }}>
+        <div style={{ paddingBottom: 'calc(81px + env(safe-area-inset-bottom, 0px))' }}>
           {/* User section */}
           <div style={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-between',
-            padding: '20px 0 24px',
+            gap: 12,
+            padding: '20px 24px 24px',
           }}>
-            <div>
+            <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)' }}>
                 김한우님, 반가워요!
               </div>
@@ -2324,31 +2324,28 @@ function MyPageScreen({ nav, goTab }) {
                 fontSize: 14,
                 fontWeight: 500,
                 color: 'var(--color-neutral-600)',
-                marginTop: 6,
+                marginTop: 2,
                 display: 'flex',
                 alignItems: 'center',
-                gap: 2,
                 cursor: 'pointer',
               }}>
-                내 정보 <ChevronRight size={14} color="var(--color-neutral-600)" />
+                내 정보
+                <ChevronRight size={20} color="var(--color-neutral-600)" />
               </div>
             </div>
             <div style={{
               width: 100,
               height: 100,
               borderRadius: 50,
-              backgroundColor: '#dae7ff',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              overflow: 'hidden',
               flexShrink: 0,
             }}>
-              <img src="/Cow.png" alt="" style={{ width: 80, height: 60, objectFit: 'contain' }} />
+              <img src="/Cow.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
           </div>
 
           {/* Menu groups */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10, padding: '0 24px' }}>
             {menuGroups.map((group, gi) => (
               <div key={gi} style={{
                 backgroundColor: 'var(--color-neutral-000)',
@@ -2360,12 +2357,13 @@ function MyPageScreen({ nav, goTab }) {
                   padding: '20px 20px 4px',
                   fontSize: 16,
                   fontWeight: 500,
+                  lineHeight: '24px',
                   color: 'var(--color-neutral-600)',
                 }}>
                   {group.label}
                 </div>
-                {group.items.map((item, ii) => {
-                  return (
+                <div style={{ padding: '0 8px 16px', display: 'flex', flexDirection: 'column', gap: 4 }}>
+                  {group.items.map((item, ii) => (
                     <div
                       key={ii}
                       onClick={item.target ? () => nav(item.target) : undefined}
@@ -2375,22 +2373,139 @@ function MyPageScreen({ nav, goTab }) {
                         display: 'flex',
                         alignItems: 'center',
                         gap: 8,
+                        borderRadius: 10,
                         cursor: item.target ? 'pointer' : 'default',
                       }}
                     >
                       <img src={item.icon} alt="" style={{ width: 24, height: 24 }} />
-                      <span style={{ fontSize: 16, fontWeight: 600, color: 'var(--color-neutral-800)' }}>
+                      <span style={{ fontSize: 16, fontWeight: 600, lineHeight: '24px', color: 'var(--color-neutral-800)' }}>
                         {item.text}
                       </span>
                     </div>
-                  )
-                })}
+                  ))}
+                </div>
               </div>
             ))}
           </div>
         </div>
       </div>
       <TabBar activeTab="my" onTabChange={goTab} />
+    </div>
+  )
+}
+
+function ShoppingScreen({ goTab }) {
+  const products = Array.from({ length: 6 }, (_, i) => ({
+    id: i + 1,
+    name: '[1++등급] 등심 로스구이 150g',
+    price: '20,000원',
+    unit: '100g당 1,000원',
+    farm: '뱅카우목장 1호',
+    img: '/shopping.jpg',
+  }))
+
+  const ProductCard = ({ product }) => (
+    <div style={{ width: 150, flexShrink: 0 }}>
+      <div style={{
+        width: '100%',
+        aspectRatio: '1/1',
+        borderRadius: 8,
+        overflow: 'hidden',
+        backgroundColor: 'var(--color-neutral-100)',
+      }}>
+        <img src={product.img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+      </div>
+      <div style={{ marginTop: 8 }}>
+        <div style={{ fontSize: 14, fontWeight: 400, lineHeight: '20px', color: 'var(--color-neutral-800)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          {product.name}
+        </div>
+        <div style={{ fontSize: 16, fontWeight: 700, lineHeight: '24px', color: 'var(--color-neutral-900)', marginTop: 2 }}>
+          {product.price}
+        </div>
+        <div style={{ fontSize: 12, fontWeight: 400, lineHeight: '18px', color: 'var(--color-neutral-600)' }}>
+          {product.unit}
+        </div>
+        <div style={{ display: 'flex', gap: 4, marginTop: 4, flexWrap: 'wrap' }}>
+          <span style={{ fontSize: 10, fontWeight: 500, lineHeight: '16px', color: 'var(--color-neutral-700)', border: '1px solid var(--color-neutral-100)', borderRadius: 4, padding: '2px 6px', display: 'flex', alignItems: 'center', gap: 2 }}>
+            <img src="/favicon.svg" alt="" style={{ width: 12, height: 12 }} />
+            뱅카우한우
+          </span>
+          <span style={{ fontSize: 10, fontWeight: 500, lineHeight: '16px', color: 'var(--color-neutral-700)', border: '1px solid var(--color-neutral-100)', borderRadius: 4, padding: '2px 6px' }}>
+            텍스트
+          </span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 4 }}>
+          <div style={{ width: 22, height: 22, borderRadius: 11, backgroundColor: 'var(--color-primary-600)', overflow: 'hidden', flexShrink: 0 }} />
+          <span style={{ fontSize: 12, fontWeight: 400, lineHeight: '18px', color: 'var(--color-neutral-700)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            {product.farm}
+          </span>
+        </div>
+      </div>
+    </div>
+  )
+
+  const ProductSection = ({ title }) => (
+    <div style={{ padding: '28px 16px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+        <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)' }}>{title}</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 4, cursor: 'pointer' }}>
+          <span style={{ fontSize: 14, fontWeight: 500, lineHeight: '20px', color: 'var(--color-neutral-700)' }}>전체보기</span>
+          <ChevronRight size={10} color="var(--color-neutral-700)" />
+        </div>
+      </div>
+      <div className="v3-hide-scrollbar" style={{ display: 'flex', gap: 8, overflowX: 'auto' }}>
+        {products.slice(0, 3).map(p => <ProductCard key={p.id} product={p} />)}
+      </div>
+    </div>
+  )
+
+  return (
+    <div className="v3-screen" style={S.screen}>
+      <div className="v3-scroll" style={S.scrollBody}>
+        {/* AppBar */}
+        <div style={S.appBar}>
+          <div style={S.safeTop} />
+          <div style={S.appBarRow}>
+            <div style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)', flex: 1 }}>쇼핑</div>
+            <div style={{ width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Bell size={24} color="var(--color-neutral-800)" />
+            </div>
+          </div>
+        </div>
+
+        <div style={{ paddingBottom: 'calc(81px + env(safe-area-inset-bottom, 0px))' }}>
+          {/* Quick access bar */}
+          <div style={{ padding: '20px 16px' }}>
+            <div style={{
+              backgroundColor: 'var(--color-neutral-050)',
+              borderRadius: 16,
+              padding: 16,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 12,
+            }}>
+              {['주문내역', '내 포인트', '내 쿠폰'].map((text, i) => [
+                i > 0 && <div key={`d${i}`} style={{ width: 1, height: 25, backgroundColor: 'var(--color-neutral-200)' }} />,
+                <div key={text} style={{ flex: 1, textAlign: 'center', ...T.body17('medium'), color: 'var(--color-neutral-800)', cursor: 'pointer' }}>
+                  {text}
+                </div>
+              ])}
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div style={{ height: 10, backgroundColor: 'var(--color-neutral-050)' }} />
+
+          {/* Product sections */}
+          <ProductSection title="전체 상품" />
+
+          <div style={{ height: 0, borderTop: '1px solid var(--color-neutral-050)' }} />
+
+          <ProductSection title="추천 상품" />
+        </div>
+      </div>
+      <TabBar activeTab="shopping" onTabChange={goTab} />
     </div>
   )
 }
@@ -2521,7 +2636,7 @@ export default function V3() {
       return <InvestScreen nav={navigate} onBack={goBack} phase={phase} />
 
     case 'shopping':
-      return <SimpleTabScreen title="쇼핑" activeTab="shopping" goTab={goTab} />
+      return <ShoppingScreen goTab={goTab} />
 
     case 'my':
       return <MyPageScreen nav={navigate} goTab={goTab} />
