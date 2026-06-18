@@ -2256,35 +2256,35 @@ function MyPageScreen({ nav, goTab }) {
     {
       label: '뱅킹',
       items: [
-        { icon: Wallet, text: '내 계좌', target: 'asset' },
+        { icon: '/icons/account.svg', text: '내 계좌', target: 'asset' },
       ],
     },
     {
       label: '투자',
       items: [
-        { icon: TrendingUp, text: '내 투자', target: 'invest' },
-        { icon: FileText, text: '투자 내역', target: 'history' },
-        { icon: Receipt, text: '정산 내역', target: 'settlement_history' },
-        { icon: Shield, text: '자산 보호 내역' },
-        { icon: Coins, text: '세금' },
-        { icon: FileX, text: '중도해지 신청 내역' },
+        { icon: '/icons/icon.svg', text: '내 투자', target: 'invest' },
+        { icon: '/icons/farm.svg', text: '투자 내역', target: 'history' },
+        { icon: '/icons/amount-bag.svg', text: '정산 내역', target: 'settlement_history' },
+        { icon: '/icons/shield.svg', text: '자산 보호 내역' },
+        { icon: '/icons/money-bag.svg', text: '세금' },
+        { icon: '/icons/flat-paper.svg', text: '중도해지 신청 내역' },
       ],
     },
     {
       label: '쇼핑',
       items: [
-        { icon: Package, text: '주문내역' },
-        { icon: Gift, text: '내 포인트' },
-        { icon: Ticket, text: '내 쿠폰' },
+        { icon: '/icons/meet.svg', text: '주문내역' },
+        { icon: '/icons/point-bag.svg', text: '내 포인트' },
+        { icon: '/icons/coupon.svg', text: '내 쿠폰' },
       ],
     },
     {
       label: '고객지원',
       items: [
-        { icon: Headphones, text: '1:1 문의' },
-        { icon: MessageCircle, text: '고객센터' },
-        { icon: Megaphone, text: '공지사항' },
-        { icon: FileText, text: '이용약관' },
+        { icon: '/icons/help.svg', text: '1:1 문의' },
+        { icon: '/icons/review.svg', text: '고객센터' },
+        { icon: '/icons/loud-speaker.svg', text: '공지사항' },
+        { icon: '/icons/paper.svg', text: '이용약관' },
       ],
     },
   ]
@@ -2343,7 +2343,7 @@ function MyPageScreen({ nav, goTab }) {
               justifyContent: 'center',
               flexShrink: 0,
             }}>
-              <img src="/product.png" alt="" style={{ width: 80, height: 60, objectFit: 'contain' }} />
+              <img src="/Cow.png" alt="" style={{ width: 80, height: 60, objectFit: 'contain' }} />
             </div>
           </div>
 
@@ -2365,7 +2365,6 @@ function MyPageScreen({ nav, goTab }) {
                   {group.label}
                 </div>
                 {group.items.map((item, ii) => {
-                  const Icon = item.icon
                   return (
                     <div
                       key={ii}
@@ -2379,7 +2378,7 @@ function MyPageScreen({ nav, goTab }) {
                         cursor: item.target ? 'pointer' : 'default',
                       }}
                     >
-                      <Icon size={24} color="var(--color-neutral-600)" />
+                      <img src={item.icon} alt="" style={{ width: 24, height: 24 }} />
                       <span style={{ fontSize: 16, fontWeight: 600, color: 'var(--color-neutral-800)' }}>
                         {item.text}
                       </span>

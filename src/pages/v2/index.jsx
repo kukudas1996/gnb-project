@@ -2361,7 +2361,7 @@ function MyPageScreen({ nav, goTab }) {
       }}
       onClick={target ? () => nav(target) : undefined}
     >
-      {createElement(icon, { size: 24, color: 'var(--color-neutral-600)', strokeWidth: 1.5 })}
+      <img src={icon} alt="" style={{ width: 24, height: 24 }} />
       <span style={{ fontSize: 16, fontWeight: 600, color: 'var(--color-neutral-800)' }}>{label}</span>
     </div>
   )
@@ -2400,7 +2400,7 @@ function MyPageScreen({ nav, goTab }) {
             justifyContent: 'center',
             overflow: 'hidden',
           }}>
-            <img src="/product.png" style={{ width: 80, height: 60, objectFit: 'contain' }} />
+            <img src="/Cow.png" style={{ width: 80, height: 60, objectFit: 'contain' }} />
           </div>
           <div style={{ textAlign: 'center' }}>
             <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)' }}>김한우님, 반가워요!</div>
@@ -2413,35 +2413,35 @@ function MyPageScreen({ nav, goTab }) {
           {/* 뱅킹 */}
           <div style={cardStyle}>
             <div style={categoryLabel}>뱅킹</div>
-            {menuItem(Wallet, '내 계좌', 'asset')}
+            {menuItem('/icons/account.svg', '내 계좌', 'asset')}
           </div>
 
           {/* 투자 */}
           <div style={cardStyle}>
             <div style={categoryLabel}>투자</div>
-            {menuItem(TrendingUp, '내 투자', 'invest')}
-            {menuItem(FileText, '투자 내역', 'history')}
-            {menuItem(Receipt, '정산 내역', 'settlement_history')}
-            {menuItem(Shield, '자산 보호 내역')}
-            {menuItem(Coins, '세금')}
-            {menuItem(FileX, '중도해지 신청 내역')}
+            {menuItem('/icons/icon.svg', '내 투자', 'invest')}
+            {menuItem('/icons/farm.svg', '투자 내역', 'history')}
+            {menuItem('/icons/amount-bag.svg', '정산 내역', 'settlement_history')}
+            {menuItem('/icons/shield.svg', '자산 보호 내역')}
+            {menuItem('/icons/money-bag.svg', '세금')}
+            {menuItem('/icons/flat-paper.svg', '중도해지 신청 내역')}
           </div>
 
           {/* 쇼핑 */}
           <div style={cardStyle}>
             <div style={categoryLabel}>쇼핑</div>
-            {menuItem(Package, '주문내역')}
-            {menuItem(Gift, '내 포인트')}
-            {menuItem(Ticket, '내 쿠폰')}
+            {menuItem('/icons/meet.svg', '주문내역')}
+            {menuItem('/icons/point-bag.svg', '내 포인트')}
+            {menuItem('/icons/coupon.svg', '내 쿠폰')}
           </div>
 
           {/* 고객지원 */}
           <div style={cardStyle}>
             <div style={categoryLabel}>고객지원</div>
-            {menuItem(Headphones, '1:1 문의')}
-            {menuItem(MessageSquare, '고객센터')}
-            {menuItem(Megaphone, '공지사항')}
-            {menuItem(FileText, '이용약관')}
+            {menuItem('/icons/help.svg', '1:1 문의')}
+            {menuItem('/icons/review.svg', '고객센터')}
+            {menuItem('/icons/loud-speaker.svg', '공지사항')}
+            {menuItem('/icons/paper.svg', '이용약관')}
           </div>
         </div>
       </div>
