@@ -2,7 +2,9 @@ import { createElement, useState, useCallback } from 'react'
 import {
   Home, ShoppingBag, User, Lock,
   Bell, ChevronLeft, ChevronRight, ChevronDown, Clock,
-  Copy, MoreVertical, Users, Delete, Check, X
+  Copy, MoreVertical, Users, Delete, Check, X,
+  Wallet, TrendingUp, FileText, Receipt, Shield, Coins, FileX,
+  Package, Gift, Ticket, Headphones, MessageCircle, Megaphone, Settings
 } from 'lucide-react'
 
 // ============================================================
@@ -2270,6 +2272,115 @@ function AccountDetailScreen({ onBack, phase }) {
   )
 }
 
+function MyPageScreen({ nav, goTab }) {
+  const menuItem = (Icon, label, target) => (
+    <div
+      key={label}
+      style={{
+        height: 44,
+        padding: '10px 12px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 8,
+        cursor: target ? 'pointer' : 'default',
+      }}
+      onClick={target ? () => nav(target) : undefined}
+    >
+      <Icon size={24} color="var(--color-neutral-600)" />
+      <span style={{ fontSize: 16, fontWeight: 600, color: 'var(--color-neutral-800)' }}>{label}</span>
+    </div>
+  )
+
+  const cardStyle = {
+    backgroundColor: 'var(--color-neutral-000)',
+    borderRadius: 16,
+    boxShadow: '0px 0px 2px rgba(19,21,26,0.06), 0px 0px 7px rgba(19,21,26,0.04)',
+  }
+
+  const categoryLabel = (text) => (
+    <div style={{ fontSize: 16, fontWeight: 500, color: 'var(--color-neutral-600)', padding: '20px 20px 4px' }}>{text}</div>
+  )
+
+  return (
+    <div className="v5-screen" style={{ ...S.screen, backgroundColor: 'var(--color-neutral-050)' }}>
+      <div className="v5-scroll" style={{ ...S.scrollBody, paddingBottom: 'calc(81px + env(safe-area-inset-bottom, 0px))' }}>
+        {/* AppBar */}
+        <div style={{ ...S.safeTop, backgroundColor: 'var(--color-neutral-050)' }} />
+        <div style={{ position: 'sticky', top: 0, zIndex: 10, backgroundColor: 'var(--color-neutral-050)' }}>
+          <div style={{ height: 60, padding: '0 6px 0 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)' }}>마이페이지</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              <div style={{ width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Settings size={24} color="var(--color-neutral-800)" />
+              </div>
+              <div style={{ width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Bell size={24} color="var(--color-neutral-800)" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* User Section */}
+        <div style={{ padding: '20px 16px 24px', display: 'flex', alignItems: 'center', gap: 16 }}>
+          <div style={{ width: 100, height: 100, borderRadius: 50, backgroundColor: '#dae7ff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <img src="/product.png" style={{ width: 80, height: 60, objectFit: 'contain' }} />
+          </div>
+          <div>
+            <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)' }}>김한우님, 반가워요!</div>
+            <div style={{ fontSize: 14, color: 'var(--color-neutral-600)', marginTop: 4, cursor: 'pointer' }}>내 정보 {'>'}</div>
+          </div>
+        </div>
+
+        {/* Card Groups */}
+        <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {/* 뱅킹 */}
+          <div style={cardStyle}>
+            {categoryLabel('뱅킹')}
+            <div style={{ padding: '0 8px 8px' }}>
+              {menuItem(Wallet, '내 계좌', 'asset')}
+            </div>
+          </div>
+
+          {/* 투자 */}
+          <div style={cardStyle}>
+            {categoryLabel('투자')}
+            <div style={{ padding: '0 8px 8px' }}>
+              {menuItem(TrendingUp, '내 투자', 'invest')}
+              {menuItem(FileText, '투자 내역', 'history')}
+              {menuItem(Receipt, '정산 내역', 'settlement_history')}
+              {menuItem(Shield, '자산 보호 내역')}
+              {menuItem(Coins, '세금')}
+              {menuItem(FileX, '중도해지 신청 내역')}
+            </div>
+          </div>
+
+          {/* 쇼핑 */}
+          <div style={cardStyle}>
+            {categoryLabel('쇼핑')}
+            <div style={{ padding: '0 8px 8px' }}>
+              {menuItem(Package, '주문내역')}
+              {menuItem(Gift, '내 포인트')}
+              {menuItem(Ticket, '내 쿠폰')}
+            </div>
+          </div>
+
+          {/* 고객지원 */}
+          <div style={cardStyle}>
+            {categoryLabel('고객지원')}
+            <div style={{ padding: '0 8px 8px' }}>
+              {menuItem(Headphones, '1:1 문의')}
+              {menuItem(MessageCircle, '고객센터')}
+              {menuItem(Megaphone, '공지사항')}
+              {menuItem(FileText, '이용약관')}
+            </div>
+          </div>
+        </div>
+      </div>
+      <TabBar activeTab="my" onTabChange={goTab} />
+    </div>
+  )
+}
+
 function SimpleTabScreen({ title, activeTab, goTab }) {
   return (
     <div className="v5-screen" style={S.screen}>
@@ -2407,7 +2518,7 @@ export default function V3() {
       return <SimpleTabScreen title="쇼핑" activeTab="shopping" goTab={goTab} />
 
     case 'my':
-      return <SimpleTabScreen title="마이" activeTab="my" goTab={goTab} />
+      return <MyPageScreen nav={navigate} goTab={goTab} />
 
     case 'asset':
       return <AssetScreen onBack={goBack} nav={navigate} goTab={goTab} phase={phase} />

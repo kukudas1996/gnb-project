@@ -3,7 +3,9 @@ import {
   Home, ShoppingBag, User, Compass,
   Bell, ChevronLeft, ChevronRight, ChevronDown, Clock,
   Copy, MoreVertical, Users, Delete, Check, X,
-  ThumbsUp, ThumbsDown, MessageSquare, Share2, Play
+  ThumbsUp, ThumbsDown, MessageSquare, Share2, Play,
+  Wallet, TrendingUp, FileText, Receipt, Shield, Coins, FileX,
+  Package, Gift, Ticket, Headphones, Megaphone, Settings
 } from 'lucide-react'
 
 // ============================================================
@@ -2331,6 +2333,123 @@ function AccountDetailScreen({ onBack, phase }) {
   )
 }
 
+// ============================================================
+// MyPage Screen (마이페이지)
+// ============================================================
+function MyPageScreen({ nav, goTab }) {
+  const cardStyle = {
+    backgroundColor: 'var(--color-neutral-000)',
+    borderRadius: 16,
+    boxShadow: '0px 0px 2px rgba(19,21,26,0.06), 0px 0px 7px rgba(19,21,26,0.04)',
+  }
+  const categoryLabel = {
+    fontSize: 16,
+    fontWeight: 500,
+    color: 'var(--color-neutral-600)',
+    padding: '20px 20px 4px',
+  }
+  const menuItem = (icon, label, target) => (
+    <div
+      key={label}
+      style={{
+        height: 44,
+        padding: '10px 12px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 8,
+        cursor: target ? 'pointer' : 'default',
+      }}
+      onClick={target ? () => nav(target) : undefined}
+    >
+      {createElement(icon, { size: 24, color: 'var(--color-neutral-600)', strokeWidth: 1.5 })}
+      <span style={{ fontSize: 16, fontWeight: 600, color: 'var(--color-neutral-800)' }}>{label}</span>
+    </div>
+  )
+
+  return (
+    <div className="v5-screen" style={{ ...S.screen, backgroundColor: 'var(--color-neutral-050)' }}>
+      <div className="v5-scroll" style={{ ...S.scrollBody, backgroundColor: 'var(--color-neutral-050)' }}>
+        {/* AppBar */}
+        <div style={{ ...S.safeTop, backgroundColor: 'var(--color-neutral-000)' }} />
+        <div style={{ ...S.appBar, backgroundColor: 'var(--color-neutral-000)' }}>
+          <div style={{ ...S.appBarRow }}>
+            <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)', flex: 1 }}>마이페이지</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              {createElement(Settings, { size: 24, color: 'var(--color-neutral-800)', strokeWidth: 1.5 })}
+              {createElement(Bell, { size: 24, color: 'var(--color-neutral-800)', strokeWidth: 1.5 })}
+            </div>
+          </div>
+        </div>
+
+        {/* User Section */}
+        <div style={{
+          backgroundColor: 'var(--color-neutral-000)',
+          padding: '20px 16px 24px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 12,
+        }}>
+          <div style={{
+            width: 100,
+            height: 100,
+            borderRadius: 50,
+            backgroundColor: '#dae7ff',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            overflow: 'hidden',
+          }}>
+            <img src="/product.png" style={{ width: 80, height: 60, objectFit: 'contain' }} />
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)' }}>김한우님, 반가워요!</div>
+            <div style={{ fontSize: 14, color: 'var(--color-neutral-600)', marginTop: 4, cursor: 'pointer' }}>내 정보 &gt;</div>
+          </div>
+        </div>
+
+        {/* Cards */}
+        <div style={{ padding: '10px 16px', display: 'flex', flexDirection: 'column', gap: 10, paddingBottom: 'calc(81px + env(safe-area-inset-bottom, 0px))' }}>
+          {/* 뱅킹 */}
+          <div style={cardStyle}>
+            <div style={categoryLabel}>뱅킹</div>
+            {menuItem(Wallet, '내 계좌', 'asset')}
+          </div>
+
+          {/* 투자 */}
+          <div style={cardStyle}>
+            <div style={categoryLabel}>투자</div>
+            {menuItem(TrendingUp, '내 투자', 'invest')}
+            {menuItem(FileText, '투자 내역', 'history')}
+            {menuItem(Receipt, '정산 내역', 'settlement_history')}
+            {menuItem(Shield, '자산 보호 내역')}
+            {menuItem(Coins, '세금')}
+            {menuItem(FileX, '중도해지 신청 내역')}
+          </div>
+
+          {/* 쇼핑 */}
+          <div style={cardStyle}>
+            <div style={categoryLabel}>쇼핑</div>
+            {menuItem(Package, '주문내역')}
+            {menuItem(Gift, '내 포인트')}
+            {menuItem(Ticket, '내 쿠폰')}
+          </div>
+
+          {/* 고객지원 */}
+          <div style={cardStyle}>
+            <div style={categoryLabel}>고객지원</div>
+            {menuItem(Headphones, '1:1 문의')}
+            {menuItem(MessageSquare, '고객센터')}
+            {menuItem(Megaphone, '공지사항')}
+            {menuItem(FileText, '이용약관')}
+          </div>
+        </div>
+      </div>
+      <TabBar activeTab="my" onTabChange={goTab} />
+    </div>
+  )
+}
+
 function SimpleTabScreen({ title, activeTab, goTab }) {
   return (
     <div className="v5-screen" style={S.screen}>
@@ -2796,7 +2915,7 @@ export default function V5() {
       return <SimpleTabScreen title="쇼핑" activeTab="shopping" goTab={goTab} />
 
     case 'my':
-      return <SimpleTabScreen title="마이" activeTab="my" goTab={goTab} />
+      return <MyPageScreen nav={navigate} goTab={goTab} />
 
     case 'asset':
       return <AssetScreen onBack={goBack} nav={navigate} goTab={goTab} phase={phase} />

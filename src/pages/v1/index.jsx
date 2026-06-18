@@ -2,7 +2,8 @@ import { createElement, useState, useCallback } from 'react'
 import {
   Home, ShoppingBag, User,
   Bell, ChevronLeft, ChevronRight, ChevronDown, Clock,
-  Copy, MoreVertical, Users, Delete, Check
+  Copy, MoreVertical, Users, Delete, Check,
+  Wallet, TrendingUp, FileText, Receipt, Shield, Coins, FileX, Package, Gift, Ticket, Headphones, MessageCircle, Megaphone, Settings
 } from 'lucide-react'
 
 // ============================================================
@@ -2250,6 +2251,151 @@ function AccountDetailScreen({ onBack, phase }) {
   )
 }
 
+function MyPageScreen({ nav, goTab }) {
+  const menuGroups = [
+    {
+      label: '뱅킹',
+      items: [
+        { icon: Wallet, text: '내 계좌', target: 'asset' },
+      ],
+    },
+    {
+      label: '투자',
+      items: [
+        { icon: TrendingUp, text: '내 투자', target: 'invest' },
+        { icon: FileText, text: '투자 내역', target: 'history' },
+        { icon: Receipt, text: '정산 내역', target: 'settlement_history' },
+        { icon: Shield, text: '자산 보호 내역' },
+        { icon: Coins, text: '세금' },
+        { icon: FileX, text: '중도해지 신청 내역' },
+      ],
+    },
+    {
+      label: '쇼핑',
+      items: [
+        { icon: Package, text: '주문내역' },
+        { icon: Gift, text: '내 포인트' },
+        { icon: Ticket, text: '내 쿠폰' },
+      ],
+    },
+    {
+      label: '고객지원',
+      items: [
+        { icon: Headphones, text: '1:1 문의' },
+        { icon: MessageCircle, text: '고객센터' },
+        { icon: Megaphone, text: '공지사항' },
+        { icon: FileText, text: '이용약관' },
+      ],
+    },
+  ]
+
+  return (
+    <div className="v3-screen" style={{ ...S.screen, backgroundColor: 'var(--color-neutral-050)' }}>
+      <div className="v3-scroll" style={{ ...S.scrollBody, backgroundColor: 'var(--color-neutral-050)' }}>
+        {/* AppBar */}
+        <div style={{ ...S.appBar, backgroundColor: 'var(--color-neutral-050)' }}>
+          <div style={S.safeTop} />
+          <div style={S.appBarRow}>
+            <div style={{ ...S.appBarTitle, ...T.title20('semibold') }}>마이페이지</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              <div style={{ width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Settings size={24} color="var(--color-neutral-900)" />
+              </div>
+              <div style={{ width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Bell size={24} color="var(--color-neutral-900)" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style={{ padding: '0 16px', paddingBottom: 'calc(81px + env(safe-area-inset-bottom, 0px))' }}>
+          {/* User section */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: '20px 0 24px',
+          }}>
+            <div>
+              <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)' }}>
+                김한우님, 반가워요!
+              </div>
+              <div style={{
+                fontSize: 14,
+                fontWeight: 500,
+                color: 'var(--color-neutral-600)',
+                marginTop: 6,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 2,
+                cursor: 'pointer',
+              }}>
+                내 정보 <ChevronRight size={14} color="var(--color-neutral-600)" />
+              </div>
+            </div>
+            <div style={{
+              width: 100,
+              height: 100,
+              borderRadius: 50,
+              backgroundColor: '#dae7ff',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}>
+              <img src="/product.png" alt="" style={{ width: 80, height: 60, objectFit: 'contain' }} />
+            </div>
+          </div>
+
+          {/* Menu groups */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {menuGroups.map((group, gi) => (
+              <div key={gi} style={{
+                backgroundColor: 'var(--color-neutral-000)',
+                borderRadius: 16,
+                boxShadow: '0px 0px 2px rgba(19,21,26,0.06), 0px 0px 7px rgba(19,21,26,0.04)',
+                overflow: 'hidden',
+              }}>
+                <div style={{
+                  padding: '20px 20px 4px',
+                  fontSize: 16,
+                  fontWeight: 500,
+                  color: 'var(--color-neutral-600)',
+                }}>
+                  {group.label}
+                </div>
+                {group.items.map((item, ii) => {
+                  const Icon = item.icon
+                  return (
+                    <div
+                      key={ii}
+                      onClick={item.target ? () => nav(item.target) : undefined}
+                      style={{
+                        height: 44,
+                        padding: '10px 12px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 8,
+                        cursor: item.target ? 'pointer' : 'default',
+                      }}
+                    >
+                      <Icon size={24} color="var(--color-neutral-600)" />
+                      <span style={{ fontSize: 16, fontWeight: 600, color: 'var(--color-neutral-800)' }}>
+                        {item.text}
+                      </span>
+                    </div>
+                  )
+                })}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <TabBar activeTab="my" onTabChange={goTab} />
+    </div>
+  )
+}
+
 function SimpleTabScreen({ title, activeTab, goTab }) {
   return (
     <div className="v3-screen" style={S.screen}>
@@ -2379,7 +2525,7 @@ export default function V3() {
       return <SimpleTabScreen title="쇼핑" activeTab="shopping" goTab={goTab} />
 
     case 'my':
-      return <SimpleTabScreen title="마이" activeTab="my" goTab={goTab} />
+      return <MyPageScreen nav={navigate} goTab={goTab} />
 
     case 'asset':
       return <AssetScreen onBack={goBack} nav={navigate} goTab={goTab} phase={phase} />
