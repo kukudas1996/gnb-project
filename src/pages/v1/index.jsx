@@ -2314,7 +2314,7 @@ function MyPageScreen({ nav, goTab }) {
             display: 'flex',
             alignItems: 'center',
             gap: 12,
-            padding: '20px 24px 24px',
+            padding: '20px 16px 0',
           }}>
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)' }}>
@@ -2344,8 +2344,45 @@ function MyPageScreen({ nav, goTab }) {
             </div>
           </div>
 
+          {/* Membership card */}
+          <div style={{ padding: '0 16px' }}>
+            <div style={{
+              backgroundColor: 'var(--color-neutral-000)',
+              border: '1px solid var(--color-neutral-100)',
+              borderRadius: 16,
+              padding: '12px 20px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
+              overflow: 'hidden',
+            }}>
+              <img src="/Visitor.png" alt="" style={{ width: 56, height: 56, objectFit: 'cover', flexShrink: 0 }} />
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 18, fontWeight: 600, lineHeight: '26px', color: 'var(--color-neutral-800)' }}>견학생</div>
+                <div style={{ fontSize: 14, lineHeight: '20px', display: 'flex', alignItems: 'center', gap: 2 }}>
+                  <span style={{ fontWeight: 500, color: 'var(--color-neutral-600)' }}>투자중</span>
+                  <span style={{ fontWeight: 600, color: 'var(--color-neutral-800)' }}>0C</span>
+                </div>
+              </div>
+              <div style={{
+                backgroundColor: 'var(--color-neutral-000)',
+                border: '1px solid var(--color-neutral-100)',
+                borderRadius: 8,
+                padding: '8px 12px',
+                fontSize: 14,
+                fontWeight: 500,
+                lineHeight: '20px',
+                color: 'var(--color-neutral-800)',
+                flexShrink: 0,
+                cursor: 'pointer',
+              }}>
+                혜택 보기
+              </div>
+            </div>
+          </div>
+
           {/* Menu groups */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10, padding: '0 24px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12, padding: '0 16px', paddingTop: 12 }}>
             {menuGroups.map((group, gi) => (
               <div key={gi} style={{
                 backgroundColor: 'var(--color-neutral-000)',

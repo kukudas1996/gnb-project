@@ -2318,7 +2318,7 @@ function MyPageScreen({ nav, goTab }) {
         </div>
 
         {/* User Section */}
-        <div style={{ padding: '20px 24px 24px', display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div style={{ padding: '20px 16px 0', display: 'flex', alignItems: 'center', gap: 12 }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)' }}>김한우님, 반가워요!</div>
             <div style={{ fontSize: 14, fontWeight: 500, color: 'var(--color-neutral-600)', marginTop: 2, display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
@@ -2331,8 +2331,45 @@ function MyPageScreen({ nav, goTab }) {
           </div>
         </div>
 
+        {/* Membership card */}
+        <div style={{ padding: '0 16px' }}>
+          <div style={{
+            backgroundColor: 'var(--color-neutral-000)',
+            border: '1px solid var(--color-neutral-100)',
+            borderRadius: 16,
+            padding: '12px 20px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            overflow: 'hidden',
+          }}>
+            <img src="/Visitor.png" alt="" style={{ width: 56, height: 56, objectFit: 'cover', flexShrink: 0 }} />
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: 18, fontWeight: 600, lineHeight: '26px', color: 'var(--color-neutral-800)' }}>견학생</div>
+              <div style={{ fontSize: 14, lineHeight: '20px', display: 'flex', alignItems: 'center', gap: 2 }}>
+                <span style={{ fontWeight: 500, color: 'var(--color-neutral-600)' }}>투자중</span>
+                <span style={{ fontWeight: 600, color: 'var(--color-neutral-800)' }}>0C</span>
+              </div>
+            </div>
+            <div style={{
+              backgroundColor: 'var(--color-neutral-000)',
+              border: '1px solid var(--color-neutral-100)',
+              borderRadius: 8,
+              padding: '8px 12px',
+              fontSize: 14,
+              fontWeight: 500,
+              lineHeight: '20px',
+              color: 'var(--color-neutral-800)',
+              flexShrink: 0,
+              cursor: 'pointer',
+            }}>
+              혜택 보기
+            </div>
+          </div>
+        </div>
+
         {/* Card Groups */}
-        <div style={{ padding: '0 24px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <div style={{ padding: '0 16px', paddingTop: 12, display: 'flex', flexDirection: 'column', gap: 12 }}>
           {/* 뱅킹 */}
           <div style={cardStyle}>
             <div style={{ fontSize: 16, fontWeight: 500, lineHeight: '24px', color: 'var(--color-neutral-600)', padding: '20px 20px 4px' }}>뱅킹</div>
