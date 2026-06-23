@@ -5,6 +5,7 @@ const versions = [
   { key: 'v2', label: 'V2', desc: '다이나믹 메시지 및 뎁스형' },
   { key: 'v3', label: 'V3', desc: '다이나믹 메시지 및 탭바형' },
   { key: 'v4', label: 'V4', desc: '홈 개편 및 잠금화면 푸시' },
+  { key: 'v5', label: 'V5', desc: '주문형 투자 신청 및 내역' },
 ]
 
 function HomePage() {
