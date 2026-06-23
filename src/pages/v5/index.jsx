@@ -1678,8 +1678,8 @@ function HistoryPostSettlementScreen({ onBack, nav }) {
 // ============================================================
 function HistoryDetailApplyingScreen({ onBack, nav }) {
   return (
-    <div className="v5-screen" style={{ ...S.screen, position: 'relative' }}>
-      <div className="v5-scroll" style={{ height: '100dvh', overflowY: 'auto', paddingBottom: 120 }}>
+    <div className="v5-screen" style={S.screen}>
+      <div className="v5-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
         <div style={S.appBar}>
           <div style={S.safeTop} />
           <div style={{ ...S.appBarRow, position: 'relative' }}>
@@ -1740,21 +1740,17 @@ function HistoryDetailApplyingScreen({ onBack, nav }) {
             </div>
           ))}
         </div>
-      </div>
-      {/* 신청 취소하기 button */}
-      <div style={{
-        position: 'absolute', bottom: 0, left: 0, right: 0,
-        padding: '8px 16px', paddingBottom: 'calc(16px + env(safe-area-inset-bottom, 0px))',
-        backgroundColor: 'var(--color-neutral-000)', zIndex: 15,
-      }}>
-        <div style={{
-          height: 56, borderRadius: 14,
-          border: '1px solid var(--color-neutral-200)',
-          backgroundColor: 'var(--color-neutral-000)',
-          color: 'var(--color-red-500)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          ...T.body17('semibold'), cursor: 'pointer',
-        }}>신청 취소하기</div>
+        {/* 신청 취소하기 button */}
+        <div style={{ padding: '8px 16px 40px' }}>
+          <div style={{
+            height: 56, borderRadius: 14,
+            border: '1px solid var(--color-neutral-200)',
+            backgroundColor: 'var(--color-neutral-000)',
+            color: 'var(--color-red-500)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            ...T.body17('semibold'), cursor: 'pointer',
+          }}>신청 취소하기</div>
+        </div>
       </div>
     </div>
   )
