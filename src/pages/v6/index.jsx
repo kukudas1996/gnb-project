@@ -838,13 +838,14 @@ function ShoppingScreen({ phase, goTab, onLogin, nav }) {
     <div className="v6-screen" style={S.screen}>
       <div className="v6-scroll" style={S.scrollBody}>
         <AppInstallBanner />
-        <WebAppBar phase={phase} onLogin={onLogin} nav={nav} />
 
         {/* Title */}
         <div style={{ padding: '16px 16px 0' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)' }}>쇼핑</div>
-            <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-600)', cursor: 'pointer' }}>검색</span>
+            {phase === 'guest' && (
+              <span onClick={onLogin} style={{ ...T.body15('medium'), color: 'var(--color-neutral-600)', cursor: 'pointer', minHeight: 44, display: 'flex', alignItems: 'center' }}>로그인</span>
+            )}
           </div>
         </div>
 
@@ -898,13 +899,14 @@ function FeedScreen({ phase, goTab, onLogin, nav }) {
     <div className="v6-screen" style={S.screen}>
       <div className="v6-scroll" style={S.scrollBody}>
         <AppInstallBanner />
-        <WebAppBar phase={phase} onLogin={onLogin} nav={nav} />
 
         {/* Title */}
         <div style={{ padding: '16px 16px 0' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)' }}>서비스</div>
-            <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-600)', cursor: 'pointer' }}>알림</span>
+            {phase === 'guest' && (
+              <span onClick={onLogin} style={{ ...T.body15('medium'), color: 'var(--color-neutral-600)', cursor: 'pointer', minHeight: 44, display: 'flex', alignItems: 'center' }}>로그인</span>
+            )}
           </div>
         </div>
 
