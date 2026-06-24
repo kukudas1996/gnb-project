@@ -69,6 +69,7 @@ const S = {
     top: 0,
     zIndex: 10,
     backgroundColor: 'var(--color-neutral-000)',
+    borderBottom: '1px solid var(--color-neutral-100)',
   },
   appBarRow: {
     height: 56,
@@ -141,11 +142,10 @@ function AppInstallBanner() {
     }}>
       <div style={{
         width: 28, height: 28, borderRadius: 6,
-        backgroundColor: 'rgba(255,255,255,0.2)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        overflow: 'hidden',
         flexShrink: 0,
       }}>
-        <span style={{ fontSize: 14, fontWeight: 700, color: '#fff' }}>B</span>
+        <img src="/앱설치유도.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
       </div>
       <span style={{ flex: 1, ...T.label13('medium'), color: '#fff' }}>
         더 편리한 뱅카우앱을 만나보세요
@@ -350,9 +350,10 @@ function AppInstallBottomSheet({ onDismiss }) {
           height: 180, borderRadius: 16,
           backgroundColor: 'var(--color-neutral-050)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          marginBottom: 20,
-          ...T.body15('medium'), color: 'var(--color-neutral-400)',
-        }}>상품 이미지</div>
+          marginBottom: 20, overflow: 'hidden',
+        }}>
+          <img src="/product.png" alt="" style={{ height: 140, objectFit: 'contain' }} />
+        </div>
         <div onClick={onDismiss} style={{
           height: 56, borderRadius: 14,
           backgroundColor: 'var(--color-primary-500)',
@@ -377,7 +378,7 @@ function AppInstallBottomSheet({ onDismiss }) {
 function Footer({ phase, onLogin }) {
   const isGuest = phase === 'guest'
   return (
-    <div style={{ backgroundColor: 'var(--color-neutral-050)', padding: '32px 16px 40px' }}>
+    <div style={{ backgroundColor: '#EBEDF2', padding: '32px 16px 40px' }}>
       {/* App download button */}
       <div style={{
         height: 48, borderRadius: 24,
@@ -480,18 +481,33 @@ function HomeScreen({ phase, nav, goTab, onLogin, showBottomSheet, onDismissShee
         <AppInstallBanner />
         <WebAppBar phase={phase} onLogin={onLogin} nav={nav} />
 
-        {/* Large placeholder area */}
+        {/* Large placeholder area — white bg to contrast with gray footer */}
         <div style={{
-          backgroundColor: '#F5F6FA',
-          minHeight: 460,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          backgroundColor: 'var(--color-neutral-000)',
+          minHeight: 520,
+          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
           padding: '60px 16px',
         }}>
           <div style={{
-            ...T.title20('semibold'), color: 'var(--color-neutral-400)',
+            width: 80, height: 80, borderRadius: 20,
+            backgroundColor: 'var(--color-neutral-050)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            marginBottom: 20,
+          }}>
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-300)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" />
+              <circle cx="8.5" cy="8.5" r="1.5" />
+              <path d="M21 15l-5-5L5 21" />
+            </svg>
+          </div>
+          <div style={{
+            ...T.title20('semibold'), color: 'var(--color-neutral-300)',
             textAlign: 'center', whiteSpace: 'pre-line', lineHeight: '32px',
           }}>{'잘 만들어진\n투자 전환을 위한\n상세페이지'}</div>
         </div>
+
+        {/* Divider between content and footer */}
+        <div style={{ height: 12, backgroundColor: 'var(--color-neutral-100)' }} />
 
         {/* Footer */}
         <Footer phase={phase} onLogin={onLogin} />
@@ -673,13 +689,13 @@ function FeedScreen({ phase, goTab, onLogin, nav }) {
         <div style={{ padding: '8px 16px 24px' }}>
           <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)', marginBottom: 12 }}>뱅카우 숏츠</div>
           <div style={{ display: 'flex', gap: 12 }}>
-            {[1, 2].map(i => (
+            {['/숏츠1.png', '/숏츠2.png'].map((src, i) => (
               <div key={i} style={{
                 flex: 1, aspectRatio: '9/14', borderRadius: 12,
-                backgroundColor: 'var(--color-neutral-100)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                ...T.label13('medium'), color: 'var(--color-neutral-400)',
-              }}>숏츠 {i}</div>
+                overflow: 'hidden',
+              }}>
+                <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              </div>
             ))}
           </div>
         </div>
@@ -702,17 +718,23 @@ function FeedScreen({ phase, goTab, onLogin, nav }) {
           </div>
           {/* Content grid 2x3 */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px 12px' }}>
-            {[1, 2, 3, 4, 5, 6].map(i => (
+            {[
+              { img: '/insight/content-1.png', title: '한우 투자, 이제 시작해도 늦지 않다' },
+              { img: '/insight/content-2.png', title: '한우 투자, 이제 시작해도 늦지 않다' },
+              { img: '/insight/content-3.png', title: '한우 투자로 얻는 수익과 리스크 분석' },
+              { img: '/insight/content-4.png', title: '한우 투자로 얻는 수익과 리스크 분석' },
+              { img: '/insight/content-5.png', title: '초보자를 위한 한우 투자 가이드' },
+              { img: '/insight/content-6.png', title: '초보자를 위한 한우 투자 가이드' },
+            ].map((item, i) => (
               <div key={i}>
                 <div style={{
                   aspectRatio: '16/10', borderRadius: 8,
-                  backgroundColor: 'var(--color-neutral-100)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  ...T.label13('medium'), color: 'var(--color-neutral-400)',
-                  marginBottom: 8,
-                }}>썸네일</div>
+                  overflow: 'hidden', marginBottom: 8,
+                }}>
+                  <img src={item.img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
                 <div style={{ ...T.body15('medium'), color: 'var(--color-neutral-800)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                  콘텐츠 제목 {i}
+                  {item.title}
                 </div>
               </div>
             ))}
@@ -733,16 +755,22 @@ function FeedScreen({ phase, goTab, onLogin, nav }) {
         <div style={{ padding: '24px 16px' }}>
           <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>언론 보도</div>
           {[
-            { title: '언론 보도 기사 제목 1', sub: '매체명 | 2026.01.01' },
-            { title: '언론 보도 기사 제목 2', sub: '매체명 | 2026.01.01' },
-            { title: '언론 보도 기사 제목 3', sub: '매체명 | 2026.01.01' },
+            { img: '/insight/news-1.png', title: '한우 투자, 새로운 기회', sub: '최근 한우 시장의 변화와...' },
+            { img: '/insight/news-2.png', title: '한우 투자, 성공적인 사례', sub: '한우 투자에 성공한 사례를...' },
+            { img: '/insight/news-3.png', title: '한우 투자, 전문가의 조언', sub: '전문가들은 한우 투자를 고...' },
           ].map((item, i) => (
             <div key={i} style={{
+              display: 'flex', alignItems: 'center', gap: 12,
               padding: '14px 0',
               borderBottom: i < 2 ? '1px solid var(--color-neutral-100)' : 'none',
             }}>
-              <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-800)', marginBottom: 4 }}>{item.title}</div>
-              <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>{item.sub}</div>
+              <div style={{ flex: 1 }}>
+                <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-800)', marginBottom: 4 }}>{item.title}</div>
+                <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>{item.sub}</div>
+              </div>
+              <div style={{ width: 64, height: 64, borderRadius: 8, overflow: 'hidden', flexShrink: 0 }}>
+                <img src={item.img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              </div>
             </div>
           ))}
         </div>
@@ -760,8 +788,21 @@ function FeedScreen({ phase, goTab, onLogin, nav }) {
 function ProductDetailScreen({ onBack, onApply }) {
   return (
     <div className="v6-screen" style={{ ...S.screen, display: 'flex', flexDirection: 'column' }}>
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <span style={{ ...T.headline28('semibold'), color: 'var(--color-neutral-900)', opacity: 0.2 }}>투자 상품 상세</span>
+      <SubAppBar title="A 투자 상품" onBack={onBack} />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{
+          width: 80, height: 80, borderRadius: 20,
+          backgroundColor: 'var(--color-neutral-050)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          marginBottom: 16,
+        }}>
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-300)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <circle cx="8.5" cy="8.5" r="1.5" />
+            <path d="M21 15l-5-5L5 21" />
+          </svg>
+        </div>
+        <span style={{ ...T.title20('semibold'), color: 'var(--color-neutral-300)' }}>투자 상품 상세</span>
       </div>
       <CTAButton label="투자하기" onClick={onApply} />
     </div>
@@ -775,8 +816,20 @@ function ProductDetailAfterScreen({ onBack }) {
   return (
     <div className="v6-screen" style={{ ...S.screen, display: 'flex', flexDirection: 'column' }}>
       <SubAppBar title="A 투자 상품" onBack={onBack} />
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <span style={{ ...T.headline28('semibold'), color: 'var(--color-neutral-900)', opacity: 0.2 }}>투자 상품 상세</span>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{
+          width: 80, height: 80, borderRadius: 20,
+          backgroundColor: 'var(--color-neutral-050)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          marginBottom: 16,
+        }}>
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-300)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <circle cx="8.5" cy="8.5" r="1.5" />
+            <path d="M21 15l-5-5L5 21" />
+          </svg>
+        </div>
+        <span style={{ ...T.title20('semibold'), color: 'var(--color-neutral-300)' }}>투자 상품 상세</span>
       </div>
       <div style={{
         position: 'absolute', bottom: 0, left: 0, right: 0,
