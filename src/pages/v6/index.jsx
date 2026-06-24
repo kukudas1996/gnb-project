@@ -925,8 +925,8 @@ function FeedScreen({ phase, goTab, onLogin, nav }) {
           </div>
           <div className="v6-hide-scrollbar" style={{ display: 'flex', gap: 12, overflowX: 'auto', marginRight: -16 }}>
             {[
-              { img: '/insight/content-1.png', title: '초보자를 위한 한우 투자 가이드', desc: '송아지 입식부터 출하, 정산까지 처음이어도 어렵지 않아요' },
-              { img: '/insight/content-2.png', title: '한우는 돈이 돼요', desc: '한우 시장은 언제나 수요가 항상 있었어요' },
+              { img: '/insight/guide-1.png', title: '초보자를 위한 한우 투자 가이드', desc: '송아지 입식부터 출하, 정산까지 처음이어도 어렵지 않아요' },
+              { img: '/insight/guide-2.png', title: '한우는 돈이 돼요', desc: '한우 시장은 언제나 수요가 항상 있었어요' },
             ].map((item, i) => (
               <div key={i} style={{ flexShrink: 0, width: 280, display: 'flex', flexDirection: 'column', gap: 8 }}>
                 <div style={{ width: '100%', aspectRatio: '160/90', borderRadius: 16, overflow: 'hidden' }}>
@@ -961,7 +961,7 @@ function FeedScreen({ phase, goTab, onLogin, nav }) {
         <div style={{ height: 10, backgroundColor: 'var(--color-neutral-050)' }} />
 
         {/* 뱅카우 콘텐츠 */}
-        <div style={{ padding: '24px 16px' }}>
+        <div style={{ padding: '24px 16px', overflow: 'hidden' }}>
           <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)', marginBottom: 12 }}>뱅카우 콘텐츠</div>
           {/* Filter tabs */}
           <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
@@ -975,7 +975,7 @@ function FeedScreen({ phase, goTab, onLogin, nav }) {
             ))}
           </div>
           {/* Content grid 2x3 */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px 12px', overflow: 'hidden' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px 12px', width: '100%', maxWidth: '100%' }}>
             {[
               { img: '/insight/content-1.png', title: '한우 투자, 이제 시작해도 늦지 않다' },
               { img: '/insight/content-2.png', title: '한우 투자, 이제 시작해도 늦지 않다' },
@@ -984,12 +984,12 @@ function FeedScreen({ phase, goTab, onLogin, nav }) {
               { img: '/insight/content-5.png', title: '초보자를 위한 한우 투자 가이드' },
               { img: '/insight/content-6.png', title: '초보자를 위한 한우 투자 가이드' },
             ].map((item, i) => (
-              <div key={i}>
+              <div key={i} style={{ minWidth: 0, overflow: 'hidden' }}>
                 <div style={{
-                  aspectRatio: '16/10', borderRadius: 8,
+                  width: '100%', aspectRatio: '16/10', borderRadius: 8,
                   overflow: 'hidden', marginBottom: 8,
                 }}>
-                  <img src={item.img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img src={item.img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                 </div>
                 <div style={{ ...T.body15('medium'), color: 'var(--color-neutral-800)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {item.title}
