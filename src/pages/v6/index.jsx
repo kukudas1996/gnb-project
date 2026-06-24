@@ -59,6 +59,7 @@ const S = {
   scrollBody: {
     height: '100dvh',
     overflowY: 'auto',
+    overflowX: 'hidden',
     paddingBottom: 'calc(81px + env(safe-area-inset-bottom, 0px))',
   },
   safeTop: {
@@ -772,7 +773,7 @@ function FeedScreen({ phase, goTab, onLogin, nav }) {
           <div style={{ display: 'flex', gap: 12 }}>
             {['/shorts-1.png', '/shorts-2.png'].map((src, i) => (
               <div key={i} style={{
-                flex: 1, aspectRatio: '9/14', borderRadius: 12,
+                flex: 1, minWidth: 0, aspectRatio: '9/14', borderRadius: 12,
                 overflow: 'hidden',
               }}>
                 <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -798,7 +799,7 @@ function FeedScreen({ phase, goTab, onLogin, nav }) {
             ))}
           </div>
           {/* Content grid 2x3 */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px 12px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px 12px', overflow: 'hidden' }}>
             {[
               { img: '/insight/content-1.png', title: '한우 투자, 이제 시작해도 늦지 않다' },
               { img: '/insight/content-2.png', title: '한우 투자, 이제 시작해도 늦지 않다' },
