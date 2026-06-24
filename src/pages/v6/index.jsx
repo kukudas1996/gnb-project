@@ -134,30 +134,38 @@ const S = {
 function AppInstallBanner() {
   return (
     <div style={{
-      backgroundColor: 'var(--color-primary-500)',
-      padding: '8px 16px',
+      backgroundColor: 'var(--color-neutral-050)',
+      padding: '11px 16px',
       display: 'flex',
       alignItems: 'center',
-      gap: 8,
+      justifyContent: 'space-between',
+      overflow: 'hidden',
     }}>
-      <div style={{
-        width: 28, height: 28, borderRadius: 6,
-        overflow: 'hidden',
-        flexShrink: 0,
-      }}>
-        <img src="/app-install.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: 1, minWidth: 0 }}>
+        <div style={{
+          width: 28, height: 28, borderRadius: 6,
+          overflow: 'hidden',
+          flexShrink: 0,
+        }}>
+          <img src="/app-install.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        </div>
+        <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)', flex: 1, minWidth: 0 }}>
+          더 편리한 뱅카우앱을 만나보세요
+        </span>
       </div>
-      <span style={{ flex: 1, ...T.label13('medium'), color: '#fff' }}>
-        더 편리한 뱅카우앱을 만나보세요
-      </span>
       <div style={{
-        padding: '4px 12px',
-        backgroundColor: '#fff',
-        borderRadius: 14,
+        padding: '2px 14px',
+        minHeight: 32,
+        minWidth: 52,
+        backgroundColor: 'var(--color-neutral-800)',
+        borderRadius: 8,
         ...T.label13('semibold'),
-        color: 'var(--color-primary-500)',
+        color: '#fff',
         cursor: 'pointer',
         flexShrink: 0,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
       }}>앱 다운로드</div>
     </div>
   )
