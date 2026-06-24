@@ -918,8 +918,33 @@ function FeedScreen({ phase, goTab, onLogin, nav }) {
           }}>배너</div>
         </div>
 
+        {/* 한우 투자가 처음이신가요? */}
+        <div style={{ padding: '24px 16px', backgroundColor: '#fff' }}>
+          <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>
+            한우 투자가 처음이신가요?
+          </div>
+          <div className="v6-hide-scrollbar" style={{ display: 'flex', gap: 12, overflowX: 'auto', marginRight: -16 }}>
+            {[
+              { img: '/insight/content-1.png', title: '초보자를 위한 한우 투자 가이드', desc: '송아지 입식부터 출하, 정산까지 처음이어도 어렵지 않아요' },
+              { img: '/insight/content-2.png', title: '한우는 돈이 돼요', desc: '한우 시장은 언제나 수요가 항상 있었어요' },
+            ].map((item, i) => (
+              <div key={i} style={{ flexShrink: 0, width: 280, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <div style={{ width: '100%', aspectRatio: '160/90', borderRadius: 16, overflow: 'hidden' }}>
+                  <img src={item.img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
+                <div>
+                  <div style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)', marginBottom: 4 }}>{item.title}</div>
+                  <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-600)' }}>{item.desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ height: 10, backgroundColor: 'var(--color-neutral-050)' }} />
+
         {/* 뱅카우 숏츠 */}
-        <div style={{ padding: '8px 16px 24px' }}>
+        <div style={{ padding: '24px 16px' }}>
           <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)', marginBottom: 12 }}>뱅카우 숏츠</div>
           <div style={{ display: 'flex', gap: 12 }}>
             {['/shorts-1.png', '/shorts-2.png'].map((src, i) => (
