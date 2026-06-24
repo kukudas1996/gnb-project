@@ -145,7 +145,7 @@ function AppInstallBanner() {
         overflow: 'hidden',
         flexShrink: 0,
       }}>
-        <img src="/앱설치유도.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        <img src="/app-install.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
       </div>
       <span style={{ flex: 1, ...T.label13('medium'), color: '#fff' }}>
         더 편리한 뱅카우앱을 만나보세요
@@ -689,7 +689,7 @@ function FeedScreen({ phase, goTab, onLogin, nav }) {
         <div style={{ padding: '8px 16px 24px' }}>
           <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)', marginBottom: 12 }}>뱅카우 숏츠</div>
           <div style={{ display: 'flex', gap: 12 }}>
-            {['/숏츠1.png', '/숏츠2.png'].map((src, i) => (
+            {['/shorts-1.png', '/shorts-2.png'].map((src, i) => (
               <div key={i} style={{
                 flex: 1, aspectRatio: '9/14', borderRadius: 12,
                 overflow: 'hidden',
