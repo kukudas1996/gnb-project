@@ -456,6 +456,79 @@ function Footer({ phase, onLogin }) {
 }
 
 // ============================================================
+// Login Screen
+// ============================================================
+function LoginScreen({ onBack, onConfirm }) {
+  const [phone, setPhone] = useState('010')
+
+  const formatPhone = (val) => {
+    const nums = val.replace(/\D/g, '').slice(0, 11)
+    return nums
+  }
+
+  return (
+    <div className="v6-screen" style={{ ...S.screen, display: 'flex', flexDirection: 'column', height: '100dvh' }}>
+      <div style={{ ...S.appBar, borderBottom: 'none' }}>
+        <div style={S.safeTop} />
+        <div style={{ ...S.appBarRow, position: 'relative' }}>
+          <div onClick={onBack} style={{ cursor: 'pointer', zIndex: 1, width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <ChevronLeft size={24} color="var(--color-neutral-800)" />
+          </div>
+          <div style={{ width: 40 }} />
+        </div>
+      </div>
+
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <div style={{ padding: '20px 24px' }}>
+          <div style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)' }}>
+            휴대폰 번호를 입력해주세요
+          </div>
+        </div>
+
+        <div style={{ padding: '0 24px' }}>
+          <div style={{
+            height: 48, borderRadius: 10,
+            border: '1px solid var(--color-neutral-200)',
+            padding: '0 12px',
+            display: 'flex', alignItems: 'center',
+          }}>
+            <input
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(formatPhone(e.target.value))}
+              placeholder="01012345678"
+              style={{
+                border: 'none', outline: 'none', width: '100%',
+                fontSize: 16, fontWeight: 400, lineHeight: '24px',
+                color: 'var(--color-neutral-900)',
+                fontFamily: 'Pretendard, -apple-system, sans-serif',
+                backgroundColor: 'transparent',
+              }}
+            />
+          </div>
+        </div>
+
+        <div style={{ flex: 1 }} />
+
+        <div style={{
+          padding: '10px 24px 20px',
+          paddingBottom: 'calc(20px + env(safe-area-inset-bottom, 0px))',
+        }}>
+          <div onClick={phone.length >= 10 ? onConfirm : undefined} style={{
+            height: 56, borderRadius: 10,
+            backgroundColor: phone.length >= 10 ? 'var(--color-primary-500)' : 'var(--color-neutral-200)',
+            color: phone.length >= 10 ? '#fff' : 'var(--color-neutral-400)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: 16, fontWeight: 600, lineHeight: '24px',
+            cursor: phone.length >= 10 ? 'pointer' : 'default',
+          }}>확인</div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ============================================================
 // Shared UI Components
 // ============================================================
 function IconCheck({ filled = false }) {
@@ -1629,8 +1702,9 @@ export default function V6() {
   }, [])
 
   const handleLogin = useCallback(() => {
-    setPhase('member')
-  }, [])
+    setHistory(prev => [...prev, screen])
+    setScreen('login')
+  }, [screen])
 
   const handleDismissSheet = useCallback(() => {
     setShowBottomSheet(false)
@@ -1677,6 +1751,13 @@ export default function V6() {
 
     case 'feed':
       return <FeedScreen phase={phase} goTab={goTab} onLogin={handleLogin} nav={navigate} />
+
+    case 'login':
+      return <LoginScreen onBack={goBack} onConfirm={() => {
+        setPhase('member')
+        setScreen('home')
+        setHistory([])
+      }} />
 
     case 'product_detail':
       return <ProductDetailScreen onBack={goBack} onApply={handleGoToQuantity} />
