@@ -459,7 +459,7 @@ function Footer({ phase, onLogin }) {
 // Login Screen
 // ============================================================
 function LoginScreen({ onBack, onConfirm }) {
-  const [phone, setPhone] = useState('010')
+  const [phone, setPhone] = useState('01012345678')
 
   const formatPhone = (val) => {
     const nums = val.replace(/\D/g, '').slice(0, 11)
