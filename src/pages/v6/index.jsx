@@ -908,16 +908,6 @@ function FeedScreen({ phase, goTab, onLogin, nav }) {
           </div>
         </div>
 
-        {/* Banner placeholder */}
-        <div style={{ padding: '16px 16px' }}>
-          <div style={{
-            height: 120, borderRadius: 16,
-            backgroundColor: 'var(--color-neutral-100)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            ...T.body15('semibold'), color: 'var(--color-neutral-500)', opacity: 0.5,
-          }}>배너</div>
-        </div>
-
         {/* 한우 투자가 처음이신가요? */}
         <div style={{ padding: '24px 16px', backgroundColor: '#fff' }}>
           <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>
