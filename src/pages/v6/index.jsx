@@ -563,33 +563,186 @@ function HomeScreen({ phase, nav, goTab, onLogin, showBottomSheet, onDismissShee
         <AppInstallBanner />
         <WebAppBar phase={phase} onLogin={onLogin} nav={nav} />
 
-        {/* Large placeholder area — white bg to contrast with gray footer */}
+        {/* Placeholder hero area */}
         <div style={{
           backgroundColor: 'var(--color-neutral-000)',
-          minHeight: 520,
+          minHeight: 280,
           display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
           padding: '60px 16px',
         }}>
           <div style={{
-            width: 80, height: 80, borderRadius: 20,
-            backgroundColor: 'var(--color-neutral-050)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            marginBottom: 20,
-          }}>
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-300)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="3" y="3" width="18" height="18" rx="2" />
-              <circle cx="8.5" cy="8.5" r="1.5" />
-              <path d="M21 15l-5-5L5 21" />
-            </svg>
-          </div>
-          <div style={{
-            ...T.title20('semibold'), color: 'var(--color-neutral-300)',
-            textAlign: 'center', whiteSpace: 'pre-line', lineHeight: '32px',
+            fontSize: 28, fontWeight: 600, color: 'var(--color-neutral-400)',
+            textAlign: 'center', whiteSpace: 'pre-line', lineHeight: 1.5,
           }}>{'잘 만들어진\n투자 전환을 위한\n상세페이지'}</div>
         </div>
 
-        {/* Divider between content and footer */}
-        <div style={{ height: 12, backgroundColor: 'var(--color-neutral-100)' }} />
+        {/* 투자 상품 섹션 */}
+        <div style={{ padding: '24px 16px' }}>
+          <div style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)', marginBottom: 9 }}>
+            투자 상품
+          </div>
+          <div
+            onClick={() => {
+              if (phase === 'guest') onLogin()
+              else nav('product_detail')
+            }}
+            style={{
+              borderRadius: 16, overflow: 'hidden', padding: 8, cursor: 'pointer',
+              background: 'linear-gradient(90deg, rgba(68,135,255,0.2) 0%, rgba(68,135,255,0.2) 100%), #fff',
+            }}
+          >
+            {/* Timer + Image area */}
+            <div style={{ padding: '8px 8px 0' }}>
+              <div style={{
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+                backgroundColor: '#fff', borderRadius: 40, padding: '5px 12px 5px 8px',
+              }}>
+                <Clock size={20} color="var(--color-neutral-700)" />
+                <span style={{ fontSize: 14, fontWeight: 500, lineHeight: '20px', color: 'var(--color-neutral-900)' }}>
+                  13일 23:59:59 남음
+                </span>
+              </div>
+              <div style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                height: 140, overflow: 'hidden',
+              }}>
+                <img src="/product.png" alt="" style={{ height: 120, objectFit: 'contain' }} />
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 4 }}>
+                <div style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 4,
+                  backgroundColor: 'rgba(255,255,255,0.64)', border: '1px solid rgba(255,255,255,0.8)',
+                  borderRadius: 16, padding: '5px 12px',
+                }}>
+                  <Users size={16} color="var(--color-neutral-800)" />
+                  <span style={{ fontSize: 14, fontWeight: 500, lineHeight: '20px', color: 'var(--color-neutral-800)' }}>
+                    9,999명 투자중
+                  </span>
+                </div>
+              </div>
+            </div>
+            {/* Info card */}
+            <div style={{
+              backgroundColor: '#fff', borderRadius: 8, padding: '20px 24px',
+              boxShadow: '0px 1px 2px rgba(0,0,0,0.08), 0px 2px 4px rgba(0,0,0,0.06)',
+              display: 'flex', flexDirection: 'column', gap: 12,
+            }}>
+              <div>
+                <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)', marginBottom: 4 }}>A 투자 상품</div>
+                <div style={{
+                  display: 'inline-flex', padding: '0 8px', height: 20, borderRadius: 6,
+                  backgroundColor: 'var(--color-neutral-050)', alignItems: 'center',
+                }}>
+                  <span style={{ fontSize: 10, fontWeight: 500, lineHeight: '18px', color: 'var(--color-neutral-700)' }}>10마리 투자상품</span>
+                </div>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 12, fontWeight: 500, lineHeight: '18px', color: 'var(--color-neutral-600)' }}>1C 금액</div>
+                  <div style={{ fontSize: 18, fontWeight: 600, lineHeight: '26px', color: 'var(--color-neutral-900)' }}>20,000원~</div>
+                </div>
+                <div style={{ width: 1, height: 36, backgroundColor: 'var(--color-neutral-100)' }} />
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 12, fontWeight: 500, lineHeight: '18px', color: 'var(--color-neutral-600)' }}>마감 일자</div>
+                  <div style={{ fontSize: 18, fontWeight: 600, lineHeight: '26px', color: 'var(--color-neutral-900)' }}>2023.12.31</div>
+                </div>
+              </div>
+              {/* Progress bar */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <div style={{ height: 6, borderRadius: 100, backgroundColor: 'var(--color-neutral-200)', overflow: 'hidden' }}>
+                  <div style={{ width: '33%', height: '100%', borderRadius: 7, backgroundColor: 'var(--color-neutral-700)' }} />
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: 14, fontWeight: 500, lineHeight: '20px', color: 'var(--color-neutral-500)' }}>
+                    <span style={{ color: 'var(--color-neutral-700)' }}>8,475 </span>/ 25,278C
+                  </span>
+                  <div style={{
+                    padding: '0 8px', height: 24, borderRadius: 8,
+                    backgroundColor: 'var(--color-neutral-050)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    <span style={{ fontSize: 12, fontWeight: 500, color: 'var(--color-neutral-700)' }}>모집중</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 마감 상품 섹션 */}
+        <div style={{ padding: '24px 16px' }}>
+          <div style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)', marginBottom: 12 }}>
+            마감 상품
+          </div>
+          <div className="v6-hide-scrollbar" style={{ display: 'flex', gap: 16, overflowX: 'auto', marginRight: -16 }}>
+            {['유전지수 높은 상품', '유전지수 높은 상품', '유전지수 높은 상품'].map((name, idx) => (
+              <div key={idx} style={{
+                flexShrink: 0, width: 280, borderRadius: 16, overflow: 'hidden', padding: 8,
+                background: 'linear-gradient(90deg, rgba(68,135,255,0.2) 0%, rgba(68,135,255,0.2) 100%), #fff',
+                position: 'relative',
+              }}>
+                {/* Image area with dark overlay */}
+                <div style={{ position: 'relative', height: 178, borderRadius: '8px 8px 0 0', overflow: 'hidden', padding: '8px 8px 0' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                    <img src="/product.png" alt="" style={{ height: 120, objectFit: 'contain' }} />
+                  </div>
+                  <div style={{
+                    position: 'absolute', inset: 0,
+                    backgroundColor: 'rgba(7,23,51,0.5)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    <span style={{ fontSize: 24, fontWeight: 600, lineHeight: '32px', color: '#fff' }}>120% 투자 달성</span>
+                  </div>
+                </div>
+                {/* Info card */}
+                <div style={{
+                  backgroundColor: '#fff', borderRadius: 8, padding: '20px 24px',
+                  boxShadow: '0px 1px 2px rgba(0,0,0,0.08), 0px 2px 4px rgba(0,0,0,0.06)',
+                  display: 'flex', flexDirection: 'column', gap: 12,
+                }}>
+                  <div>
+                    <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)', marginBottom: 4 }}>{name}</div>
+                    <div style={{
+                      display: 'inline-flex', padding: '0 8px', height: 20, borderRadius: 6,
+                      backgroundColor: 'var(--color-neutral-050)', alignItems: 'center',
+                    }}>
+                      <span style={{ fontSize: 10, fontWeight: 500, lineHeight: '18px', color: 'var(--color-neutral-700)' }}>10마리 투자상품</span>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 12, fontWeight: 500, lineHeight: '18px', color: 'var(--color-neutral-600)' }}>1C 금액</div>
+                      <div style={{ fontSize: 18, fontWeight: 600, lineHeight: '26px', color: 'var(--color-neutral-900)' }}>50,000원~</div>
+                    </div>
+                    <div style={{ width: 1, height: 36, backgroundColor: 'var(--color-neutral-100)' }} />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 12, fontWeight: 500, lineHeight: '18px', color: 'var(--color-neutral-600)' }}>마감 일자</div>
+                      <div style={{ fontSize: 18, fontWeight: 600, lineHeight: '26px', color: 'var(--color-neutral-900)' }}>2023.12.31</div>
+                    </div>
+                  </div>
+                  {/* Progress bar - full */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    <div style={{ height: 6, borderRadius: 100, backgroundColor: 'var(--color-neutral-200)', overflow: 'hidden' }}>
+                      <div style={{ width: '100%', height: '100%', borderRadius: 7, backgroundColor: 'var(--color-neutral-800)' }} />
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ fontSize: 14, fontWeight: 500, lineHeight: '20px', color: 'var(--color-neutral-500)' }}>
+                        <span style={{ color: 'var(--color-neutral-800)' }}>8,475 </span>/ 25,278C
+                      </span>
+                      <div style={{
+                        padding: '0 8px', height: 20, borderRadius: 8,
+                        backgroundColor: 'var(--color-neutral-800)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      }}>
+                        <span style={{ fontSize: 12, fontWeight: 500, color: '#fff' }}>마감</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
 
         {/* Footer */}
         <Footer phase={phase} onLogin={onLogin} />
