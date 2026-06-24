@@ -284,9 +284,7 @@ function FixedBottomCTA({ label, onClick }) {
     <div style={{
       position: 'fixed', bottom: 'calc(55px + env(safe-area-inset-bottom, 0px))', left: 0, right: 0,
       padding: '8px 16px',
-      backgroundColor: 'var(--color-neutral-000)',
       zIndex: 15,
-      borderTop: '1px solid var(--color-neutral-050)',
     }}>
       <div onClick={onClick} style={{
         height: 56, borderRadius: 14,
