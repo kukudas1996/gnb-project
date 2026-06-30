@@ -220,14 +220,11 @@ export default function V7Home() {
           </div>
         </div>
 
-        {/* Scroll indicator dots */}
-        <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: 20 }}>
-          <div style={{
-            width: 30,
-            height: 6,
-            borderRadius: 3,
-            background: 'linear-gradient(90deg, var(--color-neutral-300) 33%, var(--color-neutral-200) 33%, var(--color-neutral-200) 66%, var(--color-neutral-100) 66%)',
-          }} />
+        {/* Page indicator dots */}
+        <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: 20, gap: 6 }}>
+          <div style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: 'var(--color-neutral-800)' }} />
+          <div style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: 'var(--color-neutral-200)' }} />
+          <div style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: 'var(--color-neutral-200)' }} />
         </div>
 
         {/* ====== 자세히 보기 ====== */}
@@ -276,20 +273,7 @@ export default function V7Home() {
                 padding: '5px 12px 5px 8px',
                 alignSelf: 'flex-start',
               }}>
-                <div style={{
-                  width: 20,
-                  height: 20,
-                  borderRadius: '50%',
-                  backgroundColor: 'var(--color-primary-500)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="12" r="10" />
-                    <path d="M12 6v6l4 2" />
-                  </svg>
-                </div>
+                <img src="/icons/icon.svg" alt="" style={{ width: 20, height: 20, flexShrink: 0 }} />
                 <span style={{ fontSize: 14, fontWeight: 500, lineHeight: '20px', color: 'var(--color-neutral-900)', whiteSpace: 'nowrap' }}>13일 23:59:59 남음</span>
               </div>
 
@@ -420,6 +404,7 @@ export default function V7Home() {
               overflowX: 'auto',
               padding: '0 16px',
               scrollSnapType: 'x mandatory',
+              scrollPadding: '0 16px',
             }}
           >
             {[0, 1].map((i) => (
@@ -593,27 +578,10 @@ export default function V7Home() {
 
 function TabBarItem({ icon, label, selected = false }) {
   const color = selected ? 'var(--color-neutral-800)' : 'var(--color-neutral-600)'
-
-  const icons = {
-    home: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill={selected ? color : 'none'} stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-        {!selected && <polyline points="9 22 9 12 15 12 15 22" />}
-      </svg>
-    ),
-    shopping: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-        <line x1="3" y1="6" x2="21" y2="6" />
-        <path d="M16 10a4 4 0 0 1-8 0" />
-      </svg>
-    ),
-    my: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-        <circle cx="12" cy="7" r="4" />
-      </svg>
-    ),
+  const iconMap = {
+    home: '/icons/TabBarItem/TabBarIcon/Home.svg',
+    shopping: '/icons/TabBarItem/TabBarIcon/Shopping.svg',
+    my: '/icons/TabBarItem/TabBarIcon/My.svg',
   }
 
   return (
@@ -627,7 +595,7 @@ function TabBarItem({ icon, label, selected = false }) {
       padding: '2px 4px 0',
       cursor: 'pointer',
     }}>
-      {icons[icon]}
+      <img src={iconMap[icon]} alt={label} style={{ width: 24, height: 24 }} />
       <span style={{
         ...T.label11(),
         color,
