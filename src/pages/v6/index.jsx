@@ -1,6 +1,6 @@
 import { createElement, useState, useCallback } from 'react'
 import {
-  Home, ShoppingBag, Newspaper,
+  Home, ShoppingBag, Newspaper, User,
   ChevronLeft, ChevronRight, ChevronDown, Clock,
   Copy, MoreVertical, Users, Delete, Check, X,
   Wallet, Download,
@@ -175,33 +175,22 @@ function AppInstallBanner() {
 // ============================================================
 // Web AppBar (bankcow logo left, links right)
 // ============================================================
-function WebAppBar({ phase, onLogin, nav }) {
+function WebAppBar({ phase, onLogin }) {
   const isGuest = phase === 'guest'
   return (
     <div style={S.appBar}>
       <div style={S.safeTop} />
       <div style={S.appBarRow}>
-        <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>bankcow</span>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 0 }}>
-          {isGuest ? (
-            <span
-              onClick={onLogin}
-              style={{ ...T.body15('medium'), color: 'var(--color-neutral-700)', cursor: 'pointer', minHeight: 44, display: 'flex', alignItems: 'center' }}
-            >로그인</span>
-          ) : (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 0 }}>
-              <span
-                onClick={() => nav('history')}
-                style={{ ...T.body15('medium'), color: 'var(--color-neutral-700)', cursor: 'pointer', minHeight: 44, display: 'flex', alignItems: 'center', padding: '0 8px' }}
-              >투자내역</span>
-              <span style={{ color: 'var(--color-neutral-300)', margin: '0 2px' }}>|</span>
-              <span
-                onClick={() => nav('asset')}
-                style={{ ...T.body15('medium'), color: 'var(--color-neutral-700)', cursor: 'pointer', minHeight: 44, display: 'flex', alignItems: 'center', padding: '0 8px' }}
-              >내 계좌</span>
-            </div>
-          )}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <img src="/app-install.png" alt="" style={{ width: 28, height: 28, borderRadius: 6 }} />
+          <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>bankcow</span>
         </div>
+        {isGuest && (
+          <span
+            onClick={onLogin}
+            style={{ ...T.body15('medium'), color: 'var(--color-neutral-700)', cursor: 'pointer', minHeight: 44, display: 'flex', alignItems: 'center' }}
+          >로그인</span>
+        )}
       </div>
     </div>
   )
@@ -228,13 +217,14 @@ function SubAppBar({ title, onBack, light = false }) {
 }
 
 // ============================================================
-// TabBar (3 tabs: 홈/쇼핑/피드)
+// TabBar (4 tabs: 홈/쇼핑/피드/마이)
 // ============================================================
 function TabBar({ activeTab, onTabChange }) {
   const tabs = [
     { key: 'home', label: '홈', TabIcon: Home },
     { key: 'shopping', label: '쇼핑', TabIcon: ShoppingBag },
     { key: 'feed', label: '피드', TabIcon: Newspaper },
+    { key: 'mypage', label: '마이', TabIcon: User },
   ]
   return (
     <div style={S.tabBar}>
@@ -382,73 +372,83 @@ function AppInstallBottomSheet({ onDismiss }) {
 // ============================================================
 // Footer
 // ============================================================
-function Footer({ phase, onLogin }) {
-  const isGuest = phase === 'guest'
+function Footer() {
   return (
-    <div style={{ backgroundColor: '#EBEDF2', padding: '32px 16px 40px' }}>
-      {/* App download button */}
-      <div style={{
-        height: 48, borderRadius: 24,
-        border: '1px solid var(--color-neutral-300)',
-        backgroundColor: 'var(--color-neutral-000)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        gap: 6,
-        ...T.body15('semibold'), color: 'var(--color-neutral-700)',
-        marginBottom: 16,
-      }}>
-        <Download size={18} color="var(--color-neutral-600)" />
-        앱 다운로드
+    <div style={{ padding: '40px 16px 40px' }}>
+      {/* bankcow logo */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 28 }}>
+        <img src="/app-install.png" alt="" style={{ width: 24, height: 24, borderRadius: 5 }} />
+        <span style={{ ...T.body17('bold'), color: 'var(--color-neutral-900)' }}>bankcow</span>
       </div>
 
-      {/* Login/Logout link */}
-      <div style={{ textAlign: 'center', marginBottom: 24 }}>
-        {isGuest ? (
-          <span onClick={onLogin} style={{ ...T.body15('medium'), color: 'var(--color-neutral-600)', cursor: 'pointer' }}>로그인</span>
-        ) : (
-          <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-600)' }}>로그아웃</span>
-        )}
+      {/* 비지니스 */}
+      <div style={{ marginBottom: 24 }}>
+        <div style={{ ...T.body15('bold'), color: 'var(--color-neutral-800)', marginBottom: 12 }}>비지니스</div>
+        {['사업제휴 문의', '농장입점 문의', '기관투자 문의'].map(item => (
+          <div key={item} style={{ ...T.body15('medium'), color: 'var(--color-neutral-600)', marginBottom: 8, cursor: 'pointer' }}>{item}</div>
+        ))}
+      </div>
+
+      {/* 약관 */}
+      <div style={{ marginBottom: 24 }}>
+        <div style={{ ...T.body15('bold'), color: 'var(--color-neutral-800)', marginBottom: 12 }}>약관</div>
+        {['서비스 이용약관', '개인정보 처리방침', '추심이체 거래약관', '마케팅 수신동의'].map(item => (
+          <div key={item} style={{ ...T.body15('medium'), color: 'var(--color-neutral-600)', marginBottom: 8, cursor: 'pointer' }}>{item}</div>
+        ))}
+      </div>
+
+      {/* 앱 다운로드 */}
+      <div style={{ marginBottom: 28 }}>
+        <div style={{ ...T.body15('bold'), color: 'var(--color-neutral-800)', marginBottom: 12 }}>앱 다운로드</div>
+        <div style={{ display: 'flex', gap: 8 }}>
+          {[
+            { icon: '', label: 'App store' },
+            { icon: '▶', label: 'Google Play' },
+          ].map(item => (
+            <div key={item.label} style={{
+              flex: 1, height: 48, borderRadius: 12,
+              border: '1px solid var(--color-neutral-200)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+              ...T.body15('semibold'), color: 'var(--color-neutral-800)',
+              cursor: 'pointer',
+            }}>
+              <span style={{ fontSize: 16 }}>{item.icon}</span>
+              {item.label}
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Divider */}
-      <div style={{ height: 1, backgroundColor: 'var(--color-neutral-200)', marginBottom: 24 }} />
-
-      {/* Two columns */}
-      <div style={{ display: 'flex', gap: 32, marginBottom: 24 }}>
-        <div style={{ flex: 1 }}>
-          <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-700)', marginBottom: 12 }}>고객지원</div>
-          {['고객센터', '1:1 문의', '공지사항'].map(item => (
-            <div key={item} style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)', marginBottom: 8 }}>{item}</div>
-          ))}
-        </div>
-        <div style={{ flex: 1 }}>
-          <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-700)', marginBottom: 12 }}>약관</div>
-          {['서비스 이용약관', '개인정보 처리방침', '추심이체 거래약관', '마케팅 수신동의'].map(item => (
-            <div key={item} style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)', marginBottom: 8 }}>{item}</div>
-          ))}
-        </div>
-      </div>
-
-      {/* Divider */}
-      <div style={{ height: 1, backgroundColor: 'var(--color-neutral-200)', marginBottom: 24 }} />
+      <div style={{ height: 1, backgroundColor: 'var(--color-neutral-100)', marginBottom: 20 }} />
 
       {/* Company info */}
-      <div style={{ ...T.body15('bold'), color: 'var(--color-neutral-700)', marginBottom: 12 }}>bankcow</div>
-      <div style={{ ...T.label13('regular'), color: 'var(--color-neutral-500)', lineHeight: '20px', marginBottom: 16 }}>
-        기업: 주식회사 스탁키퍼<br />
-        대표이사 안재헌<br />
-        주소: 서울특별시 강남구 테헤란로 501, 2층 208-210호<br />
-        사업자등록번호: 000-00-00000<br />
-        통신판매업: 제0000-서울강남-00000호
+      <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)', lineHeight: '20px' }}>
+        <span>기업 : 주식회사 스탁키퍼</span>
+        <span style={{ margin: '0 8px', color: 'var(--color-neutral-200)' }}>|</span>
+        <span>대표이사 안재헌</span><br />
+        주소 : 서울특별시 강남구 테헤란로 501, 2층 208~210호<br />
+        사업자등록번호 : 574-81-01983<br />
+        법인등록번호 : 110111-7642245<br />
+        통신판매업 신고번호 : 제 2025-서울 강남-04318호<br />
+        <br />
+        전화 : 02-2274-2517 (평일 10시~ 17시)<br />
+        Email(제휴/협력) : bankcow@stockeeper.co
       </div>
 
       {/* Social media icons */}
-      <div style={{ display: 'flex', gap: 12, marginTop: 16 }}>
-        {[1, 2, 3, 4, 5].map(i => (
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 20 }}>
+        {[1, 2, 3, 4].map(i => (
           <div key={i} style={{
-            width: 36, height: 36, borderRadius: 18,
-            backgroundColor: 'var(--color-neutral-300)',
+            width: 32, height: 32, borderRadius: 16,
+            backgroundColor: 'var(--color-neutral-200)',
           }} />
         ))}
+        <div style={{ width: 1, height: 20, backgroundColor: 'var(--color-neutral-200)', margin: '0 4px' }} />
+        <div style={{
+          width: 32, height: 32, borderRadius: 8,
+          backgroundColor: 'var(--color-neutral-200)',
+        }} />
       </div>
     </div>
   )
@@ -559,19 +559,49 @@ function HomeScreen({ phase, nav, goTab, onLogin, showBottomSheet, onDismissShee
     <div className="v6-screen" style={S.screen}>
       <div className="v6-scroll" style={S.scrollBody}>
         <AppInstallBanner />
-        <WebAppBar phase={phase} onLogin={onLogin} nav={nav} />
+        <WebAppBar phase={phase} onLogin={onLogin} />
 
-        {/* Placeholder hero area */}
+        {/* Hero section */}
         <div style={{
-          backgroundColor: 'var(--color-neutral-000)',
-          minHeight: 280,
-          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-          padding: '60px 16px',
+          background: 'linear-gradient(180deg, #E8F0FF 0%, #F5F8FF 60%, #FFFFFF 100%)',
+          padding: '60px 20px 40px',
+          display: 'flex', flexDirection: 'column', alignItems: 'center',
         }}>
+          <div style={{ ...T.body15('medium'), color: 'var(--color-neutral-600)', marginBottom: 12, textAlign: 'center' }}>
+            한우 조각 투자 플랫폼, 뱅카우
+          </div>
+          <div style={{ ...T.headline32('bold'), color: 'var(--color-neutral-900)', textAlign: 'center', whiteSpace: 'pre-line', marginBottom: 32 }}>
+            {'송아지 키우며\n자산을 늘려요'}
+          </div>
+          <div style={{ width: 200, height: 160, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 40 }}>
+            <img src="/product.png" alt="" style={{ height: 160, objectFit: 'contain' }} />
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ ...T.body15('medium'), color: 'var(--color-neutral-700)', marginBottom: 4 }}>지금까지 누적 투자 금액</div>
+            <div style={{ ...T.headline24('bold'), color: 'var(--color-primary-500)', marginBottom: 24 }}>13,072,663,500 원</div>
+            <div style={{ ...T.body15('medium'), color: 'var(--color-neutral-600)', whiteSpace: 'pre-line', lineHeight: '22px' }}>
+              {'뱅카우는 매일 새로운\n성과를 만들어내고 있습니다'}
+            </div>
+          </div>
+        </div>
+
+        {/* 내 계좌 / 투자내역 quick bar */}
+        <div style={{ padding: '24px 16px' }}>
           <div style={{
-            fontSize: 28, fontWeight: 600, color: 'var(--color-neutral-400)',
-            textAlign: 'center', whiteSpace: 'pre-line', lineHeight: 1.5,
-          }}>{'잘 만들어진\n투자 전환을 위한\n상세페이지'}</div>
+            border: '1px solid var(--color-neutral-200)',
+            borderRadius: 16, padding: 16,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <div onClick={() => { if (phase === 'guest') onLogin(); else nav('asset'); }} style={{
+              flex: 1, textAlign: 'center', ...T.body17('semibold'), color: 'var(--color-neutral-800)',
+              cursor: 'pointer', minHeight: 26, display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>내 계좌</div>
+            <div style={{ width: 1, height: 25, backgroundColor: 'var(--color-neutral-200)' }} />
+            <div onClick={() => { if (phase === 'guest') onLogin(); else nav('history'); }} style={{
+              flex: 1, textAlign: 'center', ...T.body17('semibold'), color: 'var(--color-neutral-800)',
+              cursor: 'pointer', minHeight: 26, display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>투자내역</div>
+          </div>
         </div>
 
         {/* 투자 상품 섹션 */}
@@ -743,7 +773,7 @@ function HomeScreen({ phase, nav, goTab, onLogin, showBottomSheet, onDismissShee
         </div>
 
         {/* Footer */}
-        <Footer phase={phase} onLogin={onLogin} />
+        <Footer />
       </div>
 
       {/* Phase transition buttons */}
@@ -884,7 +914,7 @@ function ShoppingScreen({ phase, goTab, onLogin, nav }) {
         <div style={{ height: 0, borderTop: '1px solid var(--color-neutral-050)' }} />
         <ProductSection title="{상품 그룹}" />
 
-        <Footer phase={phase} onLogin={onLogin} />
+        <Footer />
       </div>
       <TabBar activeTab="shopping" onTabChange={goTab} />
     </div>
@@ -1025,7 +1055,7 @@ function FeedScreen({ phase, goTab, onLogin, nav }) {
           ))}
         </div>
 
-        <Footer phase={phase} onLogin={onLogin} />
+        <Footer />
       </div>
       <TabBar activeTab="feed" onTabChange={goTab} />
     </div>
@@ -1843,6 +1873,182 @@ function HistoryDetailPostSettlementScreen({ onBack }) {
 }
 
 // ============================================================
+// App Download Modal (for unavailable menu items)
+// ============================================================
+function AppDownloadModal({ onClose }) {
+  return (
+    <div onClick={onClose} style={{
+      position: 'fixed', inset: 0, zIndex: 100,
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      padding: 32,
+    }}>
+      <div onClick={e => e.stopPropagation()} style={{
+        backgroundColor: 'var(--color-neutral-000)',
+        borderRadius: 20, padding: '28px 24px 20px',
+        width: '100%', maxWidth: 320,
+      }}>
+        <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 8 }}>
+          앱에서 이용해 주세요
+        </div>
+        <div style={{ ...T.body15('medium'), color: 'var(--color-neutral-600)', marginBottom: 24, lineHeight: '22px' }}>
+          이 기능은 뱅카우 앱에서만 이용할 수 있어요.{'\n'}앱을 다운로드해서 더 편리하게 이용해 보세요!
+        </div>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <div onClick={onClose} style={{
+            flex: 1, height: 48, borderRadius: 12,
+            backgroundColor: 'var(--color-neutral-100)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            ...T.body17('semibold'), color: 'var(--color-neutral-700)', cursor: 'pointer',
+          }}>닫기</div>
+          <div onClick={onClose} style={{
+            flex: 1, height: 48, borderRadius: 12,
+            backgroundColor: 'var(--color-primary-500)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            ...T.body17('semibold'), color: '#fff', cursor: 'pointer',
+          }}>앱 다운로드</div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ============================================================
+// MyPage Screen (마이페이지)
+// ============================================================
+function MyPageScreen({ phase, goTab, onLogin, nav }) {
+  const [showAppModal, setShowAppModal] = useState(false)
+  const isGuest = phase === 'guest'
+  const isMember = !isGuest
+
+  // 투자내역, 내 계좌만 진입 가능
+  const handleMenuClick = (label) => {
+    if (label === '내 계좌') {
+      if (isGuest) { onLogin(); return }
+      nav('asset')
+    } else if (label === '투자 내역') {
+      if (isGuest) { onLogin(); return }
+      nav('history')
+    } else {
+      setShowAppModal(true)
+    }
+  }
+
+  const menuGroups = [
+    { title: '뱅킹', items: [{ icon: '💳', label: '내 계좌' }] },
+    { title: '투자', items: [
+      { icon: '🤠', label: '내 투자' },
+      { icon: '📊', label: '투자 내역' },
+      { icon: '🪙', label: '정산 내역' },
+      { icon: '🛡️', label: '자산 보호 내역' },
+      { icon: '💰', label: '세금' },
+      { icon: '🔄', label: '중도해지 신청 내역' },
+    ]},
+    { title: '쇼핑', items: [
+      { icon: '🛒', label: '주문내역' },
+      { icon: '🅿️', label: '내 포인트' },
+      { icon: '🎫', label: '내 쿠폰' },
+    ]},
+    { title: '고객지원', items: [
+      { icon: '🎧', label: '1:1 문의' },
+      { icon: '💬', label: '고객센터' },
+      { icon: '📢', label: '공지사항' },
+      { icon: '📄', label: '이용약관' },
+    ]},
+  ]
+
+  return (
+    <div className="v6-screen" style={S.screen}>
+      <div className="v6-scroll" style={S.scrollBody}>
+        {/* Header */}
+        <div style={S.safeTop} />
+        <div style={{ padding: '16px 16px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)' }}>마이페이지</span>
+          {isGuest && (
+            <span onClick={onLogin} style={{ ...T.body15('medium'), color: 'var(--color-neutral-600)', cursor: 'pointer', minHeight: 44, display: 'flex', alignItems: 'center' }}>로그인</span>
+          )}
+        </div>
+
+        {/* Profile area */}
+        {isGuest ? (
+          <div style={{ padding: '32px 24px 40px', textAlign: 'center' }}>
+            <div style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)', whiteSpace: 'pre-line', marginBottom: 20, lineHeight: '26px' }}>
+              {'로그인하고\n뱅카우 서비스 시작하기'}
+            </div>
+            <div onClick={onLogin} style={{
+              height: 56, borderRadius: 14,
+              backgroundColor: 'var(--color-primary-500)',
+              color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              ...T.body17('semibold'), cursor: 'pointer',
+            }}>로그인</div>
+          </div>
+        ) : (
+          <div style={{ padding: '20px 16px 24px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+              <div>
+                <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 4 }}>김한우님, 반가워요!</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4, cursor: 'pointer' }}>
+                  <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-600)' }}>내 정보</span>
+                  <ChevronRight size={14} color="var(--color-neutral-500)" />
+                </div>
+              </div>
+              <div style={{ width: 80, height: 80, borderRadius: 40, overflow: 'hidden', flexShrink: 0 }}>
+                <img src="/Cow.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              </div>
+            </div>
+            {/* 견학생 badge */}
+            <div style={{
+              border: '1px solid var(--color-neutral-100)',
+              borderRadius: 16, padding: '14px 16px',
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <div style={{ width: 44, height: 44, borderRadius: 22, overflow: 'hidden', backgroundColor: 'var(--color-neutral-050)' }}>
+                  <img src="/Cow.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
+                <div>
+                  <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-800)' }}>{'{견학생}'}</div>
+                  <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>투자중 {'{0}'}C</div>
+                </div>
+              </div>
+              <div style={{
+                padding: '6px 14px', borderRadius: 8,
+                border: '1px solid var(--color-neutral-200)',
+                ...T.label13('semibold'), color: 'var(--color-neutral-700)', cursor: 'pointer',
+              }}>혜택 보기</div>
+            </div>
+          </div>
+        )}
+
+        {/* Menu groups */}
+        <div style={{ padding: '0 16px 40px', display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {menuGroups.map(group => (
+            <div key={group.title} style={{
+              border: '1px solid var(--color-neutral-100)',
+              borderRadius: 16, padding: '20px 16px',
+            }}>
+              <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)', marginBottom: 12 }}>{group.title}</div>
+              {group.items.map((item, idx) => (
+                <div key={item.label} onClick={() => handleMenuClick(item.label)} style={{
+                  display: 'flex', alignItems: 'center', gap: 12,
+                  padding: '12px 0', cursor: 'pointer',
+                  borderTop: idx > 0 ? '1px solid var(--color-neutral-050)' : 'none',
+                }}>
+                  <span style={{ fontSize: 20 }}>{item.icon}</span>
+                  <span style={{ ...T.body17('medium'), color: 'var(--color-neutral-800)' }}>{item.label}</span>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+      <TabBar activeTab="mypage" onTabChange={goTab} />
+      {showAppModal && <AppDownloadModal onClose={() => setShowAppModal(false)} />}
+    </div>
+  )
+}
+
+// ============================================================
 // MAIN V6 COMPONENT
 // ============================================================
 export default function V6() {
@@ -1920,6 +2126,9 @@ export default function V6() {
 
     case 'feed':
       return <FeedScreen phase={phase} goTab={goTab} onLogin={handleLogin} nav={navigate} />
+
+    case 'mypage':
+      return <MyPageScreen phase={phase} goTab={goTab} onLogin={handleLogin} nav={navigate} />
 
     case 'login':
       return <LoginScreen onBack={goBack} onConfirm={() => {
