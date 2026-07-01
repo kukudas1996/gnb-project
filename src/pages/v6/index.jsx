@@ -1457,11 +1457,8 @@ function AppDownloadModal({ onClose }) {
 // MyPage Screen (마이페이지)
 // ============================================================
 function MyPageScreen({ phase, goTab, onLogin, nav }) {
-  const [showAppModal, setShowAppModal] = useState(false)
   const isGuest = phase === 'guest'
-  const isMember = !isGuest
 
-  // 투자내역, 내 계좌만 진입 가능
   const handleMenuClick = (label) => {
     if (label === '내 계좌') {
       if (isGuest) { onLogin(); return }
@@ -1469,20 +1466,13 @@ function MyPageScreen({ phase, goTab, onLogin, nav }) {
     } else if (label === '투자 내역') {
       if (isGuest) { onLogin(); return }
       nav('history')
-    } else {
-      setShowAppModal(true)
     }
   }
 
-  const menuGroups = [
-    { title: '뱅킹', items: [{ icon: '💳', label: '내 계좌' }] },
+  const accessibleGroups = [
     { title: '투자', items: [
-      { icon: '🤠', label: '내 투자' },
       { icon: '📊', label: '투자 내역' },
-      { icon: '🪙', label: '정산 내역' },
-      { icon: '🛡️', label: '자산 보호 내역' },
-      { icon: '💰', label: '세금' },
-      { icon: '🔄', label: '중도해지 신청 내역' },
+      { icon: '💳', label: '내 계좌' },
     ]},
     { title: '쇼핑', items: [
       { icon: '🛒', label: '주문내역' },
@@ -1496,6 +1486,34 @@ function MyPageScreen({ phase, goTab, onLogin, nav }) {
       { icon: '📄', label: '이용약관' },
     ]},
   ]
+
+  const lockedItems = [
+    { icon: '🤠', label: '내 투자' },
+    { icon: '📊', label: '투자 내역' },
+    { icon: '🪙', label: '정산 내역' },
+    { icon: '🛡️', label: '자산 보호 내역' },
+    { icon: '💰', label: '세금' },
+    { icon: '🔄', label: '중도해지 신청 내역' },
+  ]
+
+  const MenuCard = ({ group }) => (
+    <div style={{
+      border: '1px solid var(--color-neutral-100)',
+      borderRadius: 16, padding: '20px 16px',
+    }}>
+      <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)', marginBottom: 12 }}>{group.title}</div>
+      {group.items.map((item, idx) => (
+        <div key={item.label} onClick={() => handleMenuClick(item.label)} style={{
+          display: 'flex', alignItems: 'center', gap: 12,
+          padding: '12px 0', cursor: 'pointer',
+          borderTop: idx > 0 ? '1px solid var(--color-neutral-050)' : 'none',
+        }}>
+          <span style={{ fontSize: 20 }}>{item.icon}</span>
+          <span style={{ ...T.body17('medium'), color: 'var(--color-neutral-800)' }}>{item.label}</span>
+        </div>
+      ))}
+    </div>
+  )
 
   return (
     <div className="v6-screen" style={S.screen}>
@@ -1560,30 +1578,53 @@ function MyPageScreen({ phase, goTab, onLogin, nav }) {
           </div>
         )}
 
-        {/* Menu groups */}
-        <div style={{ padding: '0 16px 40px', display: 'flex', flexDirection: 'column', gap: 12 }}>
-          {menuGroups.map(group => (
-            <div key={group.title} style={{
-              border: '1px solid var(--color-neutral-100)',
-              borderRadius: 16, padding: '20px 16px',
+        {/* Accessible menu groups */}
+        <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {accessibleGroups.map(group => <MenuCard key={group.title} group={group} />)}
+        </div>
+
+        {/* Locked section */}
+        <div style={{ padding: '12px 16px 40px' }}>
+          <div style={{
+            border: '1px solid var(--color-neutral-100)',
+            borderRadius: 16, padding: '20px 16px',
+            position: 'relative', overflow: 'hidden',
+          }}>
+            <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)', marginBottom: 12 }}>투자</div>
+            {lockedItems.map((item, idx) => (
+              <div key={item.label} style={{
+                display: 'flex', alignItems: 'center', gap: 12,
+                padding: '12px 0',
+                borderTop: idx > 0 ? '1px solid var(--color-neutral-050)' : 'none',
+                filter: 'blur(3px)', opacity: 0.5,
+              }}>
+                <span style={{ fontSize: 20 }}>{item.icon}</span>
+                <span style={{ ...T.body17('medium'), color: 'var(--color-neutral-800)' }}>{item.label}</span>
+              </div>
+            ))}
+            {/* Overlay */}
+            <div style={{
+              position: 'absolute', inset: 0,
+              display: 'flex', flexDirection: 'column',
+              alignItems: 'center', justifyContent: 'center',
+              backgroundColor: 'rgba(255,255,255,0.6)',
             }}>
-              <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)', marginBottom: 12 }}>{group.title}</div>
-              {group.items.map((item, idx) => (
-                <div key={item.label} onClick={() => handleMenuClick(item.label)} style={{
-                  display: 'flex', alignItems: 'center', gap: 12,
-                  padding: '12px 0', cursor: 'pointer',
-                  borderTop: idx > 0 ? '1px solid var(--color-neutral-050)' : 'none',
-                }}>
-                  <span style={{ fontSize: 20 }}>{item.icon}</span>
-                  <span style={{ ...T.body17('medium'), color: 'var(--color-neutral-800)' }}>{item.label}</span>
-                </div>
-              ))}
+              <div style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)', textAlign: 'center', marginBottom: 4 }}>
+                모든 서비스는
+              </div>
+              <div style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)', textAlign: 'center', marginBottom: 16 }}>
+                뱅카우 앱에서 이용가능해요
+              </div>
+              <div style={{
+                padding: '10px 24px', borderRadius: 24,
+                backgroundColor: 'var(--color-primary-500)',
+                ...T.body15('semibold'), color: '#fff', cursor: 'pointer',
+              }}>앱에서 시작하기</div>
             </div>
-          ))}
+          </div>
         </div>
       </div>
       <TabBar activeTab="mypage" onTabChange={goTab} />
-      {showAppModal && <AppDownloadModal onClose={() => setShowAppModal(false)} />}
     </div>
   )
 }
