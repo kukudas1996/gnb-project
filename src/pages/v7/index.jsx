@@ -1526,35 +1526,36 @@ function MyInvestDetailScreen({ onBack, nav, phase, initialTab }) {
         {/* Blue gradient header */}
         <div style={{ background: 'linear-gradient(180deg, rgba(68,135,255,0.2) 0%, rgba(68,135,255,0) 100%)', paddingTop: 'env(safe-area-inset-top, 0px)' }}>
           <SubAppBar title="" onBack={onBack} />
-          <div style={{ padding: '0 16px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, paddingBottom: 20 }}>
-              <span style={{ ...T.headline28(), color: 'var(--color-neutral-900)' }}>A 투자 상품</span>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>보유 수량</span>
+          <div style={{ padding: '0 24px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', paddingTop: 30, paddingBottom: 20 }}>
+              <span style={{ ...T.headline32('semibold'), color: 'var(--color-neutral-900)', letterSpacing: '-0.96px' }}>A 투자 상품</span>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 2, marginTop: 20 }}>
+                <span style={{ fontSize: 14, fontWeight: 500, lineHeight: '20px', color: 'var(--color-neutral-800)', opacity: 0.8 }}>보유 수량</span>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: 2 }}>
                   <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-800)' }}>1</span>
-                  <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>/ 100주</span>
+                  <span style={{ fontSize: 14, fontWeight: 500, lineHeight: '20px', color: 'var(--color-neutral-800)', opacity: 0.8 }}>/ 100주</span>
                 </div>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>내 투자금</span>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 2, marginTop: 20 }}>
+                <span style={{ fontSize: 14, fontWeight: 500, lineHeight: '20px', color: 'var(--color-neutral-800)', opacity: 0.8 }}>내 투자금</span>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: 2 }}>
                   <span style={{ ...T.headline24('bold'), color: 'var(--color-neutral-800)' }}>20,000</span>
-                  <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>원</span>
+                  <span style={{ fontSize: 14, fontWeight: 500, lineHeight: '20px', color: 'var(--color-neutral-800)', opacity: 0.8 }}>원</span>
                 </div>
               </div>
             </div>
-            <div style={{ width: 160, height: 140, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', flexShrink: 0 }}>
-              <img src="/product.png" alt="" style={{ width: 160, height: 140, objectFit: 'contain' }} />
+            <div style={{ width: 200, height: 200, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', flexShrink: 0 }}>
+              <img src="/product.png" alt="" style={{ width: 200, height: 200, objectFit: 'contain' }} />
             </div>
           </div>
         </div>
 
         {/* Tab bar */}
-        <div style={{ display: 'flex', borderBottom: '1px solid var(--color-neutral-100)', padding: '0 16px', gap: 20 }}>
+        <div style={{ display: 'flex', borderBottom: '1px solid var(--color-neutral-100)', padding: '0 4px' }}>
           {tabs.map(tab => (
             <div key={tab} onClick={() => setActiveTab(tab)} style={{
               height: 52, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
+              padding: '0 12px', flexShrink: 0,
               borderBottom: activeTab === tab ? '2px solid var(--color-neutral-800)' : '2px solid transparent',
             }}>
               <span style={{ ...(activeTab === tab ? T.body17('bold') : T.body17('semibold')), color: activeTab === tab ? 'var(--color-neutral-800)' : 'var(--color-neutral-600)' }}>{tab}</span>
@@ -1620,7 +1621,7 @@ function MyInvestDetailScreen({ onBack, nav, phase, initialTab }) {
               {timelineSteps.map((step, idx) => (
                 <div key={idx}>
                   {idx > 0 && (
-                    <div style={{ height: 44, display: 'flex', alignItems: 'center' }}>
+                    <div style={{ paddingTop: 4, paddingBottom: 4, display: 'flex', alignItems: 'center' }}>
                       <div style={{ width: 36, display: 'flex', justifyContent: 'center' }}>
                         <div style={{ width: 3, height: 24, backgroundColor: step.done ? 'var(--color-primary-500)' : 'var(--color-neutral-100)', borderRadius: 99 }} />
                       </div>
@@ -1630,7 +1631,7 @@ function MyInvestDetailScreen({ onBack, nav, phase, initialTab }) {
                     <div style={{ display: 'flex', alignItems: 'center', flex: 1, minWidth: 0, gap: 12 }}>
                       <div style={{
                         width: 36, height: 36, borderRadius: 18,
-                        backgroundColor: step.done ? 'var(--color-primary-500)' : 'var(--color-neutral-200)',
+                        backgroundColor: step.done ? 'var(--color-primary-500)' : 'var(--color-neutral-100)',
                         display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                       }}>
                         {step.done ? (
@@ -1640,24 +1641,26 @@ function MyInvestDetailScreen({ onBack, nav, phase, initialTab }) {
                         )}
                       </div>
                       <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-                        <span style={{ ...T.title20('semibold'), color: 'var(--color-neutral-800)' }}>{step.label}</span>
+                        <span style={{ ...T.title20('semibold'), color: step.done ? 'var(--color-neutral-800)' : 'var(--color-neutral-700)' }}>{step.label}</span>
                         {step.tag && (
-                          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 2 }}>
                             <span style={{ ...T.label13('semibold'), color: 'var(--color-primary-500)', backgroundColor: 'var(--color-primary-050)', padding: '2px 8px', borderRadius: 4 }}>{step.tag}</span>
                             <img src="/icons/Graphic/help2.svg" alt="" style={{ width: 16, height: 16 }} />
                           </div>
                         )}
                         {step.sub && !step.expected && <span style={{ ...T.body15(), color: 'var(--color-neutral-500)' }}>{step.sub}</span>}
-                        {step.expected && (
+                      </div>
+                    </div>
+                    {step.date ? <span style={{ ...T.body17(), color: 'var(--color-neutral-800)', flexShrink: 0 }}>{step.date}</span>
+                      : step.expected ? (
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', flexShrink: 0 }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                             <span style={{ ...T.body15(), color: 'var(--color-neutral-500)' }}>{step.sub}</span>
                             <img src="/icons/Graphic/help2.svg" alt="" style={{ width: 16, height: 16 }} />
                           </div>
-                        )}
-                      </div>
-                    </div>
-                    {step.date ? <span style={{ ...T.body17(), color: 'var(--color-neutral-800)', flexShrink: 0 }}>{step.date}</span>
-                      : step.expected ? <span style={{ ...T.body15(), color: 'var(--color-neutral-500)', flexShrink: 0 }}>{step.expected}</span> : null}
+                          <span style={{ ...T.body15(), color: 'var(--color-neutral-500)' }}>{step.expected}</span>
+                        </div>
+                      ) : null}
                   </div>
                 </div>
               ))}
