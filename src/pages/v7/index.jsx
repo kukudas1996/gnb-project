@@ -883,7 +883,9 @@ function MyAccountScreen({ onBack, nav, phase }) {
       <div onClick={() => nav('account')} style={{ padding: '24px 16px', cursor: 'pointer' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <img src="/icons/Finance/nhBank.svg" alt="" style={{ width: 40, height: 40 }} />
+            <div style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: '#03B24B', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <img src="/icons/Finance/nhBank.svg" alt="" style={{ width: 28, height: 28 }} />
+            </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                 <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>NH농협은행</span>
