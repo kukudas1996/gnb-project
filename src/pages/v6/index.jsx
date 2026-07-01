@@ -585,218 +585,67 @@ function HomeScreen({ phase, nav, goTab, onLogin, showBottomSheet, onDismissShee
           </div>
         </div>
 
-        {/* 내 계좌 / 투자내역 quick bar */}
-        <div style={{ padding: '24px 16px' }}>
-          <div style={{
-            border: '1px solid var(--color-neutral-200)',
-            borderRadius: 16, padding: 16,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>
-            <div onClick={() => { if (phase === 'guest') onLogin(); else nav('asset'); }} style={{
-              flex: 1, textAlign: 'center', ...T.body17('semibold'), color: 'var(--color-neutral-800)',
-              cursor: 'pointer', minHeight: 26, display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>내 계좌</div>
-            <div style={{ width: 1, height: 25, backgroundColor: 'var(--color-neutral-200)' }} />
-            <div onClick={() => { if (phase === 'guest') onLogin(); else nav('history'); }} style={{
-              flex: 1, textAlign: 'center', ...T.body17('semibold'), color: 'var(--color-neutral-800)',
-              cursor: 'pointer', minHeight: 26, display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>투자내역</div>
-          </div>
-        </div>
-
-        {/* 투자 상품 섹션 */}
-        <div style={{ padding: '24px 16px' }}>
-          <div style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)', marginBottom: 9 }}>
-            투자 상품
-          </div>
-          <div
-            onClick={() => {
-              if (phase === 'guest') onLogin()
-              else nav('product_detail')
-            }}
-            style={{
-              borderRadius: 16, overflow: 'hidden', padding: 8, cursor: 'pointer',
-              background: 'linear-gradient(90deg, rgba(68,135,255,0.2) 0%, rgba(68,135,255,0.2) 100%), #fff',
-            }}
-          >
-            {/* Timer + Image area */}
-            <div style={{ padding: '8px 8px 0' }}>
-              <div style={{
-                display: 'inline-flex', alignItems: 'center', gap: 8,
-                backgroundColor: '#fff', borderRadius: 40, padding: '5px 12px 5px 8px',
-              }}>
-                <Clock size={20} color="var(--color-neutral-700)" />
-                <span style={{ fontSize: 14, fontWeight: 500, lineHeight: '20px', color: 'var(--color-neutral-900)' }}>
-                  13일 23:59:59 남음
-                </span>
-              </div>
-              <div style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                height: 140, overflow: 'hidden',
-              }}>
-                <img src="/product.png" alt="" style={{ height: 120, objectFit: 'contain' }} />
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 4 }}>
-                <div style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 4,
-                  backgroundColor: 'rgba(255,255,255,0.64)', border: '1px solid rgba(255,255,255,0.8)',
-                  borderRadius: 16, padding: '5px 12px',
-                }}>
-                  <Users size={16} color="var(--color-neutral-800)" />
-                  <span style={{ fontSize: 14, fontWeight: 500, lineHeight: '20px', color: 'var(--color-neutral-800)' }}>
-                    9,999명 투자중
-                  </span>
-                </div>
-              </div>
-            </div>
-            {/* Info card */}
-            <div style={{
-              backgroundColor: '#fff', borderRadius: 8, padding: '20px 24px',
-              boxShadow: '0px 1px 2px rgba(0,0,0,0.08), 0px 2px 4px rgba(0,0,0,0.06)',
-              display: 'flex', flexDirection: 'column', gap: 12,
-            }}>
-              <div>
-                <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)', marginBottom: 4 }}>A 투자 상품</div>
-                <div style={{
-                  display: 'inline-flex', padding: '0 8px', height: 20, borderRadius: 6,
-                  backgroundColor: 'var(--color-neutral-050)', alignItems: 'center',
-                }}>
-                  <span style={{ fontSize: 10, fontWeight: 500, lineHeight: '18px', color: 'var(--color-neutral-700)' }}>10마리 투자상품</span>
-                </div>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 12, fontWeight: 500, lineHeight: '18px', color: 'var(--color-neutral-600)' }}>1C 금액</div>
-                  <div style={{ fontSize: 18, fontWeight: 600, lineHeight: '26px', color: 'var(--color-neutral-900)' }}>20,000원~</div>
-                </div>
-                <div style={{ width: 1, height: 36, backgroundColor: 'var(--color-neutral-100)' }} />
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 12, fontWeight: 500, lineHeight: '18px', color: 'var(--color-neutral-600)' }}>마감 일자</div>
-                  <div style={{ fontSize: 18, fontWeight: 600, lineHeight: '26px', color: 'var(--color-neutral-900)' }}>2023.12.31</div>
-                </div>
-              </div>
-              {/* Progress bar */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                <div style={{ height: 6, borderRadius: 100, backgroundColor: 'var(--color-neutral-200)', overflow: 'hidden' }}>
-                  <div style={{ width: '33%', height: '100%', borderRadius: 7, backgroundColor: 'var(--color-neutral-700)' }} />
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontSize: 14, fontWeight: 500, lineHeight: '20px', color: 'var(--color-neutral-500)' }}>
-                    <span style={{ color: 'var(--color-neutral-700)' }}>8,475 </span>/ 25,278C
-                  </span>
-                  <div style={{
-                    padding: '0 8px', height: 24, borderRadius: 8,
-                    backgroundColor: 'var(--color-neutral-050)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  }}>
-                    <span style={{ fontSize: 12, fontWeight: 500, color: 'var(--color-neutral-700)' }}>모집중</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* 마감 상품 섹션 */}
-        <div style={{ padding: '24px 16px' }}>
-          <div style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)', marginBottom: 12 }}>
-            마감 상품
-          </div>
-          <div className="v6-hide-scrollbar" style={{ display: 'flex', gap: 16, overflowX: 'auto', marginRight: -16 }}>
-            {['유전지수 높은 상품', '유전지수 높은 상품', '유전지수 높은 상품'].map((name, idx) => (
-              <div key={idx} style={{
-                flexShrink: 0, width: 280, borderRadius: 16, overflow: 'hidden', padding: 8,
-                background: 'linear-gradient(90deg, rgba(68,135,255,0.2) 0%, rgba(68,135,255,0.2) 100%), #fff',
-                position: 'relative',
-              }}>
-                {/* Image area with dark overlay */}
-                <div style={{ position: 'relative', height: 178, borderRadius: '8px 8px 0 0', overflow: 'hidden', padding: '8px 8px 0' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-                    <img src="/product.png" alt="" style={{ height: 120, objectFit: 'contain' }} />
-                  </div>
-                  <div style={{
-                    position: 'absolute', inset: 0,
-                    backgroundColor: 'rgba(7,23,51,0.5)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  }}>
-                    <span style={{ fontSize: 24, fontWeight: 600, lineHeight: '32px', color: '#fff' }}>120% 투자 달성</span>
-                  </div>
-                </div>
-                {/* Info card */}
-                <div style={{
-                  backgroundColor: '#fff', borderRadius: 8, padding: '20px 24px',
-                  boxShadow: '0px 1px 2px rgba(0,0,0,0.08), 0px 2px 4px rgba(0,0,0,0.06)',
-                  display: 'flex', flexDirection: 'column', gap: 12,
-                }}>
-                  <div>
-                    <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)', marginBottom: 4 }}>{name}</div>
-                    <div style={{
-                      display: 'inline-flex', padding: '0 8px', height: 20, borderRadius: 6,
-                      backgroundColor: 'var(--color-neutral-050)', alignItems: 'center',
-                    }}>
-                      <span style={{ fontSize: 10, fontWeight: 500, lineHeight: '18px', color: 'var(--color-neutral-700)' }}>10마리 투자상품</span>
-                    </div>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: 12, fontWeight: 500, lineHeight: '18px', color: 'var(--color-neutral-600)' }}>1C 금액</div>
-                      <div style={{ fontSize: 18, fontWeight: 600, lineHeight: '26px', color: 'var(--color-neutral-900)' }}>50,000원~</div>
-                    </div>
-                    <div style={{ width: 1, height: 36, backgroundColor: 'var(--color-neutral-100)' }} />
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: 12, fontWeight: 500, lineHeight: '18px', color: 'var(--color-neutral-600)' }}>마감 일자</div>
-                      <div style={{ fontSize: 18, fontWeight: 600, lineHeight: '26px', color: 'var(--color-neutral-900)' }}>2023.12.31</div>
-                    </div>
-                  </div>
-                  {/* Progress bar - full */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                    <div style={{ height: 6, borderRadius: 100, backgroundColor: 'var(--color-neutral-200)', overflow: 'hidden' }}>
-                      <div style={{ width: '100%', height: '100%', borderRadius: 7, backgroundColor: 'var(--color-neutral-800)' }} />
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontSize: 14, fontWeight: 500, lineHeight: '20px', color: 'var(--color-neutral-500)' }}>
-                        <span style={{ color: 'var(--color-neutral-800)' }}>8,475 </span>/ 25,278C
-                      </span>
-                      <div style={{
-                        padding: '0 8px', height: 20, borderRadius: 8,
-                        backgroundColor: 'var(--color-neutral-800)',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      }}>
-                        <span style={{ fontSize: 12, fontWeight: 500, color: '#fff' }}>마감</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
         {/* Footer */}
         <Footer />
       </div>
 
-      {/* Phase transition buttons */}
+      {/* Phase transition buttons - top position */}
       {phase === 'applying' && (
-        <PhaseTransitionButton label="체결 당일로 이동" onClick={() => onPhaseTransition('settled')} />
+        <div style={{
+          position: 'fixed', top: 'calc(env(safe-area-inset-top, 0px) + 120px)', left: 0, right: 0,
+          display: 'flex', justifyContent: 'center', zIndex: 15, pointerEvents: 'none',
+        }}>
+          <div onClick={() => onPhaseTransition('settled')} style={{
+            padding: '6px 14px',
+            backgroundColor: 'var(--color-neutral-800)', color: '#fff',
+            borderRadius: 16, ...T.label13('semibold'),
+            cursor: 'pointer', pointerEvents: 'auto',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+          }}>체결 당일로 이동</div>
+        </div>
       )}
       {phase === 'settled' && (
-        <PhaseTransitionButton label="정산 완료로 이동" onClick={() => onPhaseTransition('post_settlement')} />
+        <div style={{
+          position: 'fixed', top: 'calc(env(safe-area-inset-top, 0px) + 120px)', left: 0, right: 0,
+          display: 'flex', justifyContent: 'center', zIndex: 15, pointerEvents: 'none',
+        }}>
+          <div onClick={() => onPhaseTransition('post_settlement')} style={{
+            padding: '6px 14px',
+            backgroundColor: 'var(--color-neutral-800)', color: '#fff',
+            borderRadius: 16, ...T.label13('semibold'),
+            cursor: 'pointer', pointerEvents: 'auto',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+          }}>정산 완료로 이동</div>
+        </div>
+      )}
+
+      {/* 3주 신청중 chip - only during applying phase */}
+      {phase === 'applying' && (
+        <div style={{
+          position: 'fixed', bottom: 'calc(120px + env(safe-area-inset-bottom, 0px))', left: 0, right: 0,
+          display: 'flex', justifyContent: 'center', zIndex: 15, pointerEvents: 'none',
+        }}>
+          <div onClick={() => nav('history')} style={{
+            padding: '8px 20px',
+            backgroundColor: 'var(--color-neutral-800)', color: '#fff',
+            borderRadius: 20, ...T.body15('semibold'),
+            cursor: 'pointer', pointerEvents: 'auto',
+            boxShadow: '0 2px 12px rgba(0,0,0,0.2)',
+          }}>3주 신청중</div>
+        </div>
       )}
 
       {/* Fixed bottom CTA */}
-      {(phase === 'guest' || phase === 'member' || phase === 'applying' || phase === 'settled' || phase === 'post_settlement') && (
-        <FixedBottomCTA
-          label="투자하러 가기"
-          onClick={() => {
-            if (phase === 'guest') {
-              onLogin()
-            } else {
-              nav('product_detail')
-            }
-          }}
-        />
-      )}
+      <FixedBottomCTA
+        label="투자하러 가기"
+        onClick={() => {
+          if (phase === 'guest') {
+            onLogin()
+          } else {
+            nav('product_detail')
+          }
+        }}
+      />
 
       <TabBar activeTab="home" onTabChange={goTab} />
 
@@ -1462,7 +1311,8 @@ function HistoryEmptyScreen({ onBack }) {
   )
 }
 
-function HistoryApplyingScreen({ onBack, nav }) {
+function HistoryApplyingScreen({ onBack }) {
+  const [showAppModal, setShowAppModal] = useState(false)
   return (
     <div className="v6-screen" style={S.screen}>
       <div className="v6-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
@@ -1473,7 +1323,7 @@ function HistoryApplyingScreen({ onBack, nav }) {
             내 투자가 신청중인 이유
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="var(--color-primary-400)" strokeWidth="1.5"/><text x="8" y="11.5" textAnchor="middle" fill="var(--color-primary-400)" fontSize="10" fontWeight="600">i</text></svg>
           </div>
-          <div onClick={() => nav('history_detail_applying')} style={{
+          <div onClick={() => setShowAppModal(true)} style={{
             display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer',
           }}>
             <div style={{
@@ -1496,18 +1346,20 @@ function HistoryApplyingScreen({ onBack, nav }) {
           </div>
         </div>
       </div>
+      {showAppModal && <AppDownloadModal onClose={() => setShowAppModal(false)} />}
     </div>
   )
 }
 
-function HistorySettledScreen({ onBack, nav }) {
+function HistorySettledScreen({ onBack }) {
+  const [showAppModal, setShowAppModal] = useState(false)
   return (
     <div className="v6-screen" style={S.screen}>
       <div className="v6-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
         <SubAppBar title="" onBack={onBack} />
         <div style={{ padding: '0 16px' }}>
           <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)', marginBottom: 20 }}>투자 내역</div>
-          <div onClick={() => nav('history_detail_settled')} style={{
+          <div onClick={() => setShowAppModal(true)} style={{
             display: 'flex', alignItems: 'center', gap: 12, padding: '16px 0', cursor: 'pointer',
           }}>
             <span style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)', minWidth: 40, flexShrink: 0 }}>06.12</span>
@@ -1519,18 +1371,20 @@ function HistorySettledScreen({ onBack, nav }) {
           </div>
         </div>
       </div>
+      {showAppModal && <AppDownloadModal onClose={() => setShowAppModal(false)} />}
     </div>
   )
 }
 
-function HistoryPostSettlementScreen({ onBack, nav }) {
+function HistoryPostSettlementScreen({ onBack }) {
+  const [showAppModal, setShowAppModal] = useState(false)
   return (
     <div className="v6-screen" style={S.screen}>
       <div className="v6-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
         <SubAppBar title="" onBack={onBack} />
         <div style={{ padding: '0 16px' }}>
           <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)', marginBottom: 20 }}>투자 내역</div>
-          <div onClick={() => nav('history_detail_post_settlement')} style={{
+          <div onClick={() => setShowAppModal(true)} style={{
             display: 'flex', alignItems: 'center', gap: 12, padding: '16px 0',
             borderBottom: '1px solid var(--color-neutral-100)', cursor: 'pointer',
           }}>
@@ -1541,7 +1395,7 @@ function HistoryPostSettlementScreen({ onBack, nav }) {
             </div>
             <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-700)' }}>1주</span>
           </div>
-          <div onClick={() => nav('history_detail_settled')} style={{
+          <div onClick={() => setShowAppModal(true)} style={{
             display: 'flex', alignItems: 'center', gap: 12, padding: '16px 0', cursor: 'pointer',
           }}>
             <span style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)', minWidth: 40, flexShrink: 0 }}>06.12</span>
@@ -1553,321 +1407,7 @@ function HistoryPostSettlementScreen({ onBack, nav }) {
           </div>
         </div>
       </div>
-    </div>
-  )
-}
-
-// ============================================================
-// History Detail: 신청 (applying)
-// ============================================================
-function HistoryDetailApplyingScreen({ onBack }) {
-  return (
-    <div className="v6-screen" style={S.screen}>
-      <div className="v6-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
-        <div style={S.appBar}>
-          <div style={S.safeTop} />
-          <div style={{ ...S.appBarRow, position: 'relative' }}>
-            <div onClick={onBack} style={{ cursor: 'pointer', zIndex: 1, width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <ChevronLeft size={24} />
-            </div>
-            <div style={{ width: 44 }} />
-          </div>
-        </div>
-        <div style={{ padding: '0 16px 0' }}>
-          <div style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)', marginBottom: 4 }}>A 투자 상품 투자 신청</div>
-        </div>
-        {/* Progress stepper */}
-        <div style={{ padding: '24px 16px 0' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 8, width: '100%' }}>
-            <div style={{ textAlign: 'center' }}>
-              <IconCheck filled />
-              <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-800)', marginTop: 8 }}>신청</div>
-              <div style={{ ...T.label11('medium'), color: 'var(--color-neutral-500)', marginTop: 2 }}>취소 가능</div>
-            </div>
-            <div style={{ width: 100, height: 2, backgroundColor: 'var(--color-neutral-200)', margin: '0 8px', marginBottom: 40 }} />
-            <div style={{ textAlign: 'center' }}>
-              <StepNumber num={2} />
-              <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-500)', marginTop: 8 }}>체결</div>
-              <div style={{ ...T.label11('medium'), color: 'var(--color-neutral-500)', marginTop: 2 }}>취소 불가능</div>
-              <div style={{
-                display: 'inline-block', marginTop: 6,
-                padding: '2px 8px', borderRadius: 4,
-                backgroundColor: 'var(--color-primary-050)',
-                ...T.label11('semibold'), color: 'var(--color-primary-500)',
-              }}>11일남음</div>
-            </div>
-          </div>
-          <div style={{
-            width: '100%', height: 48, borderRadius: 12,
-            border: '1px solid var(--color-neutral-200)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            ...T.body17('semibold'), color: 'var(--color-neutral-700)',
-            marginTop: 24, marginBottom: 16,
-          }}>상품 상세 보기</div>
-        </div>
-        <div style={S.divider} />
-        <div style={{ padding: '20px 16px' }}>
-          <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)', marginBottom: 4 }}>상세 내역</div>
-          <div style={{ ...T.label13('medium'), color: 'var(--color-primary-500)', marginBottom: 20 }}>모집율이 따라, 모두 체결되지 않을 수 있어요</div>
-          {[
-            ['투자 신청일', '2026.06.01 22:21'],
-            ['투자 신청 금액', '60,000원'],
-            ['신청 수량', '3주'],
-            ['체결 예정일', '2026.06.12'],
-            ['플랫폼 이용료', '무료'],
-          ].map(([l, v]) => (
-            <div key={l} style={{
-              display: 'flex', justifyContent: 'space-between', padding: '16px 0',
-            }}>
-              <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-900)' }}>{l}</span>
-              <span style={{ ...T.body17('regular'), color: 'var(--color-neutral-700)' }}>{v}</span>
-            </div>
-          ))}
-        </div>
-        <div style={{ padding: '8px 16px 40px' }}>
-          <div style={{
-            height: 56, borderRadius: 14,
-            border: '1px solid var(--color-neutral-200)',
-            backgroundColor: 'var(--color-neutral-000)',
-            color: 'var(--color-red-500)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            ...T.body17('semibold'), cursor: 'pointer',
-          }}>신청 취소하기</div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// ============================================================
-// History Detail: 체결 (settled)
-// ============================================================
-function HistoryDetailSettledScreen({ onBack }) {
-  const [showApplyDetail, setShowApplyDetail] = useState(false)
-  return (
-    <div className="v6-screen" style={S.screen}>
-      <div className="v6-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
-        <div style={S.appBar}>
-          <div style={S.safeTop} />
-          <div style={{ ...S.appBarRow, position: 'relative' }}>
-            <div onClick={onBack} style={{ cursor: 'pointer', zIndex: 1, width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <ChevronLeft size={24} />
-            </div>
-            <div style={{ width: 44 }} />
-          </div>
-        </div>
-        <div style={{ padding: '0 16px 0' }}>
-          <div style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)', marginBottom: 24 }}>A 투자 상품 체결 완료</div>
-        </div>
-        {/* Progress stepper */}
-        <div style={{ padding: '0 16px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 32, width: '100%' }}>
-            <div style={{ textAlign: 'center' }}>
-              <IconCheck filled />
-              <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-800)', marginTop: 8 }}>신청</div>
-              <div style={{ ...T.label11('medium'), color: 'var(--color-neutral-500)', marginTop: 2 }}>취소 가능</div>
-            </div>
-            <div style={{ width: 100, height: 2, backgroundColor: 'var(--color-primary-500)', margin: '0 8px', marginBottom: 30 }} />
-            <div style={{ textAlign: 'center' }}>
-              <IconCheck filled />
-              <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-800)', marginTop: 8 }}>체결</div>
-              <div style={{ ...T.label11('medium'), color: 'var(--color-neutral-500)', marginTop: 2 }}>취소 불가능</div>
-            </div>
-          </div>
-          <div style={{
-            width: '100%', height: 48, borderRadius: 12,
-            border: '1px solid var(--color-neutral-200)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            ...T.body17('semibold'), color: 'var(--color-neutral-700)',
-            marginBottom: 16,
-          }}>상품 정보 보기</div>
-        </div>
-        <div style={S.divider} />
-        <div style={{ padding: '20px 16px' }}>
-          <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)', marginBottom: 20 }}>상세 내역</div>
-          {[
-            ['투자 체결일', '2026.06.12 09:00'],
-            ['투자 신청 금액', '60,000원'],
-            ['투자 체결 금액', '20,000원'],
-            ['체결 수량', '1주'],
-            ['환불 금액', '40,000원'],
-          ].map(([l, v]) => (
-            <div key={l} style={{
-              display: 'flex', justifyContent: 'space-between', padding: '16px 0',
-            }}>
-              <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-900)' }}>{l}</span>
-              <span style={{ ...T.body17('regular'), color: 'var(--color-neutral-700)' }}>{v}</span>
-            </div>
-          ))}
-        </div>
-        <div style={S.divider} />
-        <div style={{ padding: '20px 16px' }}>
-          <div
-            onClick={() => setShowApplyDetail(!showApplyDetail)}
-            style={{
-              display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer',
-            }}
-          >
-            <span style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)' }}>신청 내역</span>
-            <ChevronDown
-              size={24}
-              color="var(--color-neutral-400)"
-              style={{ transform: showApplyDetail ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}
-            />
-          </div>
-          {showApplyDetail && (
-            <div style={{ marginTop: 8 }}>
-              {[
-                ['투자 신청일', '2026.06.01 22:21'],
-                ['투자 신청 금액', '60,000원'],
-                ['신청 수량', '3주'],
-                ['체결 예정일', '2026.06.12'],
-                ['플랫폼 이용료', '무료'],
-              ].map(([l, v]) => (
-                <div key={l} style={{
-                  display: 'flex', justifyContent: 'space-between', padding: '16px 0',
-                }}>
-                  <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-900)' }}>{l}</span>
-                  <span style={{ ...T.body17('regular'), color: 'var(--color-neutral-700)' }}>{v}</span>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-        <div style={{ height: 60 }} />
-      </div>
-    </div>
-  )
-}
-
-// ============================================================
-// History Detail: 정산 완료 (post_settlement)
-// ============================================================
-function HistoryDetailPostSettlementScreen({ onBack }) {
-  return (
-    <div className="v6-screen" style={S.screen}>
-      <div className="v6-scroll" style={{ height: '100dvh', overflowY: 'auto' }}>
-        <div style={S.appBar}>
-          <div style={S.safeTop} />
-          <div style={{ ...S.appBarRow, position: 'relative' }}>
-            <div onClick={onBack} style={{ cursor: 'pointer', zIndex: 1, width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <ChevronLeft size={24} />
-            </div>
-            <div style={{ width: 44 }} />
-          </div>
-        </div>
-        <div style={{ padding: '0 16px 0' }}>
-          <div style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>A 투자 상품 정산 완료</div>
-          <div style={{
-            width: '100%', height: 48, borderRadius: 12,
-            border: '1px solid var(--color-neutral-200)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            ...T.body17('semibold'), color: 'var(--color-neutral-700)',
-            cursor: 'pointer',
-          }}>상품 정보 보기</div>
-        </div>
-
-        <div style={S.divider} />
-
-        {/* 상세 내역 */}
-        <div style={{ padding: '20px 16px' }}>
-          <div style={{ ...T.body17('bold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>상세 내역</div>
-          {[
-            ['정산일', '2026.08.14 09:00'],
-            ['정산금', '22,000원'],
-            ['투자금', '20,000원'],
-            ['수익금', '+20,000원'],
-            ['수익률', '+20.00%'],
-          ].map(([l, v]) => (
-            <div key={l} style={{
-              display: 'flex', justifyContent: 'space-between', padding: '12px 0',
-              borderBottom: '1px solid var(--color-neutral-050)',
-            }}>
-              <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)' }}>{l}</span>
-              <span style={{
-                ...T.body15('medium'),
-                color: v.startsWith('+') ? 'var(--color-red-500)' : 'var(--color-neutral-700)',
-              }}>{v}</span>
-            </div>
-          ))}
-
-          {/* Tax info box */}
-          <div style={{
-            marginTop: 16, padding: '16px',
-            backgroundColor: 'var(--color-neutral-050)', borderRadius: 12,
-          }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ ...T.label13('semibold'), color: 'var(--color-neutral-700)' }}>배당소득세</span>
-                <span style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)', padding: '1px 6px', backgroundColor: 'var(--color-neutral-100)', borderRadius: 4 }}>지세비</span>
-              </div>
-              <span style={{ ...T.label13('medium'), color: 'var(--color-neutral-700)' }}>(30,800)원</span>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-              <span style={{ ...T.label13('medium'), color: 'var(--color-neutral-600)' }}>· 세후 수익금</span>
-              <span style={{ ...T.label13('medium'), color: 'var(--color-neutral-700)' }}>+(169,200)원</span>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <span style={{ ...T.label13('medium'), color: 'var(--color-neutral-600)' }}>· 세후 수익률</span>
-              <span style={{ ...T.label13('medium'), color: 'var(--color-neutral-700)' }}>+(16.92)%</span>
-            </div>
-          </div>
-        </div>
-
-        <div style={S.divider} />
-
-        {/* 정산 히스토리 */}
-        <div style={{ padding: '20px 16px' }}>
-          <div style={{ ...T.body17('bold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>정산 히스토리</div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid var(--color-neutral-200)' }}>
-            <span style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>(50마리) 정산 내역</span>
-            <span style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>금액</span>
-          </div>
-          {[
-            { label: '경매금', value: '{100,000,000}원' },
-            { label: '가축 구매비', value: '-{100,000,000}원' },
-            { label: '사료 구매비', value: '-{100,000,000}원' },
-            { label: '사육 관리비', value: '-{100,000,000}원' },
-            { label: '증권 관리비', value: '0원' },
-          ].map(({ label, value }, i) => (
-            <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0' }}>
-              <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-700)' }}>{label}</span>
-              <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-900)' }}>{value}</span>
-            </div>
-          ))}
-          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '14px 0', borderTop: '1px solid var(--color-neutral-200)', marginTop: 4 }}>
-            <span style={{ ...T.body15('bold'), color: 'var(--color-neutral-900)' }}>경매 결과</span>
-            <span style={{ ...T.body15('bold'), color: 'var(--color-neutral-900)' }}>{'{100,000,000}원'}</span>
-          </div>
-          {[
-            { label: '보상금', value: '+{100,000,000}원', tag: '더보기' },
-            { label: '농가 장려금', value: '-{100,000,000}원', tag: '자세히' },
-            { label: '운영 성과금', value: '-{100,000,000}원', tag: '자세히' },
-          ].map(({ label, value, tag }, i) => (
-            <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-700)' }}>{label}</span>
-                <span style={{ ...T.label11('medium'), color: 'var(--color-neutral-500)', padding: '1px 6px', backgroundColor: 'var(--color-neutral-050)', borderRadius: 4 }}>{tag}</span>
-              </div>
-              <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-900)' }}>{value}</span>
-            </div>
-          ))}
-          <div style={{ borderTop: '1px solid var(--color-neutral-200)', marginTop: 4, paddingTop: 14 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0' }}>
-              <span style={{ ...T.body15('bold'), color: 'var(--color-neutral-900)' }}>전체 수익금 (21,876C)</span>
-              <span style={{ ...T.body15('bold'), color: 'var(--color-red-500)' }}>+20,000,000원</span>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', padding: '8px 0' }}>
-              <span style={{ ...T.body15('medium'), color: 'var(--color-neutral-600)' }}>└ 내 수익금 (1C)</span>
-              <div style={{ textAlign: 'right' }}>
-                <div style={{ ...T.body15('bold'), color: 'var(--color-red-500)' }}>+22,000원</div>
-                <div style={{ ...T.label13('medium'), color: 'var(--color-red-500)' }}>+20.00%</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div style={{ height: 60 }} />
-      </div>
+      {showAppModal && <AppDownloadModal onClose={() => setShowAppModal(false)} />}
     </div>
   )
 }
@@ -2157,19 +1697,10 @@ export default function V6() {
 
     case 'history':
       if (phase === 'guest' || phase === 'member') return <HistoryEmptyScreen onBack={goBack} />
-      if (phase === 'applying') return <HistoryApplyingScreen onBack={goBack} nav={navigate} />
-      if (phase === 'settled') return <HistorySettledScreen onBack={goBack} nav={navigate} />
-      if (phase === 'post_settlement') return <HistoryPostSettlementScreen onBack={goBack} nav={navigate} />
+      if (phase === 'applying') return <HistoryApplyingScreen onBack={goBack} />
+      if (phase === 'settled') return <HistorySettledScreen onBack={goBack} />
+      if (phase === 'post_settlement') return <HistoryPostSettlementScreen onBack={goBack} />
       return <HistoryEmptyScreen onBack={goBack} />
-
-    case 'history_detail_applying':
-      return <HistoryDetailApplyingScreen onBack={goBack} />
-
-    case 'history_detail_settled':
-      return <HistoryDetailSettledScreen onBack={goBack} />
-
-    case 'history_detail_post_settlement':
-      return <HistoryDetailPostSettlementScreen onBack={goBack} />
 
     default:
       return (
