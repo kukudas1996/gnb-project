@@ -61,7 +61,7 @@ const SettingsIcon = ({ size = 24, color = 'var(--color-neutral-800)' }) => (
 // ============================================================
 export default function V7App() {
   const [phase, setPhase] = useState('pre')
-  // phases: pre -> applying -> settled -> pre_settlement -> settlement_day -> post_settlement
+  // phases: pre -> applying -> settled -> pre_settlement -> post_settlement
   const [screen, setScreen] = useState('home')
   const [history, setHistory] = useState([])
   const [messageDismissed, setMessageDismissed] = useState(false)
@@ -109,8 +109,6 @@ export default function V7App() {
   const handlePushSettledTap = () => { setPhase('settled'); setScreen('home'); setHistory([]); setMessageDismissed(false) }
   const handleJumpToPreSettlement = () => { setScreen('push_pre_settlement'); setHistory([]) }
   const handlePushPreSettlementTap = () => { setPhase('pre_settlement'); setScreen('home'); setHistory([]); setMessageDismissed(false) }
-  const handleJumpToSettlementDay = () => { setScreen('push_settlement_day'); setHistory([]) }
-  const handlePushSettlementDayTap = () => { setPhase('settlement_day'); setScreen('home'); setHistory([]); setMessageDismissed(false) }
   const handleJumpToPostSettlement = () => { setScreen('push_post_settlement'); setHistory([]) }
   const handlePushPostSettlementTap = () => { setPhase('post_settlement'); setScreen('home'); setHistory([]); setMessageDismissed(false) }
 
@@ -118,9 +116,8 @@ export default function V7App() {
 
   const phaseTransitions = {
     applying: { label: '체결 당일로 이동하기', onClick: handleJumpToSettled },
-    settled: { label: '정산 7일 전으로 이동하기', onClick: handleJumpToPreSettlement },
-    pre_settlement: { label: '정산 당일로 이동하기', onClick: handleJumpToSettlementDay },
-    settlement_day: { label: '정산 완료로 이동하기', onClick: handleJumpToPostSettlement },
+    settled: { label: '정산 예정으로 이동하기', onClick: handleJumpToPreSettlement },
+    pre_settlement: { label: '정산 완료로 이동하기', onClick: handleJumpToPostSettlement },
   }
 
   switch (screen) {
@@ -147,15 +144,13 @@ export default function V7App() {
     case 'history_detail':
       return <InvestHistoryDetailScreen onBack={goBack} nav={navigate} phase={phase} />
     case 'settlement_history':
-      return <SettlementHistoryScreen onBack={goBack} phase={phase} />
+      return <SettlementHistoryScreen onBack={goBack} phase={phase} nav={navigate} />
     case 'my_invest_detail':
       return <MyInvestDetailScreen onBack={goBack} nav={navigate} phase={phase} initialTab={myInvestInitialTab} />
     case 'push_settled':
       return <PushNotificationScreen title="투자 체결" message="'A 투자 상품'에 1주 투자 체결됐어요." onTap={handlePushSettledTap} />
     case 'push_pre_settlement':
-      return <PushNotificationScreen title="투자 정산" message="'A투자상품'이(가) 12월 1일에 정산 예정입니다." onTap={handlePushPreSettlementTap} />
-    case 'push_settlement_day':
-      return <PushNotificationScreen title="투자 정산" message="'A투자상품'의 정산금이 오늘 순차적으로 지급될 예정입니다." onTap={handlePushSettlementDayTap} />
+      return <PushNotificationScreen title="투자 정산" message="'A투자상품'이(가) 12월 28일에 정산 예정입니다." onTap={handlePushPreSettlementTap} />
     case 'push_post_settlement':
       return <PushNotificationScreen title="투자 정산" message="'A투자상품' 정산이 완료됐어요. 정산금 22,000원이 입금됐어요." onTap={handlePushPostSettlementTap} />
     default:
@@ -191,8 +186,7 @@ function DynamicMessage({ phase, dismissed, onDismiss, nav }) {
   const messages = {
     applying: { text: '투자 신청이 완료됐어요', sub: 'A 투자 상품' },
     settled: { text: '3주 체결 완료됐어요', sub: 'A 투자 상품' },
-    pre_settlement: { text: '12월 1일 정산 예정이에요', sub: 'A 투자 상품' },
-    settlement_day: { text: '정산금이 지급될 예정이에요', sub: 'A 투자 상품' },
+    pre_settlement: { text: '12월 28일 정산 예정이에요', sub: 'A 투자 상품' },
     post_settlement: { text: '정산이 완료되었어요!', sub: 'A 투자 상품' },
   }
   const msg = messages[phase]
@@ -200,7 +194,7 @@ function DynamicMessage({ phase, dismissed, onDismiss, nav }) {
 
   const handleTap = () => {
     if (!nav) return
-    if (phase === 'pre_settlement' || phase === 'settlement_day') nav('my_invest_detail', '내 투자')
+    if (phase === 'pre_settlement') nav('my_invest_detail', '내 투자')
     else nav('history_detail')
   }
 
@@ -238,8 +232,7 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
     applying: { account: '100,000원', investAmount: '0원', showInvestItem: false, showApplying: true },
     settled: { account: '80,000원', investAmount: '20,000원', showInvestItem: true, showApplying: false, remainingText: '1년 8개월 남음' },
     pre_settlement: { account: '80,000원', investAmount: '20,000원', showInvestItem: true, showApplying: false, remainingText: '4개월 남음' },
-    settlement_day: { account: '80,000원', investAmount: '20,000원', showInvestItem: true, showApplying: false, remainingText: '4개월 남음' },
-    post_settlement: { account: '100,000원', investAmount: '0원', showInvestItem: false, showApplying: false },
+    post_settlement: { account: '102,000원', investAmount: '0원', showInvestItem: false, showApplying: false },
   }
   const config = phaseConfig[phase] || phaseConfig.pre
   const hasInvest = config.investAmount !== '0원'
@@ -746,7 +739,6 @@ function AssetScreen({ onBack, nav, phase }) {
     applying: { account: '40,000원', investAmount: '0원', showApplying: true, showItems: false },
     settled: { account: '40,000원', investAmount: '20,000원', showApplying: false, showItems: true },
     pre_settlement: { account: '40,000원', investAmount: '20,000원', showApplying: false, showItems: true },
-    settlement_day: { account: '40,000원', investAmount: '20,000원', showApplying: false, showItems: true },
     post_settlement: { account: '102,000원', investAmount: '0원', showApplying: false, showItems: false },
   }
   const config = phaseConfig[phase] || phaseConfig.pre
@@ -868,7 +860,7 @@ function AccountDetailScreen({ onBack, phase }) {
 
   const balanceMap = {
     pre: '100,000', applying: '40,000', settled: '40,000',
-    pre_settlement: '40,000', settlement_day: '40,000', post_settlement: '102,000',
+    pre_settlement: '40,000', post_settlement: '102,000',
   }
   const balance = balanceMap[phase] || '100,000'
 
@@ -886,7 +878,7 @@ function AccountDetailScreen({ onBack, phase }) {
       { date: '5월 15일', name: '윤현우', time: '18:00', type: '입금', amount: '+ 100,000원', color: 'var(--color-primary-500)' },
     ],
   }
-  const transactions = allTransactions[phase] || allTransactions[phase === 'pre_settlement' || phase === 'settlement_day' ? 'settled' : phase] || allTransactions.pre
+  const transactions = allTransactions[phase] || allTransactions[phase === 'pre_settlement' ? 'settled' : phase] || allTransactions.pre
 
   const filtered = selectedTab === '전체' ? transactions :
     transactions.filter(t => t.type === (selectedTab === '입금' ? '입금' : '출금'))
@@ -1013,7 +1005,7 @@ function InvestHistoryScreen({ onBack, nav, phase }) {
     ],
   }
 
-  const data = historyByPhase[phase] || (phase === 'pre_settlement' || phase === 'settlement_day' ? historyByPhase.settled : [])
+  const data = historyByPhase[phase] || (phase === 'pre_settlement' ? historyByPhase.settled : [])
 
   return (
     <div className="v7-screen" style={{
@@ -1100,6 +1092,7 @@ function InvestHistoryScreen({ onBack, nav, phase }) {
 // ============================================================
 function InvestHistoryDetailScreen({ onBack, nav, phase }) {
   const isApplying = phase === 'applying'
+  const isPostSettlement = phase === 'post_settlement'
 
   const timelineSteps = isApplying ? [
     { label: '신청', sub: '취소 가능', date: '26.06.01', done: true },
@@ -1117,6 +1110,31 @@ function InvestHistoryDetailScreen({ onBack, nav, phase }) {
         { label: '신청 금액', value: '60,000원' },
         { label: '신청 수량', value: '3주' },
         { label: '체결 예정일', value: '26.06.12' },
+      ],
+    },
+  ] : isPostSettlement ? [
+    {
+      title: '내 정산 내역',
+      hasTag: true,
+      rows: [
+        { label: '투자금', value: '20,000원' },
+        { label: '세금 (15.4%)', value: '-1,500원' },
+        { label: '세후 수익금', value: '+2,000원', color: '#f76868' },
+        { label: '세후 수익률', value: '+20%', color: '#f76868' },
+      ],
+      totalRow: { label: '정산금', value: '22,000원' },
+    },
+    {
+      title: '상품 정산 내역',
+      rows: [
+        { label: '총 경매가', value: '400,000,000원' },
+        { label: '총 투자금', value: '350,000,000원' },
+        { label: '보상금', value: '+5,000,000원' },
+        { label: '사육비', value: '-30,000,000원' },
+        { label: '농가 장려금', value: '-5,000,000원' },
+        { label: '운영 성과금', value: '-5,000,000원' },
+        { label: '전체 수익금 (21,876주)', value: '+10,000,000원', color: '#f76868' },
+        { label: '내 수익금 (3주)', value: '+2,000원', color: '#f76868' },
       ],
     },
   ] : [
@@ -1160,10 +1178,10 @@ function InvestHistoryDetailScreen({ onBack, nav, phase }) {
             </div>
             <span style={{ ...T.body17(), color: 'var(--color-neutral-700)' }}>A 투자 상품</span>
           </div>
-          <span style={{ ...T.headline28(), color: 'var(--color-neutral-900)' }}>{isApplying ? '투자 신청' : '체결 완료'}</span>
+          <span style={{ ...T.headline28(), color: 'var(--color-neutral-900)' }}>{isApplying ? '투자 신청' : isPostSettlement ? '정산 완료' : '체결 완료'}</span>
         </div>
 
-        <div style={{ padding: '0 16px 28px' }}>
+        {!isPostSettlement && <div style={{ padding: '0 16px 28px' }}>
           {timelineSteps.map((step, idx) => (
             <div key={idx}>
               {idx > 0 && (
@@ -1197,51 +1215,65 @@ function InvestHistoryDetailScreen({ onBack, nav, phase }) {
               </div>
             </div>
           ))}
-        </div>
+        </div>}
 
         <div style={{ padding: '0 16px 24px', display: 'flex', gap: 8 }}>
           <div style={{ flex: 1, backgroundColor: 'var(--color-neutral-050)', borderRadius: 16, minHeight: 56, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
             <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-700)' }}>상품 정보</span>
           </div>
           <div style={{ flex: 1, backgroundColor: 'var(--color-neutral-050)', borderRadius: 16, minHeight: 56, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-            <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-700)' }}>추가 투자</span>
+            <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-700)' }}>{isPostSettlement ? '내 계좌' : '추가 투자'}</span>
           </div>
         </div>
 
         {detailSections.map((section, sIdx) => (
           <div key={sIdx}>
             <div style={{ height: 12, backgroundColor: 'var(--color-neutral-050)' }} />
-            <div style={{ padding: '24px 16px 0' }}>
+            <div style={{ padding: '24px 16px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>{section.title}</span>
-              {isApplying && sIdx === 0 && (
-                <div style={{ marginTop: 8 }}>
-                  <span style={{ ...T.body15(), color: 'var(--color-primary-500)' }}>모집율에 따라 일부만 체결될 수 있어요</span>
+              {section.hasTag && (
+                <div style={{ backgroundColor: 'var(--color-neutral-050)', borderRadius: 8, padding: '4px 8px' }}>
+                  <span style={{ ...T.label13(), color: 'var(--color-neutral-600)' }}>어떻게 계산되나요?</span>
                 </div>
               )}
             </div>
-            <div style={{ paddingTop: 12, paddingBottom: sIdx === detailSections.length - 1 ? (isApplying ? 20 : 50) : 20 }}>
+            {isApplying && sIdx === 0 && (
+              <div style={{ padding: '8px 16px 0' }}>
+                <span style={{ ...T.body15(), color: 'var(--color-primary-500)' }}>모집율에 따라 일부만 체결될 수 있어요</span>
+              </div>
+            )}
+            <div style={{ paddingTop: 12, paddingBottom: 20 }}>
               {section.rows.map((row, rIdx) => (
                 <div key={rIdx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 16, gap: 12 }}>
                   <span style={{ ...T.body17(), color: 'var(--color-neutral-700)' }}>{row.label}</span>
-                  <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)', textAlign: 'right' }}>{row.value}</span>
+                  <span style={{ ...T.body17('semibold'), color: row.color || 'var(--color-neutral-800)', textAlign: 'right' }}>{row.value}</span>
                 </div>
               ))}
+              {section.totalRow && (
+                <>
+                  <div style={{ margin: '0 16px', height: 1, backgroundColor: 'var(--color-neutral-100)' }} />
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 16 }}>
+                    <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{section.totalRow.label}</span>
+                    <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>{section.totalRow.value}</span>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         ))}
-      </div>
 
-      {/* 투자 취소하기 버튼 (신청 상태에서만) */}
-      {isApplying && (
-        <div style={{ padding: '8px 16px', paddingBottom: 'calc(16px + env(safe-area-inset-bottom, 0px))' }}>
-          <div style={{
-            height: 56, borderRadius: 14,
-            backgroundColor: 'var(--color-neutral-100)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            ...T.body17('semibold'), color: 'var(--color-neutral-700)', cursor: 'pointer',
-          }}>투자 취소하기</div>
-        </div>
-      )}
+        {/* 투자 취소하기 버튼 (신청 상태에서만) */}
+        {isApplying && (
+          <div style={{ padding: '8px 16px 50px' }}>
+            <div style={{
+              height: 56, borderRadius: 14,
+              backgroundColor: 'var(--color-neutral-100)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              ...T.body17('semibold'), color: 'var(--color-neutral-700)', cursor: 'pointer',
+            }}>투자 취소하기</div>
+          </div>
+        )}
+      </div>
     </div>
   )
 }
@@ -1249,7 +1281,7 @@ function InvestHistoryDetailScreen({ onBack, nav, phase }) {
 // ============================================================
 // Settlement History Screen (정산내역)
 // ============================================================
-function SettlementHistoryScreen({ onBack, phase }) {
+function SettlementHistoryScreen({ onBack, phase, nav }) {
   const [selectedTab, setSelectedTab] = useState('전체')
   const tabs = ['전체', '년']
 
@@ -1333,7 +1365,7 @@ function SettlementHistoryScreen({ onBack, phase }) {
               <div style={{ padding: '0 16px', height: 21 }}>
                 <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>{item.date}</span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: 16 }}>
+              <div onClick={() => nav('my_invest_detail', '내 투자')} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: 16, cursor: 'pointer' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, flex: 1, minWidth: 0 }}>
                   <div style={{ width: 44, height: 44, borderRadius: 16, backgroundColor: '#dae7ff', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
                     <img src="/product.png" alt="" style={{ width: 44, height: 33, objectFit: 'cover' }} />
@@ -1373,7 +1405,7 @@ function MyInvestDetailScreen({ onBack, nav, phase, initialTab }) {
   const calfFilters = ['전체', '사육중', '출하중', '경매 완료']
 
   const isPostSettlement = phase === 'post_settlement'
-  const isPreSettlement = phase === 'pre_settlement' || phase === 'settlement_day'
+  const isPreSettlement = phase === 'pre_settlement'
 
   const calfData = [
     { name: '뱅카우목장 2호', status: '사육중', remaining: '1개월 후 출하 예정' },
@@ -1408,7 +1440,7 @@ function MyInvestDetailScreen({ onBack, nav, phase, initialTab }) {
   const timelineSteps = isPostSettlement ? [
     { label: '신청', date: '26.06.01', done: true },
     { label: '체결', date: '26.06.12', done: true },
-    { label: '정산', date: '28.12.01', done: true },
+    { label: '정산', date: '2028.12.28', done: true },
   ] : isPreSettlement ? [
     { label: '신청', date: '26.06.01', done: true },
     { label: '체결', date: '26.06.12', done: true },
@@ -1575,8 +1607,8 @@ function MyInvestDetailScreen({ onBack, nav, phase, initialTab }) {
                 </div>
                 <div style={{ padding: '12px 0 0' }}>
                   {[
-                    { l: '투자금', v: '20,000원' }, { l: '보유 수량', v: '1주' }, { l: '세금', v: '-0원' },
-                    { l: '세후 수익금', v: '+2,000원', c: '#f76868' }, { l: '세후 수익률', v: '+20.00%', c: '#f76868' },
+                    { l: '투자금', v: '20,000원' }, { l: '보유 수량', v: '1주' }, { l: '세금 (15.4%)', v: '-1,500원' },
+                    { l: '세후 수익금', v: '+2,000원', c: '#f76868' }, { l: '세후 수익률', v: '+20%', c: '#f76868' },
                   ].map((r, i) => (
                     <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 16 }}>
                       <span style={{ ...T.body17(), color: 'var(--color-neutral-700)' }}>{r.l}</span>
