@@ -137,6 +137,8 @@ export default function V7App() {
       return <ApplyCompleteScreen onConfirm={handleApplyConfirm} />
     case 'asset':
       return <AssetScreen onBack={goBack} nav={navigate} phase={phase} />
+    case 'my_account':
+      return <MyAccountScreen onBack={goBack} nav={navigate} phase={phase} />
     case 'account':
       return <AccountDetailScreen onBack={goBack} phase={phase} />
     case 'history':
@@ -325,7 +327,7 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
               <span style={{ ...T.body17('semibold'), color: 'var(--color-primary-500)', whiteSpace: 'nowrap', flexShrink: 0 }}>20,000원</span>
             </div>
           )}
-          <div onClick={() => nav('asset')} style={{ backgroundColor: 'var(--color-neutral-050)', borderRadius: 16, height: 56, padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}>
+          <div onClick={() => nav('my_account')} style={{ backgroundColor: 'var(--color-neutral-050)', borderRadius: 16, height: 56, padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}>
             <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-600)' }}>계좌 잔액</span>
             <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{config.account}</span>
           </div>
@@ -852,6 +854,61 @@ function AssetScreen({ onBack, nav, phase }) {
 }
 
 // ============================================================
+// My Account Screen (내 계좌)
+// ============================================================
+function MyAccountScreen({ onBack, nav, phase }) {
+  const balanceMap = {
+    pre: '100,000', applying: '40,000', settled: '40,000',
+    pre_settlement: '40,000', post_settlement: '102,000',
+  }
+  const balance = balanceMap[phase] || '100,000'
+
+  return (
+    <div className="v7-screen" style={{
+      width: '100%', height: '100dvh',
+      backgroundColor: 'var(--color-neutral-000)', position: 'relative',
+      fontFamily: 'Pretendard, -apple-system, sans-serif',
+    }}>
+      <div style={{ height: 'env(safe-area-inset-top, 0px)' }} />
+      <SubAppBar title="내 계좌" onBack={onBack} />
+
+      <div style={{ padding: '20px 16px 0', display: 'flex', flexDirection: 'column', gap: 4 }}>
+        <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>총 계좌 잔액</span>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 2 }}>
+          <span style={{ ...T.headline32(), color: 'var(--color-neutral-900)' }}>{balance}</span>
+          <span style={{ ...T.title20(), color: 'var(--color-neutral-900)' }}>원</span>
+        </div>
+      </div>
+
+      <div onClick={() => nav('account')} style={{ padding: '24px 16px', cursor: 'pointer' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <img src="/icons/Finance/nhBank.svg" alt="" style={{ width: 40, height: 40 }} />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>NH농협은행</span>
+                <img src="/icons/Graphic/help2.svg" alt="" style={{ width: 16, height: 16 }} />
+              </div>
+              <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{balance}원</span>
+            </div>
+          </div>
+          <ChevronRightIcon />
+        </div>
+      </div>
+
+      <div style={{ padding: '0 16px', display: 'flex', gap: 8 }}>
+        <div style={{ flex: 1, height: 56, borderRadius: 14, backgroundColor: 'var(--color-neutral-050)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+          <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-700)' }}>출금</span>
+        </div>
+        <div style={{ flex: 1, height: 56, borderRadius: 14, backgroundColor: 'var(--color-neutral-050)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+          <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-700)' }}>충전</span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ============================================================
 // Account Detail Screen (계좌 상세)
 // ============================================================
 function AccountDetailScreen({ onBack, phase }) {
@@ -873,6 +930,12 @@ function AccountDetailScreen({ onBack, phase }) {
       { date: '5월 15일', name: '윤현우', time: '18:00', type: '입금', amount: '+ 100,000원', color: 'var(--color-primary-500)' },
     ],
     settled: [
+      { date: '6월 12일', name: 'A 투자 상품 체결 환불', time: '12:31', type: '입금', amount: '+ 40,000원', color: 'var(--color-primary-500)' },
+      { date: '6월 1일', name: 'A 투자 상품 투자 신청', time: '12:31', type: '출금', amount: '- 60,000원', color: 'var(--color-neutral-800)' },
+      { date: '5월 15일', name: '윤현우', time: '18:00', type: '입금', amount: '+ 100,000원', color: 'var(--color-primary-500)' },
+    ],
+    post_settlement: [
+      { date: '12월 28일', name: 'A 투자 상품 정산금', time: '10:00', type: '입금', amount: '+ 22,000원', color: 'var(--color-primary-500)' },
       { date: '6월 12일', name: 'A 투자 상품 체결 환불', time: '12:31', type: '입금', amount: '+ 40,000원', color: 'var(--color-primary-500)' },
       { date: '6월 1일', name: 'A 투자 상품 투자 신청', time: '12:31', type: '출금', amount: '- 60,000원', color: 'var(--color-neutral-800)' },
       { date: '5월 15일', name: '윤현우', time: '18:00', type: '입금', amount: '+ 100,000원', color: 'var(--color-primary-500)' },
@@ -1462,32 +1525,34 @@ function MyInvestDetailScreen({ onBack, nav, phase, initialTab }) {
         <div style={{ background: 'linear-gradient(180deg, rgba(68,135,255,0.2) 0%, rgba(68,135,255,0) 100%)', paddingTop: 'env(safe-area-inset-top, 0px)' }}>
           <SubAppBar title="" onBack={onBack} />
           <div style={{ padding: '0 16px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, paddingBottom: 20 }}>
-              <span style={{ fontSize: 32, fontWeight: 600, letterSpacing: -0.96, color: 'var(--color-neutral-900)', lineHeight: '40px' }}>A 투자 상품</span>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, paddingBottom: 20 }}>
+              <span style={{ ...T.headline28(), color: 'var(--color-neutral-900)' }}>A 투자 상품</span>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>보유 수량</span>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: 2 }}>
-                  <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>보유 수량</span>
-                  <span style={{ marginLeft: 8, fontSize: 20, fontWeight: 600, color: 'var(--color-neutral-800)' }}>1</span>
-                  <span style={{ fontSize: 14, fontWeight: 500, color: 'var(--color-neutral-600)' }}>/ 100주</span>
+                  <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-800)' }}>1</span>
+                  <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>/ 100주</span>
                 </div>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>내 투자금</span>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: 2 }}>
-                  <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>내 투자금</span>
-                  <span style={{ marginLeft: 8, fontSize: 24, fontWeight: 600, color: 'var(--color-neutral-800)' }}>20,000</span>
-                  <span style={{ fontSize: 14, fontWeight: 500, color: 'var(--color-neutral-600)' }}>원</span>
+                  <span style={{ ...T.headline24('bold'), color: 'var(--color-neutral-800)' }}>20,000</span>
+                  <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>원</span>
                 </div>
               </div>
             </div>
-            <div style={{ width: 160, height: 120, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', flexShrink: 0 }}>
-              <img src="/product.png" alt="" style={{ width: 160, height: 120, objectFit: 'cover' }} />
+            <div style={{ width: 160, height: 140, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', flexShrink: 0 }}>
+              <img src="/product.png" alt="" style={{ width: 160, height: 140, objectFit: 'contain' }} />
             </div>
           </div>
         </div>
 
         {/* Tab bar */}
-        <div style={{ display: 'flex', borderBottom: '1px solid var(--color-neutral-100)' }}>
+        <div style={{ display: 'flex', borderBottom: '1px solid var(--color-neutral-100)', padding: '0 16px', gap: 20 }}>
           {tabs.map(tab => (
             <div key={tab} onClick={() => setActiveTab(tab)} style={{
-              flex: 1, height: 52, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
+              height: 52, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
               borderBottom: activeTab === tab ? '2px solid var(--color-neutral-800)' : '2px solid transparent',
             }}>
               <span style={{ ...(activeTab === tab ? T.body17('bold') : T.body17('semibold')), color: activeTab === tab ? 'var(--color-neutral-800)' : 'var(--color-neutral-600)' }}>{tab}</span>
