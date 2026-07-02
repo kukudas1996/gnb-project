@@ -1781,16 +1781,21 @@ function FeedScreen({ goTab }) {
   const [webviewUrl, setWebviewUrl] = useState(null)
 
   if (webviewUrl) {
+    const topBarH = 'calc(56px + env(safe-area-inset-top, 0px))'
     return (
-      <div className="v7-screen" style={{ width: '100%', height: '100dvh', backgroundColor: 'var(--color-neutral-000)', position: 'relative', fontFamily: 'Pretendard, -apple-system, sans-serif' }}>
-        <div style={{ height: 'env(safe-area-inset-top, 0px)', backgroundColor: 'var(--color-neutral-000)' }} />
-        <div style={{ height: 56, padding: '0 6px 0 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid var(--color-neutral-100)' }}>
-          <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-900)', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>뱅카우 블로그</span>
-          <div onClick={() => setWebviewUrl(null)} style={{ width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-800)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
+      <div className="v7-screen" style={{ width: '100%', height: '100dvh', backgroundColor: 'var(--color-neutral-000)', fontFamily: 'Pretendard, -apple-system, sans-serif' }}>
+        {/* Fixed top bar */}
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999, backgroundColor: 'var(--color-neutral-000)', borderBottom: '1px solid var(--color-neutral-100)' }}>
+          <div style={{ height: 'env(safe-area-inset-top, 0px)' }} />
+          <div style={{ height: 56, padding: '0 6px 0 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-900)', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>뱅카우 블로그</span>
+            <div onClick={() => setWebviewUrl(null)} style={{ width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-800)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
+            </div>
           </div>
         </div>
-        <iframe src={`/api/proxy?url=${encodeURIComponent(webviewUrl)}`} style={{ width: '100%', height: 'calc(100dvh - 56px - env(safe-area-inset-top, 0px))', border: 'none' }} title="블로그" />
+        {/* Iframe below fixed bar */}
+        <iframe src={`/api/proxy?url=${encodeURIComponent(webviewUrl)}`} style={{ position: 'fixed', top: topBarH, left: 0, width: '100%', height: `calc(100dvh - ${topBarH})`, border: 'none', zIndex: 9998 }} title="블로그" />
       </div>
     )
   }
