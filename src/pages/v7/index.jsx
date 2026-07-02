@@ -1821,7 +1821,7 @@ function FeedScreen({ goTab }) {
           </div>
           <div className="v7-hide-scrollbar" style={{ display: 'flex', gap: 12, overflowX: 'auto', marginRight: -16 }}>
             {[
-              { img: '/blogimage.png', title: '뱅카우는 어떤 기준으로 신규 공모 농가를 선정할까요?', desc: '까다로운 심사 기준과 선정 과정을 알려드릴게요', url: 'https://blog.naver.com/bancow-official/224330262729' },
+              { img: '/blogimage.png', title: '뱅카우는 어떤 기준으로 신규 공모 농가를 선정할까요?', desc: '까다로운 심사 기준과 선정 과정을 알려드릴게요', url: 'https://m.blog.naver.com/bancow-official/224330262729' },
               { img: '/insight/guide-2.png', title: '초보자를 위한 한우 투자 가이드', desc: '송아지 입식부터 출하, 정산까지 처음이어도 어렵지 않아요' },
               { img: '/insight/guide-1.png', title: '한우는 돈이 돼요', desc: '한우 시장은 언제나 수요가 항상 있었어요' },
             ].map((item, i) => (
