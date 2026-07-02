@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
   const url = req.query.url
-  if (!url || !url.includes('blog.naver.com/')) {
+  if (!url || !url.includes('blog.naver.com')) {
     return res.status(400).send('Invalid URL')
   }
 
