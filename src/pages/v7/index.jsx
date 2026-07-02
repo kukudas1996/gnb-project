@@ -1782,19 +1782,6 @@ function FeedScreen({ goTab }) {
 
   if (webviewUrl) {
     const topBarH = 'calc(56px + env(safe-area-inset-top, 0px))'
-    const iframeRef = useCallback((iframe) => {
-      if (!iframe) return
-      fetch(`/api/proxy?url=${encodeURIComponent(webviewUrl)}`)
-        .then(r => r.text())
-        .then(html => {
-          const doc = iframe.contentDocument || iframe.contentWindow.document
-          doc.open()
-          doc.write(html)
-          doc.close()
-        })
-        .catch(() => {})
-    }, [webviewUrl])
-
     return (
       <div className="v7-screen" style={{ width: '100%', height: '100dvh', backgroundColor: 'var(--color-neutral-000)', fontFamily: 'Pretendard, -apple-system, sans-serif' }}>
         {/* Fixed top bar */}
@@ -1807,8 +1794,7 @@ function FeedScreen({ goTab }) {
             </div>
           </div>
         </div>
-        {/* Blog content via document.write */}
-        <iframe ref={iframeRef} sandbox="allow-scripts allow-same-origin" style={{ position: 'fixed', top: topBarH, left: 0, width: '100%', height: `calc(100dvh - ${topBarH})`, border: 'none', zIndex: 9998 }} title="블로그" />
+        <iframe src={webviewUrl} sandbox="allow-scripts allow-same-origin allow-popups allow-forms" style={{ position: 'fixed', top: topBarH, left: 0, width: '100%', height: `calc(100dvh - ${topBarH})`, border: 'none', zIndex: 9998 }} title="블로그" />
       </div>
     )
   }
