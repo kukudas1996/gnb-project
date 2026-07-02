@@ -2134,10 +2134,10 @@ function MyPageScreen({ nav, goTab }) {
 function TabBarItem({ icon, label, selected = false, onClick }) {
   const color = selected ? 'var(--color-neutral-800)' : 'var(--color-neutral-600)'
   const iconMap = {
-    home: '/icons/TabBarItem/TabBarIcon/Home.svg',
-    shopping: '/icons/TabBarItem/TabBarIcon/Shopping.svg',
-    feed: '/icons/TabBarItem/TabBarIcon/Feed.svg',
-    my: '/icons/TabBarItem/TabBarIcon/My.svg',
+    home: '/icons/TabBarItem/Home.svg',
+    shopping: '/icons/TabBarItem/Shopping.svg',
+    feed: '/icons/TabBarItem/Feed.svg',
+    my: '/icons/TabBarItem/My.svg',
   }
   return (
     <div onClick={onClick} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: 43, padding: '2px 4px 0', cursor: 'pointer' }}>
