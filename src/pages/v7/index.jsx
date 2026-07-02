@@ -125,6 +125,8 @@ export default function V7App() {
       return <HomeScreen phase={phase} nav={navigate} goTab={goTab} phaseTransition={phaseTransitions[phase]} messageDismissed={messageDismissed} onDismissMessage={dismissMessage} />
     case 'shopping':
       return <ShoppingScreen goTab={goTab} />
+    case 'feed':
+      return <FeedScreen goTab={goTab} />
     case 'my':
       return <MyPageScreen nav={navigate} goTab={goTab} />
     case 'product_detail':
@@ -280,67 +282,6 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
           </div>
         )}
 
-        {/* 투자중 금액 */}
-        <div style={{ padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: 4 }}>
-          <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>투자중 금액</span>
-          <div onClick={() => nav('asset')} style={{ display: 'flex', alignItems: 'center', gap: 4, cursor: 'pointer' }}>
-            <span style={{ ...T.headline32(), color: 'var(--color-neutral-900)', whiteSpace: 'nowrap' }}>{config.investAmount}</span>
-            <ChevronRightIcon size={28} color="var(--color-neutral-400)" />
-          </div>
-        </div>
-
-        {/* 투자 아이템 (settled phases only) */}
-        {config.showInvestItem && (
-          <>
-            <div onClick={() => nav('my_invest_detail')} style={{ padding: '0 20px 16px', cursor: 'pointer' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <div style={{ width: 48, height: 48, borderRadius: 16, backgroundColor: '#dae7ff', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
-                  <img src="/product.png" alt="" style={{ width: 40, height: 30, objectFit: 'cover' }} />
-                </div>
-                <div style={{ display: 'flex', flex: 1, minWidth: 0, gap: 12 }}>
-                  <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
-                    <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>A 투자 상품</span>
-                    <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>{config.remainingText}</span>
-                  </div>
-                  <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'flex-end', textAlign: 'right' }}>
-                    <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>20,000원</span>
-                    <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>1주</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: 12, gap: 6 }}>
-              <div style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: 'var(--color-neutral-800)' }} />
-              <div style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: 'var(--color-neutral-200)' }} />
-            </div>
-          </>
-        )}
-
-        {/* 투자 신청중 + 계좌 잔액 */}
-        <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: 8, paddingBottom: 0 }}>
-          {config.showApplying && (
-            <div onClick={() => nav('history_detail')} style={{ backgroundColor: '#e8f0ff', borderRadius: 16, height: 56, padding: '0 20px 0 12px', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-              <div style={{ display: 'flex', alignItems: 'center', flex: 1, minWidth: 0 }}>
-                <img src="/product.png" alt="" style={{ width: 44, height: 33, objectFit: 'cover', flexShrink: 0 }} />
-                <span style={{ ...T.body17('semibold'), color: 'var(--color-primary-400)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1, minWidth: 0 }}>투자 신청중</span>
-              </div>
-              <span style={{ ...T.body17('semibold'), color: 'var(--color-primary-500)', whiteSpace: 'nowrap', flexShrink: 0 }}>20,000원</span>
-            </div>
-          )}
-          <div onClick={() => nav('my_account')} style={{ backgroundColor: 'var(--color-neutral-050)', borderRadius: 16, height: 56, padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}>
-            <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-600)' }}>계좌 잔액</span>
-            <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{config.account}</span>
-          </div>
-        </div>
-
-        {/* 자세히 보기 */}
-        <div onClick={() => nav('asset')} style={{ height: 56, display: 'flex', alignItems: 'center', justifyContent: 'center', borderTop: '1px solid var(--color-neutral-050)', cursor: 'pointer' }}>
-          <span style={{ ...T.body17(), color: 'var(--color-neutral-600)' }}>자세히 보기</span>
-        </div>
-
-        {/* Divider */}
-        <div style={{ height: 12, backgroundColor: 'var(--color-neutral-050)' }} />
-
         {/* 모집중인 상품 */}
         <div style={{ padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: 16 }}>
           <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>모집중인 상품</span>
@@ -385,6 +326,67 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
           </div>
         </div>
 
+        {/* 투자 요약 */}
+        <div style={{ backgroundColor: 'var(--color-neutral-000)', borderRadius: 20, margin: '0 16px', border: '1px solid var(--color-neutral-100)', marginBottom: 20 }}>
+          {/* 투자중 금액 */}
+          <div style={{ padding: '20px 20px 0', display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>투자중 금액</span>
+            <div onClick={() => nav('asset')} style={{ display: 'flex', alignItems: 'center', gap: 4, cursor: 'pointer' }}>
+              <span style={{ ...T.headline32(), color: 'var(--color-neutral-900)', whiteSpace: 'nowrap' }}>{config.investAmount}</span>
+              <ChevronRightIcon size={28} color="var(--color-neutral-400)" />
+            </div>
+          </div>
+          {/* 투자 아이템 (settled phases only) */}
+          {config.showInvestItem && (
+            <>
+              <div onClick={() => nav('my_invest_detail')} style={{ padding: '16px 20px', cursor: 'pointer' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div style={{ width: 48, height: 48, borderRadius: 16, backgroundColor: '#dae7ff', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
+                    <img src="/product.png" alt="" style={{ width: 40, height: 30, objectFit: 'cover' }} />
+                  </div>
+                  <div style={{ display: 'flex', flex: 1, minWidth: 0, gap: 12 }}>
+                    <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
+                      <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>A 투자 상품</span>
+                      <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>{config.remainingText}</span>
+                    </div>
+                    <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'flex-end', textAlign: 'right' }}>
+                      <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>20,000원</span>
+                      <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>1주</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: 12, gap: 6 }}>
+                <div style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: 'var(--color-neutral-800)' }} />
+                <div style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: 'var(--color-neutral-200)' }} />
+              </div>
+            </>
+          )}
+          {/* 투자 신청중 + 계좌 잔액 */}
+          <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: 8, paddingBottom: 0 }}>
+            {config.showApplying && (
+              <div onClick={() => nav('history_detail')} style={{ backgroundColor: '#e8f0ff', borderRadius: 16, height: 56, padding: '0 20px 0 12px', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                <div style={{ display: 'flex', alignItems: 'center', flex: 1, minWidth: 0 }}>
+                  <img src="/product.png" alt="" style={{ width: 44, height: 33, objectFit: 'cover', flexShrink: 0 }} />
+                  <span style={{ ...T.body17('semibold'), color: 'var(--color-primary-400)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1, minWidth: 0 }}>투자 신청중</span>
+                </div>
+                <span style={{ ...T.body17('semibold'), color: 'var(--color-primary-500)', whiteSpace: 'nowrap', flexShrink: 0 }}>20,000원</span>
+              </div>
+            )}
+            <div onClick={() => nav('my_account')} style={{ backgroundColor: 'var(--color-neutral-050)', borderRadius: 16, height: 56, padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}>
+              <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-600)' }}>계좌 잔액</span>
+              <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{config.account}</span>
+            </div>
+          </div>
+          {/* 자세히 보기 */}
+          <div onClick={() => nav('asset')} style={{ height: 56, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+            <span style={{ ...T.body17(), color: 'var(--color-neutral-600)' }}>자세히 보기</span>
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div style={{ height: 12, backgroundColor: 'var(--color-neutral-050)' }} />
+
         {/* 마감된 상품 */}
         <div style={{ padding: '0 16px 20px', display: 'flex', flexDirection: 'column', gap: 16 }}>
           <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>마감된 상품</span>
@@ -421,6 +423,7 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
         <div style={{ display: 'flex', alignItems: 'flex-start', padding: '4px 20px 0' }}>
           <TabBarItem icon="home" label="홈" selected />
           <TabBarItem icon="shopping" label="쇼핑" onClick={() => goTab('shopping')} />
+          <TabBarItem icon="feed" label="피드" onClick={() => goTab('feed')} />
           <TabBarItem icon="my" label="마이" onClick={() => goTab('my')} />
         </div>
         <div style={{ height: 'calc(env(safe-area-inset-bottom, 0px) + 8px)' }} />
@@ -1772,6 +1775,166 @@ function BottomMenu({ items, downloadIcon }) {
 }
 
 // ============================================================
+// Feed Screen
+// ============================================================
+function FeedScreen({ goTab }) {
+  const [webviewUrl, setWebviewUrl] = useState(null)
+
+  if (webviewUrl) {
+    return (
+      <div className="v7-screen" style={{ width: '100%', height: '100dvh', backgroundColor: 'var(--color-neutral-000)', position: 'relative', fontFamily: 'Pretendard, -apple-system, sans-serif' }}>
+        <div style={{ height: 'env(safe-area-inset-top, 0px)', backgroundColor: 'var(--color-neutral-000)' }} />
+        <div style={{ height: 56, padding: '0 6px 0 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid var(--color-neutral-100)' }}>
+          <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-900)', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>뱅카우 블로그</span>
+          <div onClick={() => setWebviewUrl(null)} style={{ width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-800)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
+          </div>
+        </div>
+        <iframe src={webviewUrl} style={{ width: '100%', height: 'calc(100dvh - 56px - env(safe-area-inset-top, 0px))', border: 'none' }} title="블로그" />
+      </div>
+    )
+  }
+
+  return (
+    <div className="v7-screen" style={{ width: '100%', minHeight: '100dvh', backgroundColor: 'var(--color-neutral-000)', position: 'relative', fontFamily: 'Pretendard, -apple-system, sans-serif' }}>
+      <div className="v7-scroll" style={{ height: '100dvh', overflowY: 'auto', overflowX: 'hidden', paddingBottom: 'calc(77px + env(safe-area-inset-bottom, 0px))' }}>
+        <div style={{ height: 'env(safe-area-inset-top, 0px)' }} />
+
+        {/* AppBar */}
+        <div style={{ position: 'sticky', top: 0, zIndex: 10, backgroundColor: 'var(--color-neutral-000)' }}>
+          <div style={{ height: 60, padding: '0 6px 0 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)' }}>서비스</div>
+            <div style={{ width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <BellIcon />
+            </div>
+          </div>
+        </div>
+
+        {/* 한우 투자가 처음이신가요? */}
+        <div style={{ padding: '24px 16px', backgroundColor: '#fff' }}>
+          <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>
+            한우 투자가 처음이신가요?
+          </div>
+          <div className="v7-hide-scrollbar" style={{ display: 'flex', gap: 12, overflowX: 'auto', marginRight: -16 }}>
+            {[
+              { img: '/blogimage.png', title: '뱅카우 공식 블로그', desc: '한우 투자의 모든 것, 뱅카우 블로그에서 확인하세요', url: 'https://blog.naver.com/bancow-official' },
+              { img: '/insight/guide-2.png', title: '초보자를 위한 한우 투자 가이드', desc: '송아지 입식부터 출하, 정산까지 처음이어도 어렵지 않아요' },
+              { img: '/insight/guide-1.png', title: '한우는 돈이 돼요', desc: '한우 시장은 언제나 수요가 항상 있었어요' },
+            ].map((item, i) => (
+              <div key={i} onClick={item.url ? () => setWebviewUrl(item.url) : undefined} style={{ flexShrink: 0, width: 280, display: 'flex', flexDirection: 'column', gap: 8, cursor: item.url ? 'pointer' : 'default' }}>
+                <div style={{ width: '100%', aspectRatio: '160/90', borderRadius: 16, overflow: 'hidden' }}>
+                  <img src={item.img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
+                <div>
+                  <div style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)', marginBottom: 4 }}>{item.title}</div>
+                  <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-600)' }}>{item.desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ height: 10, backgroundColor: 'var(--color-neutral-050)' }} />
+
+        {/* 뱅카우 숏츠 */}
+        <div style={{ padding: '24px 16px' }}>
+          <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)', marginBottom: 12 }}>뱅카우 숏츠</div>
+          <div style={{ display: 'flex', gap: 12 }}>
+            {['/shorts-1.png', '/shorts-2.png'].map((src, i) => (
+              <div key={i} style={{ flex: 1, minWidth: 0, aspectRatio: '9/14', borderRadius: 12, overflow: 'hidden' }}>
+                <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ height: 10, backgroundColor: 'var(--color-neutral-050)' }} />
+
+        {/* 뱅카우 콘텐츠 */}
+        <div style={{ padding: '24px 16px', overflow: 'hidden' }}>
+          <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)', marginBottom: 12 }}>뱅카우 콘텐츠</div>
+          <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
+            {['전체', '카테고리', '카테고리'].map((t, i) => (
+              <div key={i} style={{
+                padding: '6px 16px', borderRadius: 20,
+                backgroundColor: i === 0 ? 'var(--color-neutral-800)' : 'var(--color-neutral-100)',
+                ...T.label13('semibold'),
+                color: i === 0 ? '#fff' : 'var(--color-neutral-600)',
+              }}>{t}</div>
+            ))}
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px 12px', width: '100%', maxWidth: '100%' }}>
+            {[
+              { img: '/insight/content-1.png', title: '한우 투자, 이제 시작해도 늦지 않다' },
+              { img: '/insight/content-2.png', title: '한우 투자, 이제 시작해도 늦지 않다' },
+              { img: '/insight/content-3.png', title: '한우 투자로 얻는 수익과 리스크 분석' },
+              { img: '/insight/content-4.png', title: '한우 투자로 얻는 수익과 리스크 분석' },
+              { img: '/insight/content-5.png', title: '초보자를 위한 한우 투자 가이드' },
+              { img: '/insight/content-6.png', title: '초보자를 위한 한우 투자 가이드' },
+            ].map((item, i) => (
+              <div key={i} style={{ minWidth: 0, overflow: 'hidden' }}>
+                <div style={{ width: '100%', aspectRatio: '16/10', borderRadius: 8, overflow: 'hidden', marginBottom: 8 }}>
+                  <img src={item.img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                </div>
+                <div style={{ ...T.body15('medium'), color: 'var(--color-neutral-800)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {item.title}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{
+            height: 44, borderRadius: 12,
+            border: '1px solid var(--color-neutral-200)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            ...T.body15('semibold'), color: 'var(--color-neutral-700)',
+            marginTop: 20, cursor: 'pointer',
+          }}>더보기</div>
+        </div>
+
+        <div style={{ height: 10, backgroundColor: 'var(--color-neutral-050)' }} />
+
+        {/* 언론 보도 */}
+        <div style={{ padding: '24px 16px' }}>
+          <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>언론 보도</div>
+          {[
+            { img: '/insight/news-1.png', title: '한우 투자, 새로운 기회', sub: '최근 한우 시장의 변화와...' },
+            { img: '/insight/news-2.png', title: '한우 투자, 성공적인 사례', sub: '한우 투자에 성공한 사례를...' },
+            { img: '/insight/news-3.png', title: '한우 투자, 전문가의 조언', sub: '전문가들은 한우 투자를 고...' },
+          ].map((item, i) => (
+            <div key={i} style={{
+              display: 'flex', alignItems: 'center', gap: 12,
+              padding: '14px 0',
+              borderBottom: i < 2 ? '1px solid var(--color-neutral-100)' : 'none',
+            }}>
+              <div style={{ flex: 1 }}>
+                <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-800)', marginBottom: 4 }}>{item.title}</div>
+                <div style={{ ...T.label13('medium'), color: 'var(--color-neutral-500)' }}>{item.sub}</div>
+              </div>
+              <div style={{ width: 64, height: 64, borderRadius: 8, overflow: 'hidden', flexShrink: 0 }}>
+                <img src={item.img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ height: 40 }} />
+      </div>
+
+      {/* TabBar */}
+      <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, backgroundColor: 'var(--color-neutral-000)', borderTop: '1px solid var(--color-neutral-050)', zIndex: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', padding: '4px 20px 0' }}>
+          <TabBarItem icon="home" label="홈" onClick={() => goTab('home')} />
+          <TabBarItem icon="shopping" label="쇼핑" onClick={() => goTab('shopping')} />
+          <TabBarItem icon="feed" label="피드" selected />
+          <TabBarItem icon="my" label="마이" onClick={() => goTab('my')} />
+        </div>
+        <div style={{ height: 'calc(env(safe-area-inset-bottom, 0px) + 8px)' }} />
+      </div>
+    </div>
+  )
+}
+
+// ============================================================
 // Shopping Screen
 // ============================================================
 function ShoppingScreen({ goTab }) {
@@ -1845,6 +2008,7 @@ function ShoppingScreen({ goTab }) {
         <div style={{ display: 'flex', alignItems: 'flex-start', padding: '4px 20px 0' }}>
           <TabBarItem icon="home" label="홈" onClick={() => goTab('home')} />
           <TabBarItem icon="shopping" label="쇼핑" selected />
+          <TabBarItem icon="feed" label="피드" onClick={() => goTab('feed')} />
           <TabBarItem icon="my" label="마이" onClick={() => goTab('my')} />
         </div>
         <div style={{ height: 'calc(env(safe-area-inset-bottom, 0px) + 8px)' }} />
@@ -1955,6 +2119,7 @@ function MyPageScreen({ nav, goTab }) {
         <div style={{ display: 'flex', alignItems: 'flex-start', padding: '4px 20px 0' }}>
           <TabBarItem icon="home" label="홈" onClick={() => goTab('home')} />
           <TabBarItem icon="shopping" label="쇼핑" onClick={() => goTab('shopping')} />
+          <TabBarItem icon="feed" label="피드" onClick={() => goTab('feed')} />
           <TabBarItem icon="my" label="마이" selected />
         </div>
         <div style={{ height: 'calc(env(safe-area-inset-bottom, 0px) + 8px)' }} />
@@ -1971,6 +2136,7 @@ function TabBarItem({ icon, label, selected = false, onClick }) {
   const iconMap = {
     home: '/icons/TabBarItem/TabBarIcon/Home.svg',
     shopping: '/icons/TabBarItem/TabBarIcon/Shopping.svg',
+    feed: '/icons/TabBarItem/TabBarIcon/Feed.svg',
     my: '/icons/TabBarItem/TabBarIcon/My.svg',
   }
   return (
