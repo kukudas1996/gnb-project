@@ -1778,6 +1778,23 @@ function BottomMenu({ items, downloadIcon }) {
 // Feed Screen
 // ============================================================
 function FeedScreen({ goTab }) {
+  const [webviewUrl, setWebviewUrl] = useState(null)
+
+  if (webviewUrl) {
+    return (
+      <div className="v7-screen" style={{ width: '100%', height: '100dvh', backgroundColor: 'var(--color-neutral-000)', position: 'relative', fontFamily: 'Pretendard, -apple-system, sans-serif' }}>
+        <div style={{ height: 'env(safe-area-inset-top, 0px)', backgroundColor: 'var(--color-neutral-000)' }} />
+        <div style={{ height: 56, padding: '0 6px 0 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid var(--color-neutral-100)' }}>
+          <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-900)', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>뱅카우 블로그</span>
+          <div onClick={() => setWebviewUrl(null)} style={{ width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-800)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
+          </div>
+        </div>
+        <iframe src={webviewUrl} style={{ width: '100%', height: 'calc(100dvh - 56px - env(safe-area-inset-top, 0px))', border: 'none' }} title="블로그" allow="fullscreen" referrerPolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" />
+      </div>
+    )
+  }
+
   return (
     <div className="v7-screen" style={{ width: '100%', minHeight: '100dvh', backgroundColor: 'var(--color-neutral-000)', position: 'relative', fontFamily: 'Pretendard, -apple-system, sans-serif' }}>
       <div className="v7-scroll" style={{ height: '100dvh', overflowY: 'auto', overflowX: 'hidden', paddingBottom: 'calc(77px + env(safe-area-inset-bottom, 0px))' }}>
@@ -1804,7 +1821,7 @@ function FeedScreen({ goTab }) {
               { img: '/insight/guide-2.png', title: '초보자를 위한 한우 투자 가이드', desc: '송아지 입식부터 출하, 정산까지 처음이어도 어렵지 않아요' },
               { img: '/insight/guide-1.png', title: '한우는 돈이 돼요', desc: '한우 시장은 언제나 수요가 항상 있었어요' },
             ].map((item, i) => (
-              <div key={i} onClick={item.url ? () => window.open(item.url, '_blank') : undefined} style={{ flexShrink: 0, width: 280, display: 'flex', flexDirection: 'column', gap: 8, cursor: item.url ? 'pointer' : 'default' }}>
+              <div key={i} onClick={item.url ? () => setWebviewUrl(item.url) : undefined} style={{ flexShrink: 0, width: 280, display: 'flex', flexDirection: 'column', gap: 8, cursor: item.url ? 'pointer' : 'default' }}>
                 <div style={{ width: '100%', aspectRatio: '160/90', borderRadius: 16, overflow: 'hidden' }}>
                   <img src={item.img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
