@@ -1790,7 +1790,7 @@ function FeedScreen({ goTab }) {
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-800)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
           </div>
         </div>
-        <iframe src={webviewUrl} style={{ width: '100%', height: 'calc(100dvh - 56px - env(safe-area-inset-top, 0px))', border: 'none' }} title="블로그" allow="fullscreen" referrerPolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" />
+        <iframe src={`/api/proxy?url=${encodeURIComponent(webviewUrl)}`} style={{ width: '100%', height: 'calc(100dvh - 56px - env(safe-area-inset-top, 0px))', border: 'none' }} title="블로그" />
       </div>
     )
   }
@@ -2139,9 +2139,15 @@ function TabBarItem({ icon, label, selected = false, onClick }) {
     feed: '/icons/TabBarItem/Feed.svg',
     my: '/icons/TabBarItem/My.svg',
   }
+  // SVG 파일의 fill이 하드코딩이라 CSS filter로 선택 상태 색상 변경
+  // 비선택: brightness(0) saturate(100%) + 회색 (#9DA5B6 근사) invert/sepia 조합
+  // 선택: brightness(0) → 검정
+  const iconFilter = selected
+    ? 'brightness(0)'
+    : 'brightness(0) saturate(100%) invert(72%) sepia(5%) saturate(600%) hue-rotate(190deg) brightness(90%) contrast(90%)'
   return (
     <div onClick={onClick} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: 43, padding: '2px 4px 0', cursor: 'pointer' }}>
-      <img src={iconMap[icon]} alt={label} style={{ width: 24, height: 24 }} />
+      <img src={iconMap[icon]} alt={label} style={{ width: 24, height: 24, filter: iconFilter }} />
       <span style={{ ...T.label11(), color, textAlign: 'center' }}>{label}</span>
     </div>
   )
