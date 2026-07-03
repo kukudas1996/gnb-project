@@ -18,6 +18,8 @@ if (typeof document !== 'undefined' && !document.getElementById(globalStyleId)) 
     @keyframes v7-slide-out { from { transform: translateX(0); } to { transform: translateX(100%); } }
     @keyframes v7-fade-in { from { opacity: 0; } to { opacity: 1; } }
     @keyframes v7-message-slide-down { from { max-height: 0; opacity: 0; margin-top: 0; } to { max-height: 120px; opacity: 1; margin-top: 8px; } }
+    @keyframes v7-sheet-up { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    @keyframes v7-toast-down { from { transform: translateY(-40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     .v7-message-enter { animation: v7-message-slide-down 0.4s cubic-bezier(0.33, 1, 0.68, 1) forwards; overflow: hidden; }
   `
   document.head.appendChild(style)
@@ -347,7 +349,7 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
         <div style={{ height: 12, backgroundColor: 'var(--color-neutral-050)' }} />
 
         {/* 모집중인 상품 or 출시 예정 상품 */}
-        {(phase === 'settled' || phase === 'pre_settlement') ? (
+        {(phase === 'settled' || phase === 'pre_settlement' || phase === 'post_settlement') ? (
           <div style={{ padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: 16 }}>
             <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>출시 예정 상품</span>
             <div style={{ borderRadius: 16, overflow: 'hidden', backgroundColor: 'var(--color-neutral-050)', padding: 20 }}>
@@ -496,7 +498,7 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
 
       {/* 출시 알림 토스트 */}
       {showReleaseToast && (
-        <div style={{ position: 'fixed', top: 'calc(env(safe-area-inset-top, 0px) + 60px)', left: 16, right: 16, zIndex: 10000, display: 'flex', justifyContent: 'center', animation: 'v7-fade-in 0.3s ease-out' }}>
+        <div style={{ position: 'fixed', top: 'calc(env(safe-area-inset-top, 0px) + 60px)', left: 16, right: 16, zIndex: 10000, display: 'flex', justifyContent: 'center', animation: 'v7-toast-down 0.3s ease-out' }}>
           <div style={{ backgroundColor: 'var(--color-neutral-800)', borderRadius: 12, padding: '14px 20px', display: 'flex', alignItems: 'center', gap: 8 }}>
             <img src="/icons/초록색체크아이콘.svg" alt="" style={{ width: 20, height: 20 }} />
             <span style={{ ...T.body15('semibold'), color: '#fff' }}>출시 알림을 신청했어요</span>
