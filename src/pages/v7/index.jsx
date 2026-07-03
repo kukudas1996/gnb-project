@@ -66,6 +66,7 @@ export default function V7App() {
   const [history, setHistory] = useState([])
   const [messageDismissed, setMessageDismissed] = useState(false)
   const [myInvestInitialTab, setMyInvestInitialTab] = useState(null)
+  const [releaseAlertDone, setReleaseAlertDone] = useState(false)
 
   const navigate = useCallback((target, tab) => {
     setHistory(prev => [...prev, screen])
@@ -122,7 +123,7 @@ export default function V7App() {
 
   switch (screen) {
     case 'home':
-      return <HomeScreen phase={phase} nav={navigate} goTab={goTab} phaseTransition={phaseTransitions[phase]} messageDismissed={messageDismissed} onDismissMessage={dismissMessage} />
+      return <HomeScreen phase={phase} nav={navigate} goTab={goTab} phaseTransition={phaseTransitions[phase]} messageDismissed={messageDismissed} onDismissMessage={dismissMessage} releaseAlertDone={releaseAlertDone} onReleaseAlert={() => setReleaseAlertDone(true)} />
     case 'shopping':
       return <ShoppingScreen goTab={goTab} />
     case 'feed':
@@ -158,7 +159,7 @@ export default function V7App() {
     case 'push_post_settlement':
       return <PushNotificationScreen title="투자 정산" message="'A투자상품' 정산이 완료됐어요. 정산금 22,000원이 입금됐어요." onTap={handlePushPostSettlementTap} />
     default:
-      return <HomeScreen phase={phase} nav={navigate} goTab={goTab} phaseTransition={phaseTransitions[phase]} messageDismissed={messageDismissed} onDismissMessage={dismissMessage} />
+      return <HomeScreen phase={phase} nav={navigate} goTab={goTab} phaseTransition={phaseTransitions[phase]} messageDismissed={messageDismissed} onDismissMessage={dismissMessage} releaseAlertDone={releaseAlertDone} onReleaseAlert={() => setReleaseAlertDone(true)} />
   }
 }
 
@@ -227,9 +228,11 @@ function DynamicMessage({ phase, dismissed, onDismiss, nav }) {
 // ============================================================
 // Home Screen (Phase-Aware)
 // ============================================================
-function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDismissMessage }) {
+function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDismissMessage, releaseAlertDone, onReleaseAlert }) {
   const [bannerIndex] = useState(0)
   const bannerCount = 5
+  const [showReleaseSheet, setShowReleaseSheet] = useState(false)
+  const [showReleaseToast, setShowReleaseToast] = useState(false)
 
   const phaseConfig = {
     pre: { account: '100,000원', investAmount: '0원', showInvestItem: false, showApplying: false },
@@ -347,16 +350,26 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
         {(phase === 'settled' || phase === 'pre_settlement') ? (
           <div style={{ padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: 16 }}>
             <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>출시 예정 상품</span>
-            <div style={{ borderRadius: 16, overflow: 'hidden', backgroundColor: 'var(--color-neutral-050)', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '32px 16px' }}>
-              <img src="/product.png" alt="" style={{ width: 140, height: 105, objectFit: 'cover', marginBottom: 20 }} />
-              <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)', textAlign: 'center', marginBottom: 4 }}>곧 새로운 한우 투자 상품이</span>
-              <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)', textAlign: 'center', marginBottom: 20 }}>출시될 예정이에요</span>
-              <div style={{
-                width: '100%', height: 52, borderRadius: 14,
-                backgroundColor: 'var(--color-primary-500)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                ...T.body17('semibold'), color: '#fff', cursor: 'pointer',
-              }}>출시 알림 받기</div>
+            <div style={{ borderRadius: 16, overflow: 'hidden', backgroundColor: 'var(--color-neutral-050)', padding: 20 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+                <img src="/product.png" alt="" style={{ width: 48, height: 48, objectFit: 'cover', flexShrink: 0 }} />
+                <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>새로운 한우 투자 상품이{'\n'}출시될 예정이에요</span>
+              </div>
+              {releaseAlertDone ? (
+                <div style={{
+                  width: '100%', height: 48, borderRadius: 14,
+                  backgroundColor: 'var(--color-neutral-050)', border: '1px solid var(--color-neutral-200)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  ...T.body17('semibold'), color: 'var(--color-neutral-500)',
+                }}>출시 알림 신청 완료</div>
+              ) : (
+                <div onClick={() => setShowReleaseSheet(true)} style={{
+                  width: '100%', height: 48, borderRadius: 14,
+                  backgroundColor: 'var(--color-primary-500)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  ...T.body17('semibold'), color: '#fff', cursor: 'pointer',
+                }}>출시 알림 받기</div>
+              )}
             </div>
           </div>
         ) : (
@@ -445,6 +458,59 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
         </div>
         <div style={{ height: 'calc(env(safe-area-inset-bottom, 0px) + 8px)' }} />
       </div>
+
+      {/* 출시 알림 바텀시트 */}
+      {showReleaseSheet && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 9999 }}>
+          <div onClick={() => setShowReleaseSheet(false)} style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.4)' }} />
+          <div className="v7-sheet-up" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: 'var(--color-neutral-000)', borderRadius: '20px 20px 0 0', padding: '0 16px', paddingBottom: 'calc(16px + env(safe-area-inset-bottom, 0px))', animation: 'v7-sheet-up 0.3s ease-out' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '16px 0 8px' }}>
+              <div onClick={() => setShowReleaseSheet(false)} style={{ width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-800)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
+              </div>
+            </div>
+            {/* 알림 미리보기 카드 */}
+            <div style={{ backgroundColor: 'var(--color-neutral-050)', borderRadius: 16, padding: 20, marginBottom: 24 }}>
+              <div style={{ backgroundColor: 'var(--color-neutral-000)', borderRadius: 12, padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+                <div>
+                  <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-800)' }}>상품 출시</div>
+                  <div style={{ ...T.label13(), color: 'var(--color-neutral-500)', marginTop: 2 }}>새로운 투자 상품이 출시했어요</div>
+                </div>
+                <div style={{ width: 40, height: 40, borderRadius: 10, backgroundColor: 'var(--color-primary-100)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary-500)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                </div>
+              </div>
+            </div>
+            <div style={{ textAlign: 'center', marginBottom: 28 }}>
+              <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>새로운 투자 상품 출시하면</div>
+              <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>가장 먼저 알려드릴게요</div>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 4px', borderTop: '1px solid var(--color-neutral-100)', marginBottom: 16 }}>
+              <span style={{ ...T.body17(), color: 'var(--color-neutral-800)' }}>[선택] 마케팅 수신 동의</span>
+              <ChevronRightIcon size={20} color="var(--color-neutral-400)" />
+            </div>
+            <div onClick={() => { setShowReleaseSheet(false); onReleaseAlert(); setShowReleaseToast(true); setTimeout(() => setShowReleaseToast(false), 2500) }} style={{
+              width: '100%', height: 56, borderRadius: 14,
+              backgroundColor: 'var(--color-primary-500)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              ...T.body17('semibold'), color: '#fff', cursor: 'pointer',
+            }}>동의하고 알림 받기</div>
+            <div onClick={() => setShowReleaseSheet(false)} style={{ height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+              <span style={{ ...T.body17(), color: 'var(--color-neutral-500)' }}>다음에 할게요</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 출시 알림 토스트 */}
+      {showReleaseToast && (
+        <div style={{ position: 'fixed', top: 'calc(env(safe-area-inset-top, 0px) + 60px)', left: 16, right: 16, zIndex: 10000, display: 'flex', justifyContent: 'center', animation: 'v7-fade-in 0.3s ease-out' }}>
+          <div style={{ backgroundColor: 'var(--color-neutral-800)', borderRadius: 12, padding: '14px 20px', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="10" fill="#34C759"/><path d="M6 10l2.5 2.5L14 7.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            <span style={{ ...T.body15('semibold'), color: '#fff' }}>출시 알림을 신청했어요</span>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
