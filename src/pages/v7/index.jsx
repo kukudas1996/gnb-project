@@ -1505,19 +1505,17 @@ function MyInvestDetailScreen({ onBack, nav, phase, initialTab }) {
     </svg>
   )
 
-  const timelineSteps = isPostSettlement ? [
-    { label: '신청', date: '26.06.01', done: true },
-    { label: '체결', date: '26.06.12', done: true },
-    { label: '정산', date: '2028.12.28', done: true },
-  ] : isPreSettlement ? [
-    { label: '신청', date: '26.06.01', done: true },
-    { label: '체결', date: '26.06.12', done: true },
-    { label: '정산', date: '2028.12.28', done: false, tag: '정산일 확정' },
-  ] : [
-    { label: '신청', date: '26.06.01', done: true },
-    { label: '체결', date: '26.06.12', done: true },
-    { label: '정산', date: '', done: false, sub: '예상 정산 기간', expected: '2025.11 ~ 2026.01' },
-  ]
+  const progressConfig = isPostSettlement ? {
+    chip: '정산 완료', chipColor: 'var(--color-primary-500)', chipBg: 'var(--color-primary-050)',
+    progress: 100, startDate: '2026.06.01', endDate: '2028.12.01',
+  } : isPreSettlement ? {
+    chip: '정산 예정', chipColor: 'var(--color-primary-500)', chipBg: 'var(--color-primary-050)',
+    chip2: '7일 남음',
+    progress: 85, startDate: '2026.06.01', endDate: '2028.12.01',
+  } : {
+    chip: '1년 2개월 남음', chipColor: 'var(--color-neutral-600)', chipBg: 'var(--color-neutral-100)',
+    progress: 15, startDate: '2026.06.01', endDate: '예상 정산일 2025.11 ~ 2026.01',
+  }
 
   return (
     <div className="v7-screen" style={{
@@ -1616,57 +1614,25 @@ function MyInvestDetailScreen({ onBack, nav, phase, initialTab }) {
           </div>
         ) : (
           <div>
-            {/* 상품 상태 + Timeline */}
+            {/* 내 투자금 + Progress Bar */}
             <div style={{ padding: '24px 16px 0' }}>
-              <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>상품 상태</span>
-            </div>
-            <div style={{ padding: '16px 16px 28px' }}>
-              {timelineSteps.map((step, idx) => (
-                <div key={idx}>
-                  {idx > 0 && (
-                    <div style={{ paddingTop: 4, paddingBottom: 4, display: 'flex', alignItems: 'center' }}>
-                      <div style={{ width: 36, display: 'flex', justifyContent: 'center' }}>
-                        <div style={{ width: 3, height: 24, backgroundColor: step.done ? 'var(--color-primary-500)' : 'var(--color-neutral-100)', borderRadius: 99 }} />
-                      </div>
-                    </div>
-                  )}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', flex: 1, minWidth: 0, gap: 12 }}>
-                      <div style={{
-                        width: 36, height: 36, borderRadius: 18,
-                        backgroundColor: step.done ? 'var(--color-primary-500)' : 'var(--color-neutral-100)',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                      }}>
-                        {step.done ? (
-                          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 10l3.5 3.5L15 7" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                        ) : (
-                          <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--color-neutral-500)' }}>{idx + 1}</span>
-                        )}
-                      </div>
-                      <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-                        <span style={{ ...T.title20('semibold'), color: step.done ? 'var(--color-neutral-800)' : 'var(--color-neutral-700)' }}>{step.label}</span>
-                        {step.tag && (
-                          <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 2 }}>
-                            <span style={{ ...T.label13('semibold'), color: 'var(--color-primary-500)', backgroundColor: 'var(--color-primary-050)', padding: '2px 8px', borderRadius: 4 }}>{step.tag}</span>
-                            <img src="/icons/Graphic/help2.svg" alt="" style={{ width: 16, height: 16 }} />
-                          </div>
-                        )}
-                        {step.sub && !step.expected && <span style={{ ...T.body15(), color: 'var(--color-neutral-500)' }}>{step.sub}</span>}
-                      </div>
-                    </div>
-                    {step.date ? <span style={{ ...T.body17(), color: 'var(--color-neutral-800)', flexShrink: 0 }}>{step.date}</span>
-                      : step.expected ? (
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', flexShrink: 0 }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                            <span style={{ ...T.body15(), color: 'var(--color-neutral-500)' }}>{step.sub}</span>
-                            <img src="/icons/Graphic/help2.svg" alt="" style={{ width: 16, height: 16 }} />
-                          </div>
-                          <span style={{ ...T.body15(), color: 'var(--color-neutral-500)' }}>{step.expected}</span>
-                        </div>
-                      ) : null}
-                  </div>
+              <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>내 투자금</span>
+              <div style={{ ...T.headline28('bold'), color: 'var(--color-neutral-900)', marginTop: 4 }}>20,000원</div>
+              <div style={{ display: 'flex', gap: 6, marginTop: 12 }}>
+                <span style={{ ...T.label13('semibold'), color: progressConfig.chipColor, backgroundColor: progressConfig.chipBg, padding: '4px 10px', borderRadius: 6 }}>{progressConfig.chip}</span>
+                {progressConfig.chip2 && (
+                  <span style={{ ...T.label13('semibold'), color: 'var(--color-neutral-600)', backgroundColor: 'var(--color-neutral-100)', padding: '4px 10px', borderRadius: 6 }}>{progressConfig.chip2}</span>
+                )}
+              </div>
+              <div style={{ marginTop: 16 }}>
+                <div style={{ height: 6, backgroundColor: 'var(--color-neutral-100)', borderRadius: 3, overflow: 'hidden' }}>
+                  <div style={{ width: `${progressConfig.progress}%`, height: '100%', backgroundColor: 'var(--color-primary-500)', borderRadius: 3 }} />
                 </div>
-              ))}
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8 }}>
+                  <span style={{ ...T.label13(), color: 'var(--color-neutral-500)' }}>{progressConfig.startDate}</span>
+                  <span style={{ ...T.label13(), color: 'var(--color-neutral-500)' }}>{progressConfig.endDate}</span>
+                </div>
+              </div>
             </div>
 
             {isPostSettlement ? (
@@ -1703,7 +1669,7 @@ function MyInvestDetailScreen({ onBack, nav, phase, initialTab }) {
                   </div>
                 </div>
               </>
-            ) : (
+            ) : isPreSettlement ? (
               <>
                 <div style={{ height: 12, backgroundColor: 'var(--color-neutral-050)' }} />
                 <div style={{ padding: '24px 16px 0' }}>
@@ -1718,7 +1684,7 @@ function MyInvestDetailScreen({ onBack, nav, phase, initialTab }) {
                   ))}
                 </div>
               </>
-            )}
+            ) : null}
 
             <div style={{ height: 12, backgroundColor: 'var(--color-neutral-050)' }} />
             <div style={{ padding: '24px 16px 0' }}>
@@ -1731,7 +1697,7 @@ function MyInvestDetailScreen({ onBack, nav, phase, initialTab }) {
                     <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>{group.date}</span>
                   </div>
                   {group.items.map((item, iIdx) => (
-                    <div key={iIdx} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 16 }}>
+                    <div key={iIdx} onClick={() => nav('history_detail')} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 16, cursor: 'pointer' }}>
                       <div style={{ width: 44, height: 44, borderRadius: 16, backgroundColor: '#dae7ff', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
                         <img src="/product.png" alt="" style={{ width: 44, height: 33, objectFit: 'cover' }} />
                       </div>
