@@ -803,7 +803,7 @@ function AssetScreen({ onBack, nav, phase }) {
               <span style={{ ...T.body17('semibold'), color: 'var(--color-primary-500)' }}>60,000원</span>
             </div>
           )}
-          <div onClick={() => nav('account')} style={{ backgroundColor: 'var(--color-neutral-050)', borderRadius: 16, height: 56, padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}>
+          <div onClick={() => nav('my_account')} style={{ backgroundColor: 'var(--color-neutral-050)', borderRadius: 16, height: 56, padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}>
             <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-600)' }}>계좌 잔액</span>
             <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{config.account}</span>
           </div>
@@ -829,7 +829,7 @@ function AssetScreen({ onBack, nav, phase }) {
               <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-600)' }}>내 투자 상품</span>
             </div>
             <div style={{ paddingBottom: 24 }}>
-              {Array(3).fill(null).map((_, idx) => (
+              {Array(1).fill(null).map((_, idx) => (
                 <div key={idx} onClick={() => nav('my_invest_detail')} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 16, cursor: 'pointer' }}>
                   <div style={{ width: 48, height: 48, borderRadius: 16, backgroundColor: '#dae7ff', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
                     <img src="/product.png" alt="" style={{ width: 40, height: 30, objectFit: 'cover' }} />
