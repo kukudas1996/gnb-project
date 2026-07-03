@@ -1450,7 +1450,7 @@ function SettlementHistoryScreen({ onBack, phase, nav }) {
               <div style={{ padding: '0 16px', height: 21 }}>
                 <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>{item.date}</span>
               </div>
-              <div onClick={() => nav('my_invest_detail', '내 투자')} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: 16, cursor: 'pointer' }}>
+              <div onClick={() => nav('history_detail')} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: 16, cursor: 'pointer' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, flex: 1, minWidth: 0 }}>
                   <div style={{ width: 44, height: 44, borderRadius: 16, backgroundColor: '#dae7ff', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
                     <img src="/product.png" alt="" style={{ width: 44, height: 33, objectFit: 'cover' }} />
