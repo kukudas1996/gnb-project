@@ -283,9 +283,9 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
         )}
 
         {/* 투자 요약 */}
-        <div style={{ backgroundColor: 'var(--color-neutral-000)', borderRadius: 20, margin: '0 16px', border: '1px solid var(--color-neutral-100)', marginBottom: 20 }}>
+        <div>
           {/* 투자중 금액 */}
-          <div style={{ padding: '20px 20px 0', display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <div style={{ padding: '20px 16px 0', display: 'flex', flexDirection: 'column', gap: 4 }}>
             <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>투자중 금액</span>
             <div onClick={() => nav('asset')} style={{ display: 'flex', alignItems: 'center', gap: 4, cursor: 'pointer' }}>
               <span style={{ ...T.headline32(), color: 'var(--color-neutral-900)', whiteSpace: 'nowrap' }}>{config.investAmount}</span>
@@ -343,49 +343,66 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
         {/* Divider */}
         <div style={{ height: 12, backgroundColor: 'var(--color-neutral-050)' }} />
 
-        {/* 모집중인 상품 */}
-        <div style={{ padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>모집중인 상품</span>
-          <div onClick={() => nav('product_detail')} style={{ borderRadius: 16, overflow: 'hidden', padding: 8, background: 'linear-gradient(90deg, rgba(68,135,255,0.2), rgba(68,135,255,0.2)), linear-gradient(90deg, #fff, #fff)', display: 'flex', flexDirection: 'column', gap: 8, cursor: 'pointer' }}>
-            <div style={{ padding: '8px 8px 0', display: 'flex', flexDirection: 'column', position: 'relative' }}>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, backgroundColor: 'var(--color-neutral-000)', borderRadius: 40, padding: '5px 12px 5px 8px', alignSelf: 'flex-start' }}>
-                <img src="/icons/icon.svg" alt="" style={{ width: 20, height: 20, flexShrink: 0 }} />
-                <span style={{ fontSize: 14, fontWeight: 500, lineHeight: '20px', color: 'var(--color-neutral-900)', whiteSpace: 'nowrap' }}>13일 23:59:59 남음</span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
-                <img src="/product.png" alt="상품" style={{ width: 186, height: 140, objectFit: 'cover' }} />
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, backgroundColor: 'rgba(255,255,255,0.64)', border: '1px solid rgba(255,255,255,0.8)', borderRadius: 16, padding: '5px 12px' }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-800)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                  </svg>
-                  <span style={{ fontSize: 14, fontWeight: 500, lineHeight: '20px', color: 'var(--color-neutral-800)', whiteSpace: 'nowrap' }}>9,999명 투자중</span>
-                </div>
-              </div>
+        {/* 모집중인 상품 or 출시 예정 상품 */}
+        {(phase === 'settled' || phase === 'pre_settlement') ? (
+          <div style={{ padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>출시 예정 상품</span>
+            <div style={{ borderRadius: 16, overflow: 'hidden', backgroundColor: 'var(--color-neutral-050)', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '32px 16px' }}>
+              <img src="/product.png" alt="" style={{ width: 140, height: 105, objectFit: 'cover', marginBottom: 20 }} />
+              <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)', textAlign: 'center', marginBottom: 4 }}>곧 새로운 한우 투자 상품이</span>
+              <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)', textAlign: 'center', marginBottom: 20 }}>출시될 예정이에요</span>
+              <div style={{
+                width: '100%', height: 52, borderRadius: 14,
+                backgroundColor: 'var(--color-primary-500)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                ...T.body17('semibold'), color: '#fff', cursor: 'pointer',
+              }}>출시 알림 받기</div>
             </div>
-            <div style={{ backgroundColor: 'var(--color-neutral-000)', borderRadius: 12, padding: '16px 16px 20px', display: 'flex', flexDirection: 'column', gap: 12 }}>
-              <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>유전지수 높은 상품</span>
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-                  <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>모집 현황</span>
-                  <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-800)' }}>5 / 100C</span>
+          </div>
+        ) : (
+          <div style={{ padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>모집중인 상품</span>
+            <div onClick={() => nav('product_detail')} style={{ borderRadius: 16, overflow: 'hidden', padding: 8, background: 'linear-gradient(90deg, rgba(68,135,255,0.2), rgba(68,135,255,0.2)), linear-gradient(90deg, #fff, #fff)', display: 'flex', flexDirection: 'column', gap: 8, cursor: 'pointer' }}>
+              <div style={{ padding: '8px 8px 0', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, backgroundColor: 'var(--color-neutral-000)', borderRadius: 40, padding: '5px 12px 5px 8px', alignSelf: 'flex-start' }}>
+                  <img src="/icons/icon.svg" alt="" style={{ width: 20, height: 20, flexShrink: 0 }} />
+                  <span style={{ fontSize: 14, fontWeight: 500, lineHeight: '20px', color: 'var(--color-neutral-900)', whiteSpace: 'nowrap' }}>13일 23:59:59 남음</span>
                 </div>
-                <div style={{ height: 6, backgroundColor: 'var(--color-neutral-100)', borderRadius: 3, overflow: 'hidden' }}>
-                  <div style={{ width: '5%', height: '100%', backgroundColor: 'var(--color-primary-500)', borderRadius: 3 }} />
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
+                  <img src="/product.png" alt="상품" style={{ width: 186, height: 140, objectFit: 'cover' }} />
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, backgroundColor: 'rgba(255,255,255,0.64)', border: '1px solid rgba(255,255,255,0.8)', borderRadius: 16, padding: '5px 12px' }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-800)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                    <span style={{ fontSize: 14, fontWeight: 500, lineHeight: '20px', color: 'var(--color-neutral-800)', whiteSpace: 'nowrap' }}>9,999명 투자중</span>
+                  </div>
                 </div>
               </div>
-              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                {[{ l: '1C 당 금액', v: '20,000원' }, { l: '예상 수익률', v: '10.0% ~ 15.0%' }, { l: '예상 정산 기간', v: '2025.11 ~ 2026.01' }].map(item => (
-                  <div key={item.l} style={{ display: 'flex', gap: 6 }}>
-                    <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>{item.l}</span>
-                    <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-800)' }}>{item.v}</span>
+              <div style={{ backgroundColor: 'var(--color-neutral-000)', borderRadius: 12, padding: '16px 16px 20px', display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>유전지수 높은 상품</span>
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+                    <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>모집 현황</span>
+                    <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-800)' }}>5 / 100C</span>
                   </div>
-                ))}
+                  <div style={{ height: 6, backgroundColor: 'var(--color-neutral-100)', borderRadius: 3, overflow: 'hidden' }}>
+                    <div style={{ width: '5%', height: '100%', backgroundColor: 'var(--color-primary-500)', borderRadius: 3 }} />
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                  {[{ l: '1C 당 금액', v: '20,000원' }, { l: '예상 수익률', v: '10.0% ~ 15.0%' }, { l: '예상 정산 기간', v: '2025.11 ~ 2026.01' }].map(item => (
+                    <div key={item.l} style={{ display: 'flex', gap: 6 }}>
+                      <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>{item.l}</span>
+                      <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-800)' }}>{item.v}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* 마감된 상품 */}
         <div style={{ padding: '0 16px 20px', display: 'flex', flexDirection: 'column', gap: 16 }}>
