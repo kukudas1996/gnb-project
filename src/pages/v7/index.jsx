@@ -469,17 +469,9 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-800)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
               </div>
             </div>
-            {/* 알림 미리보기 카드 */}
-            <div style={{ backgroundColor: 'var(--color-neutral-050)', borderRadius: 16, padding: 20, marginBottom: 24 }}>
-              <div style={{ backgroundColor: 'var(--color-neutral-000)', borderRadius: 12, padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
-                <div>
-                  <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-800)' }}>상품 출시</div>
-                  <div style={{ ...T.label13(), color: 'var(--color-neutral-500)', marginTop: 2 }}>새로운 투자 상품이 출시했어요</div>
-                </div>
-                <div style={{ width: 40, height: 40, borderRadius: 10, backgroundColor: 'var(--color-primary-100)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary-500)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                </div>
-              </div>
+            {/* 알림 미리보기 이미지 */}
+            <div style={{ marginBottom: 24 }}>
+              <img src="/출시바텀시트이미지.png" alt="" style={{ width: '100%', borderRadius: 16 }} />
             </div>
             <div style={{ textAlign: 'center', marginBottom: 28 }}>
               <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>새로운 투자 상품 출시하면</div>
@@ -506,7 +498,7 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
       {showReleaseToast && (
         <div style={{ position: 'fixed', top: 'calc(env(safe-area-inset-top, 0px) + 60px)', left: 16, right: 16, zIndex: 10000, display: 'flex', justifyContent: 'center', animation: 'v7-fade-in 0.3s ease-out' }}>
           <div style={{ backgroundColor: 'var(--color-neutral-800)', borderRadius: 12, padding: '14px 20px', display: 'flex', alignItems: 'center', gap: 8 }}>
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="10" fill="#34C759"/><path d="M6 10l2.5 2.5L14 7.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            <img src="/icons/초록색체크아이콘.svg" alt="" style={{ width: 20, height: 20 }} />
             <span style={{ ...T.body15('semibold'), color: '#fff' }}>출시 알림을 신청했어요</span>
           </div>
         </div>
