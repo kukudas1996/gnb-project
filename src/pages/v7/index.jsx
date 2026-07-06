@@ -352,26 +352,40 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
         {(phase === 'settled' || phase === 'pre_settlement' || phase === 'post_settlement') ? (
           <div style={{ padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: 16 }}>
             <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>출시 예정 상품</span>
-            <div style={{ borderRadius: 16, overflow: 'hidden', backgroundColor: 'var(--color-neutral-050)', padding: 20 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-                <img src="/product.png" alt="" style={{ width: 48, height: 48, objectFit: 'cover', flexShrink: 0 }} />
-                <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>새로운 한우 투자 상품이{'\n'}출시될 예정이에요</span>
+            <div style={{ borderRadius: 20, overflow: 'hidden', backgroundColor: 'var(--color-neutral-100)', position: 'relative', height: 394 }}>
+              {/* 출시 예정 시기 뱃지 */}
+              <div style={{ position: 'absolute', top: 16, left: 16, display: 'flex', alignItems: 'center', gap: 8, backgroundColor: 'var(--color-neutral-000)', borderRadius: 40, padding: '5px 12px 5px 8px', zIndex: 1 }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-900)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span style={{ fontSize: 14, fontWeight: 500, lineHeight: '20px', color: 'var(--color-neutral-900)', whiteSpace: 'nowrap' }}>8월 중 출시 예정</span>
               </div>
-              {releaseAlertDone ? (
-                <div style={{
-                  width: '100%', height: 48, borderRadius: 14,
-                  backgroundColor: 'var(--color-neutral-050)', border: '1px solid var(--color-neutral-200)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  ...T.body17('semibold'), color: 'var(--color-neutral-500)',
-                }}>출시 알림 신청 완료</div>
-              ) : (
-                <div onClick={() => setShowReleaseSheet(true)} style={{
-                  width: '100%', height: 48, borderRadius: 14,
-                  backgroundColor: 'var(--color-primary-500)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  ...T.body17('semibold'), color: '#fff', cursor: 'pointer',
-                }}>출시 알림 받기</div>
-              )}
+              {/* 상품 이미지 */}
+              <img src="/출시예정상품이미지.png" alt="" style={{ position: 'absolute', top: 51, left: '50%', transform: 'translateX(-50%)', width: 237, height: 170, objectFit: 'cover', opacity: 0.5 }} />
+              {/* 알림 신청 인원 뱃지 */}
+              <div style={{ position: 'absolute', top: 184, right: 22, display: 'flex', alignItems: 'center', gap: 4, backgroundColor: 'rgba(255,255,255,0.64)', border: '1px solid rgba(255,255,255,0.8)', borderRadius: 16, padding: '5px 12px' }}>
+                <span style={{ fontSize: 16 }}>🐮</span>
+                <span style={{ fontSize: 14, fontWeight: 500, lineHeight: '20px', color: 'var(--color-neutral-800)', whiteSpace: 'nowrap' }}>134명 알림 신청중</span>
+              </div>
+              {/* 하단 정보 카드 */}
+              <div style={{ position: 'absolute', bottom: 8, left: 8, right: 8, backgroundColor: 'var(--color-neutral-000)', borderRadius: 16, padding: 20, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
+                <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)', textAlign: 'center', lineHeight: '28px' }}>
+                  새로운 한우 투자 상품이<br />곧 출시될 예정이에요
+                </div>
+                {releaseAlertDone ? (
+                  <div style={{
+                    width: '100%', height: 48, borderRadius: 14,
+                    backgroundColor: 'var(--color-neutral-050)', border: '1px solid var(--color-neutral-200)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    ...T.body17('semibold'), color: 'var(--color-neutral-500)',
+                  }}>출시 알림 신청 완료</div>
+                ) : (
+                  <div onClick={() => setShowReleaseSheet(true)} style={{
+                    width: '100%', height: 48, borderRadius: 14,
+                    backgroundColor: 'var(--color-primary-500)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    ...T.body17('semibold'), color: '#fff', cursor: 'pointer',
+                  }}>출시 알림 받기</div>
+                )}
+              </div>
             </div>
           </div>
         ) : (
@@ -1544,9 +1558,9 @@ function SettlementHistoryScreen({ onBack, phase, nav }) {
 // My Invest Detail Screen (내투자상세)
 // ============================================================
 function MyInvestDetailScreen({ onBack, nav, phase, initialTab }) {
-  const [activeTab, setActiveTab] = useState(initialTab || '송아지 정보')
+  const [activeTab, setActiveTab] = useState(initialTab || '내 투자')
   const [calfFilter, setCalfFilter] = useState('사육중')
-  const tabs = ['송아지 정보', '내 투자']
+  const tabs = ['내 투자', '송아지 정보']
   const calfFilters = ['전체', '사육중', '출하중', '경매 완료']
 
   const isPostSettlement = phase === 'post_settlement'
