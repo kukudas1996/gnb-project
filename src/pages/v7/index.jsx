@@ -69,12 +69,15 @@ export default function V7App() {
   const [messageDismissed, setMessageDismissed] = useState(false)
   const [myInvestInitialTab, setMyInvestInitialTab] = useState(null)
   const [releaseAlertDone, setReleaseAlertDone] = useState(false)
+  const [historyDetailType, setHistoryDetailType] = useState(null)
 
   const navigate = useCallback((target, tab) => {
     setHistory(prev => [...prev, screen])
     setScreen(target)
     if (target === 'my_invest_detail' && tab) setMyInvestInitialTab(tab)
     else setMyInvestInitialTab(null)
+    if (target === 'history_detail' && tab) setHistoryDetailType(tab)
+    else if (target !== 'history_detail') setHistoryDetailType(null)
   }, [screen])
 
   const goBack = useCallback(() => {
@@ -149,7 +152,7 @@ export default function V7App() {
     case 'history':
       return <InvestHistoryScreen onBack={goBack} nav={navigate} phase={phase} />
     case 'history_detail':
-      return <InvestHistoryDetailScreen onBack={goBack} nav={navigate} phase={phase} />
+      return <InvestHistoryDetailScreen onBack={goBack} nav={navigate} phase={phase} detailType={historyDetailType} />
     case 'settlement_history':
       return <SettlementHistoryScreen onBack={goBack} phase={phase} nav={navigate} />
     case 'my_invest_detail':
@@ -157,9 +160,9 @@ export default function V7App() {
     case 'push_settled':
       return <PushNotificationScreen title="투자 체결" message="'A 투자 상품'에 1주 투자 체결됐어요." onTap={handlePushSettledTap} />
     case 'push_pre_settlement':
-      return <PushNotificationScreen title="투자 정산" message="'A투자상품'이(가) 12월 28일에 정산 예정입니다." onTap={handlePushPreSettlementTap} />
+      return <PushNotificationScreen title="투자 정산" message="'A 투자 상품'이(가) 12월 28일에 정산 예정입니다." onTap={handlePushPreSettlementTap} />
     case 'push_post_settlement':
-      return <PushNotificationScreen title="투자 정산" message="'A투자상품' 정산이 완료됐어요. 정산금 22,000원이 입금됐어요." onTap={handlePushPostSettlementTap} />
+      return <PushNotificationScreen title="투자 정산" message="'A 투자 상품' 정산이 완료됐어요. 정산금 22,000원이 입금됐어요." onTap={handlePushPostSettlementTap} />
     default:
       return <HomeScreen phase={phase} nav={navigate} goTab={goTab} phaseTransition={phaseTransitions[phase]} messageDismissed={messageDismissed} onDismissMessage={dismissMessage} releaseAlertDone={releaseAlertDone} onReleaseAlert={() => setReleaseAlertDone(true)} />
   }
@@ -192,7 +195,7 @@ function DynamicMessage({ phase, dismissed, onDismiss, nav }) {
   if (dismissed) return null
   const messages = {
     applying: { text: '투자 신청이 완료됐어요', sub: 'A 투자 상품' },
-    settled: { text: '3주 체결 완료됐어요', sub: 'A 투자 상품' },
+    settled: { text: '1주 체결 완료됐어요', sub: 'A 투자 상품' },
     pre_settlement: { text: '12월 28일 정산 예정이에요', sub: 'A 투자 상품' },
     post_settlement: { text: '정산이 완료되었어요!', sub: 'A 투자 상품' },
   }
@@ -213,7 +216,7 @@ function DynamicMessage({ phase, dismissed, onDismiss, nav }) {
         display: 'flex', alignItems: 'center', overflow: 'hidden', cursor: 'pointer',
       }}>
         <div onClick={handleTap} style={{ display: 'flex', flex: 1, alignItems: 'center', gap: 8, minWidth: 0 }}>
-          <img src="/product.png" alt="" style={{ width: 48, height: 48, objectFit: 'cover', flexShrink: 0, borderRadius: 12 }} />
+          <img src="/a상품커버.png" alt="" style={{ width: 48, height: 48, objectFit: 'cover', flexShrink: 0, borderRadius: 12 }} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: 2, flex: 1, minWidth: 0 }}>
             <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>{msg.sub}</span>
             <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{msg.text}</span>
@@ -235,16 +238,49 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
   const bannerCount = 5
   const [showReleaseSheet, setShowReleaseSheet] = useState(false)
   const [showReleaseToast, setShowReleaseToast] = useState(false)
+  const scrollRef = useRef(null)
+  const [activeSlide, setActiveSlide] = useState(0)
+
+  const handleScroll = useCallback(() => {
+    if (!scrollRef.current) return
+    const { scrollLeft, clientWidth } = scrollRef.current
+    const idx = Math.round(scrollLeft / clientWidth)
+    setActiveSlide(idx)
+  }, [])
+
+  const investProducts = {
+    pre: [
+      { name: 'B 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/b상품커버.png', bgColor: '#e87477' },
+      { name: 'C 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/c상품커버.png', bgColor: '#96ce68' },
+    ],
+    applying: [
+      { name: 'B 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/b상품커버.png', bgColor: '#e87477' },
+      { name: 'C 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/c상품커버.png', bgColor: '#96ce68' },
+    ],
+    settled: [
+      { name: 'A 투자 상품', amount: '20,000원', shares: '1주', remaining: '8개월 남음', img: '/a상품커버.png', bgColor: '#dae7ff', clickable: true },
+      { name: 'B 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/b상품커버.png', bgColor: '#e87477' },
+      { name: 'C 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/c상품커버.png', bgColor: '#96ce68' },
+    ],
+    pre_settlement: [
+      { name: 'A 투자 상품', amount: '20,000원', shares: '1주', remaining: '4개월 남음', img: '/a상품커버.png', bgColor: '#dae7ff', clickable: true },
+      { name: 'B 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/b상품커버.png', bgColor: '#e87477' },
+      { name: 'C 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/c상품커버.png', bgColor: '#96ce68' },
+    ],
+    post_settlement: [
+      { name: 'B 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/b상품커버.png', bgColor: '#e87477' },
+      { name: 'C 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/c상품커버.png', bgColor: '#96ce68' },
+    ],
+  }
 
   const phaseConfig = {
-    pre: { account: '100,000원', investAmount: '0원', showInvestItem: false, showApplying: false },
-    applying: { account: '100,000원', investAmount: '0원', showInvestItem: false, showApplying: true },
-    settled: { account: '80,000원', investAmount: '20,000원', showInvestItem: true, showApplying: false, remainingText: '1년 8개월 남음' },
-    pre_settlement: { account: '80,000원', investAmount: '20,000원', showInvestItem: true, showApplying: false, remainingText: '4개월 남음' },
-    post_settlement: { account: '102,000원', investAmount: '0원', showInvestItem: false, showApplying: false },
+    pre: { account: '100,000원', investAmount: '200,000원' },
+    applying: { account: '80,000원', investAmount: '200,000원', showApplying: true },
+    settled: { account: '80,000원', investAmount: '220,000원' },
+    pre_settlement: { account: '80,000원', investAmount: '220,000원' },
+    post_settlement: { account: '102,000원', investAmount: '200,000원' },
   }
   const config = phaseConfig[phase] || phaseConfig.pre
-  const hasInvest = config.investAmount !== '0원'
 
   return (
     <div className="v7-screen" style={{
@@ -297,38 +333,61 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
               <ChevronRightIcon size={28} color="var(--color-neutral-400)" />
             </div>
           </div>
-          {/* 투자 아이템 (settled phases only) */}
-          {config.showInvestItem && (
-            <>
-              <div onClick={() => nav('my_invest_detail')} style={{ padding: '16px 20px', cursor: 'pointer' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <div style={{ width: 48, height: 48, borderRadius: 16, backgroundColor: '#dae7ff', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
-                    <img src="/product.png" alt="" style={{ width: 40, height: 30, objectFit: 'cover' }} />
-                  </div>
-                  <div style={{ display: 'flex', flex: 1, minWidth: 0, gap: 12 }}>
-                    <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
-                      <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>A 투자 상품</span>
-                      <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>{config.remainingText}</span>
+          {/* 투자 아이템 스와이프 */}
+          {(() => {
+            const products = investProducts[phase] || investProducts.pre
+            const totalSlides = products.length + 1
+            return (
+              <>
+                <div
+                  ref={scrollRef}
+                  onScroll={handleScroll}
+                  className="v7-hide-scrollbar"
+                  style={{
+                    display: 'flex', overflowX: 'auto', scrollSnapType: 'x mandatory',
+                    WebkitOverflowScrolling: 'touch',
+                  }}
+                >
+                  {products.map((item, idx) => (
+                    <div key={idx} onClick={item.clickable ? () => nav('my_invest_detail') : undefined}
+                      style={{ flex: '0 0 100%', scrollSnapAlign: 'start', padding: '16px 20px', cursor: item.clickable ? 'pointer' : 'default' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                        <div style={{ width: 48, height: 48, borderRadius: 16, backgroundColor: item.bgColor, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
+                          <img src={item.img} alt="" style={{ width: 40, height: 30, objectFit: 'cover' }} />
+                        </div>
+                        <div style={{ display: 'flex', flex: 1, minWidth: 0, gap: 12 }}>
+                          <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
+                            <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{item.name}</span>
+                            <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>{item.remaining}</span>
+                          </div>
+                          <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'flex-end', textAlign: 'right' }}>
+                            <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{item.amount}</span>
+                            <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>{item.shares}</span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'flex-end', textAlign: 'right' }}>
-                      <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>20,000원</span>
-                      <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>1주</span>
-                    </div>
+                  ))}
+                  {/* 전체보기 slide */}
+                  <div onClick={() => nav('my_invest_detail')}
+                    style={{ flex: '0 0 100%', scrollSnapAlign: 'start', padding: '16px 20px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-600)' }}>전체보기 &gt;</span>
                   </div>
                 </div>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: 12, gap: 6 }}>
-                <div style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: 'var(--color-neutral-800)' }} />
-                <div style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: 'var(--color-neutral-200)' }} />
-              </div>
-            </>
-          )}
+                <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: 12, gap: 6 }}>
+                  {Array(totalSlides).fill(null).map((_, i) => (
+                    <div key={i} style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: i === activeSlide ? 'var(--color-neutral-800)' : 'var(--color-neutral-200)' }} />
+                  ))}
+                </div>
+              </>
+            )
+          })()}
           {/* 투자 신청중 + 계좌 잔액 */}
           <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: 8, paddingBottom: 0 }}>
             {config.showApplying && (
               <div onClick={() => nav('history_detail')} style={{ backgroundColor: '#e8f0ff', borderRadius: 16, height: 56, padding: '0 20px 0 12px', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
                 <div style={{ display: 'flex', alignItems: 'center', flex: 1, minWidth: 0 }}>
-                  <img src="/product.png" alt="" style={{ width: 44, height: 33, objectFit: 'cover', flexShrink: 0 }} />
+                  <img src="/a상품커버.png" alt="" style={{ width: 44, height: 33, objectFit: 'cover', flexShrink: 0 }} />
                   <span style={{ ...T.body17('semibold'), color: 'var(--color-primary-400)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1, minWidth: 0 }}>투자 신청중</span>
                 </div>
                 <span style={{ ...T.body17('semibold'), color: 'var(--color-primary-500)', whiteSpace: 'nowrap', flexShrink: 0 }}>20,000원</span>
@@ -398,7 +457,7 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
                   <span style={{ fontSize: 14, fontWeight: 500, lineHeight: '20px', color: 'var(--color-neutral-900)', whiteSpace: 'nowrap' }}>13일 23:59:59 남음</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
-                  <img src="/product.png" alt="상품" style={{ width: 186, height: 140, objectFit: 'cover' }} />
+                  <img src="/a상품커버.png" alt="상품" style={{ width: 186, height: 140, objectFit: 'cover' }} />
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, backgroundColor: 'rgba(255,255,255,0.64)', border: '1px solid rgba(255,255,255,0.8)', borderRadius: 16, padding: '5px 12px' }}>
@@ -410,7 +469,7 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
                 </div>
               </div>
               <div style={{ backgroundColor: 'var(--color-neutral-000)', borderRadius: 12, padding: '16px 16px 20px', display: 'flex', flexDirection: 'column', gap: 12 }}>
-                <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>유전지수 높은 상품</span>
+                <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>A 투자 상품</span>
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
                     <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>모집 현황</span>
@@ -438,11 +497,11 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
           <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>마감된 상품</span>
           <div style={{ borderRadius: 16, overflow: 'hidden', padding: 8, backgroundColor: 'var(--color-neutral-050)', display: 'flex', flexDirection: 'column', gap: 8 }}>
             <div style={{ padding: '8px 8px 0', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', filter: 'grayscale(100%)', opacity: 0.5 }}>
-              <img src="/product.png" alt="상품" style={{ width: 186, height: 140, objectFit: 'cover' }} />
+              <img src="/a상품커버.png" alt="상품" style={{ width: 186, height: 140, objectFit: 'cover' }} />
             </div>
             <div style={{ backgroundColor: 'var(--color-neutral-000)', borderRadius: 12, padding: '16px 16px 20px', display: 'flex', flexDirection: 'column', gap: 12 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>유전지수 높은 상품</span>
+                <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>A 투자 상품</span>
                 <span style={{ ...T.label13('semibold'), color: 'var(--color-neutral-500)', backgroundColor: 'var(--color-neutral-050)', padding: '4px 10px', borderRadius: 8 }}>마감</span>
               </div>
               <div>
@@ -566,7 +625,7 @@ function InvestProductDetailAfterScreen({ onBack }) {
           backgroundColor: 'var(--color-neutral-100)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           ...T.body17('semibold'), color: 'var(--color-neutral-700)',
-        }}>3주 투자중</div>
+        }}>1주 투자중</div>
         <div style={{
           flex: 1, height: 56, borderRadius: 14,
           backgroundColor: 'var(--color-primary-500)',
@@ -805,7 +864,7 @@ function PushNotificationScreen({ title, message, onTap }) {
             backgroundColor: 'var(--color-primary-500)',
             display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
           }}>
-            <img src="/product.png" alt="" style={{ width: 28, height: 28, objectFit: 'contain' }} />
+            <img src="/a상품커버.png" alt="" style={{ width: 28, height: 28, objectFit: 'contain' }} />
           </div>
           <div style={{ flex: 1 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
@@ -831,11 +890,11 @@ function PushNotificationScreen({ title, message, onTap }) {
 // ============================================================
 function AssetScreen({ onBack, nav, phase }) {
   const phaseConfig = {
-    pre: { account: '100,000원', investAmount: '0원', showApplying: false, showItems: false },
-    applying: { account: '40,000원', investAmount: '0원', showApplying: true, showItems: false },
-    settled: { account: '40,000원', investAmount: '20,000원', showApplying: false, showItems: true },
-    pre_settlement: { account: '40,000원', investAmount: '20,000원', showApplying: false, showItems: true },
-    post_settlement: { account: '102,000원', investAmount: '0원', showApplying: false, showItems: false },
+    pre: { account: '100,000원', investAmount: '200,000원', showApplying: false, showItems: true },
+    applying: { account: '80,000원', investAmount: '200,000원', showApplying: true, showItems: true },
+    settled: { account: '80,000원', investAmount: '220,000원', showApplying: false, showItems: true },
+    pre_settlement: { account: '80,000원', investAmount: '220,000원', showApplying: false, showItems: true },
+    post_settlement: { account: '102,000원', investAmount: '200,000원', showApplying: false, showItems: true },
   }
   const config = phaseConfig[phase] || phaseConfig.pre
 
@@ -871,10 +930,10 @@ function AssetScreen({ onBack, nav, phase }) {
           {config.showApplying && (
             <div onClick={() => nav('history_detail')} style={{ backgroundColor: '#e8f0ff', borderRadius: 16, height: 56, padding: '0 20px 0 12px', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
               <div style={{ display: 'flex', alignItems: 'center', flex: 1, minWidth: 0 }}>
-                <img src="/product.png" alt="" style={{ width: 44, height: 33, objectFit: 'cover', flexShrink: 0 }} />
+                <img src="/a상품커버.png" alt="" style={{ width: 44, height: 33, objectFit: 'cover', flexShrink: 0 }} />
                 <span style={{ ...T.body17('semibold'), color: 'var(--color-primary-400)' }}>투자 신청중</span>
               </div>
-              <span style={{ ...T.body17('semibold'), color: 'var(--color-primary-500)' }}>60,000원</span>
+              <span style={{ ...T.body17('semibold'), color: 'var(--color-primary-500)' }}>20,000원</span>
             </div>
           )}
           <div onClick={() => nav('my_account')} style={{ backgroundColor: 'var(--color-neutral-050)', borderRadius: 16, height: 56, padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}>
@@ -897,39 +956,43 @@ function AssetScreen({ onBack, nav, phase }) {
 
         <div style={{ height: 12, backgroundColor: 'var(--color-neutral-050)' }} />
 
-        {config.showItems ? (
-          <>
-            <div style={{ padding: '24px 16px 0' }}>
-              <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-600)' }}>내 투자 상품</span>
-            </div>
-            <div style={{ paddingBottom: 24 }}>
-              {Array(1).fill(null).map((_, idx) => (
-                <div key={idx} onClick={() => nav('my_invest_detail')} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 16, cursor: 'pointer' }}>
-                  <div style={{ width: 48, height: 48, borderRadius: 16, backgroundColor: '#dae7ff', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
-                    <img src="/product.png" alt="" style={{ width: 40, height: 30, objectFit: 'cover' }} />
-                  </div>
-                  <div style={{ display: 'flex', flex: 1, minWidth: 0, gap: 12 }}>
-                    <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
-                      <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>유전지수 높은 상품</span>
-                      <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>1년 8개월 남음</span>
+        {(() => {
+          const assetProducts = (() => {
+            const b = { name: 'B 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/b상품커버.png', bgColor: '#e87477' }
+            const c = { name: 'C 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/c상품커버.png', bgColor: '#96ce68' }
+            const a = { name: 'A 투자 상품', amount: '20,000원', shares: '1주', remaining: phase === 'pre_settlement' ? '4개월 남음' : '8개월 남음', img: '/a상품커버.png', bgColor: '#dae7ff', clickable: true }
+            if (phase === 'pre' || phase === 'applying') return [b, c]
+            if (phase === 'post_settlement') return [b, c]
+            return [a, b, c]
+          })()
+          return (
+            <>
+              <div style={{ padding: '24px 16px 0' }}>
+                <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-600)' }}>내 투자 상품</span>
+              </div>
+              <div style={{ paddingBottom: 24 }}>
+                {assetProducts.map((item, idx) => (
+                  <div key={idx} onClick={item.clickable ? () => nav('my_invest_detail') : undefined}
+                    style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 16, cursor: item.clickable ? 'pointer' : 'default' }}>
+                    <div style={{ width: 48, height: 48, borderRadius: 16, backgroundColor: item.bgColor, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
+                      <img src={item.img} alt="" style={{ width: 40, height: 30, objectFit: 'cover' }} />
                     </div>
-                    <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'flex-end' }}>
-                      <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>20,000원</span>
-                      <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>1주</span>
+                    <div style={{ display: 'flex', flex: 1, minWidth: 0, gap: 12 }}>
+                      <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
+                        <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{item.name}</span>
+                        <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>{item.remaining}</span>
+                      </div>
+                      <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'flex-end' }}>
+                        <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{item.amount}</span>
+                        <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>{item.shares}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          </>
-        ) : (
-          <div style={{ padding: '24px 16px 0' }}>
-            <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-600)' }}>내 투자 상품</span>
-            <div style={{ padding: '40px 0', textAlign: 'center' }}>
-              <span style={{ ...T.body17(), color: 'var(--color-neutral-600)' }}>투자 상품이 없어요</span>
-            </div>
-          </div>
-        )}
+                ))}
+              </div>
+            </>
+          )
+        })()}
 
         <div style={{ padding: '8px 0 50px', display: 'flex', flexDirection: 'column' }}>
           {bottomMenuItems.map((item, idx) => (
@@ -952,8 +1015,8 @@ function AssetScreen({ onBack, nav, phase }) {
 // ============================================================
 function MyAccountScreen({ onBack, nav, phase }) {
   const balanceMap = {
-    pre: '100,000', applying: '40,000', settled: '40,000',
-    pre_settlement: '40,000', post_settlement: '102,000',
+    pre: '100,000', applying: '80,000', settled: '80,000',
+    pre_settlement: '80,000', post_settlement: '102,000',
   }
   const balance = balanceMap[phase] || '100,000'
 
@@ -1012,29 +1075,35 @@ function AccountDetailScreen({ onBack, phase }) {
   const tabs = ['전체', '입금', '출금']
 
   const balanceMap = {
-    pre: '100,000', applying: '40,000', settled: '40,000',
-    pre_settlement: '40,000', post_settlement: '102,000',
+    pre: '100,000', applying: '80,000', settled: '80,000',
+    pre_settlement: '80,000', post_settlement: '102,000',
   }
   const balance = balanceMap[phase] || '100,000'
 
   const allTransactions = {
     pre: [
-      { date: '5월 15일', name: '윤현우', time: '18:00', type: '입금', amount: '+ 100,000원', color: 'var(--color-primary-500)' },
+      { date: '5월 15일', name: '윤현우', time: '18:00', type: '입금', amount: '+ 300,000원', color: 'var(--color-primary-500)' },
+      { date: '5월 15일', name: 'B 투자 상품 투자 신청', time: '12:00', type: '출금', amount: '- 100,000원', color: 'var(--color-neutral-800)' },
+      { date: '5월 15일', name: 'C 투자 상품 투자 신청', time: '12:00', type: '출금', amount: '- 100,000원', color: 'var(--color-neutral-800)' },
     ],
     applying: [
-      { date: '6월 1일', name: 'A 투자 상품 투자 신청', time: '12:31', type: '출금', amount: '- 60,000원', color: 'var(--color-neutral-800)' },
-      { date: '5월 15일', name: '윤현우', time: '18:00', type: '입금', amount: '+ 100,000원', color: 'var(--color-primary-500)' },
+      { date: '6월 1일', name: 'A 투자 상품 투자 신청', time: '12:31', type: '출금', amount: '- 20,000원', color: 'var(--color-neutral-800)' },
+      { date: '5월 15일', name: '윤현우', time: '18:00', type: '입금', amount: '+ 300,000원', color: 'var(--color-primary-500)' },
+      { date: '5월 15일', name: 'B 투자 상품 투자 신청', time: '12:00', type: '출금', amount: '- 100,000원', color: 'var(--color-neutral-800)' },
+      { date: '5월 15일', name: 'C 투자 상품 투자 신청', time: '12:00', type: '출금', amount: '- 100,000원', color: 'var(--color-neutral-800)' },
     ],
     settled: [
-      { date: '6월 12일', name: 'A 투자 상품 체결 환불', time: '12:31', type: '입금', amount: '+ 40,000원', color: 'var(--color-primary-500)' },
-      { date: '6월 1일', name: 'A 투자 상품 투자 신청', time: '12:31', type: '출금', amount: '- 60,000원', color: 'var(--color-neutral-800)' },
-      { date: '5월 15일', name: '윤현우', time: '18:00', type: '입금', amount: '+ 100,000원', color: 'var(--color-primary-500)' },
+      { date: '6월 1일', name: 'A 투자 상품 투자 신청', time: '12:31', type: '출금', amount: '- 20,000원', color: 'var(--color-neutral-800)' },
+      { date: '5월 15일', name: '윤현우', time: '18:00', type: '입금', amount: '+ 300,000원', color: 'var(--color-primary-500)' },
+      { date: '5월 15일', name: 'B 투자 상품 투자 신청', time: '12:00', type: '출금', amount: '- 100,000원', color: 'var(--color-neutral-800)' },
+      { date: '5월 15일', name: 'C 투자 상품 투자 신청', time: '12:00', type: '출금', amount: '- 100,000원', color: 'var(--color-neutral-800)' },
     ],
     post_settlement: [
       { date: '12월 28일', name: 'A 투자 상품 정산금', time: '10:00', type: '입금', amount: '+ 22,000원', color: 'var(--color-primary-500)' },
-      { date: '6월 12일', name: 'A 투자 상품 체결 환불', time: '12:31', type: '입금', amount: '+ 40,000원', color: 'var(--color-primary-500)' },
-      { date: '6월 1일', name: 'A 투자 상품 투자 신청', time: '12:31', type: '출금', amount: '- 60,000원', color: 'var(--color-neutral-800)' },
-      { date: '5월 15일', name: '윤현우', time: '18:00', type: '입금', amount: '+ 100,000원', color: 'var(--color-primary-500)' },
+      { date: '6월 1일', name: 'A 투자 상품 투자 신청', time: '12:31', type: '출금', amount: '- 20,000원', color: 'var(--color-neutral-800)' },
+      { date: '5월 15일', name: '윤현우', time: '18:00', type: '입금', amount: '+ 300,000원', color: 'var(--color-primary-500)' },
+      { date: '5월 15일', name: 'B 투자 상품 투자 신청', time: '12:00', type: '출금', amount: '- 100,000원', color: 'var(--color-neutral-800)' },
+      { date: '5월 15일', name: 'C 투자 상품 투자 신청', time: '12:00', type: '출금', amount: '- 100,000원', color: 'var(--color-neutral-800)' },
     ],
   }
   const transactions = allTransactions[phase] || allTransactions[phase === 'pre_settlement' ? 'settled' : phase] || allTransactions.pre
@@ -1128,43 +1197,29 @@ function AccountDetailScreen({ onBack, phase }) {
 // Invest History Screen (투자내역 - Phase Aware)
 // ============================================================
 function InvestHistoryScreen({ onBack, nav, phase }) {
-  if (phase === 'pre') {
-    return (
-      <div className="v7-screen" style={{
-        width: '100%', height: '100dvh',
-        backgroundColor: 'var(--color-neutral-000)', position: 'relative',
-        fontFamily: 'Pretendard, -apple-system, sans-serif',
-        display: 'flex', flexDirection: 'column',
-      }}>
-        <div style={{ height: 'env(safe-area-inset-top, 0px)' }} />
-        <SubAppBar title="" onBack={onBack} />
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-          <div style={{ width: 100, height: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0.3 }}>
-            <img src="/product.png" alt="" style={{ width: 80, height: 60, objectFit: 'cover' }} />
-          </div>
-          <span style={{ ...T.body17(), color: 'var(--color-neutral-600)' }}>투자내역이 없어요</span>
-        </div>
-      </div>
-    )
-  }
-
   // 신청중인 투자 (applying phase only)
   const applyingItems = phase === 'applying' ? [
-    { name: 'A 투자 상품', desc: '20,000원 신청중' },
+    { name: 'A 투자 상품', desc: '20,000원 신청중', img: '/a상품커버.png', bgColor: '#dae7ff' },
   ] : []
 
-  // 투자내역 (체결 이후만)
+  // 투자내역
   const historyByPhase = {
+    pre: [
+      { date: '26년 6월 12일', items: [{ name: 'B 투자 상품', desc: '100,000원 체결 완료', img: '/b상품커버.png', bgColor: '#e87477' }] },
+      { date: '26년 6월 12일', items: [{ name: 'C 투자 상품', desc: '100,000원 체결 완료', img: '/c상품커버.png', bgColor: '#96ce68' }] },
+    ],
     settled: [
-      { date: '26년 6월 12일', items: [{ name: '유전지수 높은 상품', desc: '1주 체결 완료', clickable: true }] },
+      { date: '26년 6월 12일', items: [{ name: 'A 투자 상품', desc: '20,000원 체결 완료', clickable: true, detailType: 'settled', img: '/a상품커버.png', bgColor: '#dae7ff' }] },
+      { date: '26년 6월 12일', items: [{ name: 'B 투자 상품', desc: '100,000원 체결 완료', img: '/b상품커버.png', bgColor: '#e87477' }] },
+      { date: '26년 6월 12일', items: [{ name: 'C 투자 상품', desc: '100,000원 체결 완료', img: '/c상품커버.png', bgColor: '#96ce68' }] },
     ],
     post_settlement: [
-      { date: '28년 12월 1일', items: [{ name: '유전지수 높은 상품', desc: '1주 정산 완료', clickable: true }] },
-      { date: '26년 6월 12일', items: [{ name: '유전지수 높은 상품', desc: '1주 체결 완료', clickable: true }] },
+      { date: '26년 6월 12일', items: [{ name: 'B 투자 상품', desc: '100,000원 체결 완료', img: '/b상품커버.png', bgColor: '#e87477' }] },
+      { date: '26년 6월 12일', items: [{ name: 'C 투자 상품', desc: '100,000원 체결 완료', img: '/c상품커버.png', bgColor: '#96ce68' }] },
     ],
   }
 
-  const data = historyByPhase[phase] || (phase === 'pre_settlement' ? historyByPhase.settled : [])
+  const data = historyByPhase[phase] || (phase === 'pre_settlement' ? historyByPhase.settled : historyByPhase.pre)
 
   return (
     <div className="v7-screen" style={{
@@ -1190,11 +1245,11 @@ function InvestHistoryScreen({ onBack, nav, phase }) {
                   style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '16px', cursor: 'pointer' }}>
                   <div style={{
                     width: 44, height: 44, borderRadius: 16,
-                    backgroundColor: '#dae7ff',
+                    backgroundColor: item.bgColor || '#dae7ff',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     overflow: 'hidden', flexShrink: 0,
                   }}>
-                    <img src="/product.png" alt="" style={{ width: 44, height: 33, objectFit: 'cover' }} />
+                    <img src={item.img || '/a상품커버.png'} alt="" style={{ width: 44, height: 33, objectFit: 'cover' }} />
                   </div>
                   <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
                     <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{item.name}</span>
@@ -1220,15 +1275,15 @@ function InvestHistoryScreen({ onBack, nav, phase }) {
                     <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>{group.date}</span>
                   </div>
                   {group.items.map((item, iIdx) => (
-                    <div key={iIdx} onClick={item.clickable ? () => nav('history_detail') : undefined}
+                    <div key={iIdx} onClick={item.clickable ? () => nav('history_detail', item.detailType) : undefined}
                       style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '16px', cursor: item.clickable ? 'pointer' : 'default' }}>
                       <div style={{
                         width: 44, height: 44, borderRadius: 16,
-                        backgroundColor: '#dae7ff',
+                        backgroundColor: item.bgColor || '#dae7ff',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         overflow: 'hidden', flexShrink: 0,
                       }}>
-                        <img src="/product.png" alt="" style={{ width: 44, height: 33, objectFit: 'cover' }} />
+                        <img src={item.img || '/a상품커버.png'} alt="" style={{ width: 44, height: 33, objectFit: 'cover' }} />
                       </div>
                       <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
                         <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{item.name}</span>
@@ -1249,9 +1304,9 @@ function InvestHistoryScreen({ onBack, nav, phase }) {
 // ============================================================
 // Invest History Detail Screen (투자내역 상세 - 체결)
 // ============================================================
-function InvestHistoryDetailScreen({ onBack, nav, phase }) {
+function InvestHistoryDetailScreen({ onBack, nav, phase, detailType }) {
   const isApplying = phase === 'applying'
-  const isPostSettlement = phase === 'post_settlement'
+  const isPostSettlement = detailType === 'post_settlement' || (!detailType && phase === 'post_settlement')
 
   const timelineSteps = isApplying ? [
     { label: '신청', sub: '취소 가능', date: '26.06.01', done: true },
@@ -1266,8 +1321,8 @@ function InvestHistoryDetailScreen({ onBack, nav, phase }) {
       title: '신청 내역',
       rows: [
         { label: '신청 시간', value: '2026.06.01 22:21' },
-        { label: '신청 금액', value: '60,000원' },
-        { label: '신청 수량', value: '3주' },
+        { label: '신청 금액', value: '20,000원' },
+        { label: '신청 수량', value: '1주' },
         { label: '체결 예정일', value: '26.06.12' },
       ],
     },
@@ -1293,7 +1348,7 @@ function InvestHistoryDetailScreen({ onBack, nav, phase }) {
         { label: '농가 장려금', value: '-5,000,000원' },
         { label: '운영 성과금', value: '-5,000,000원' },
         { label: '전체 수익금 (21,876주)', value: '+10,000,000원', color: '#f76868' },
-        { label: '내 수익금 (3주)', value: '+2,000원', color: '#f76868' },
+        { label: '내 수익금 (1주)', value: '+2,000원', color: '#f76868' },
       ],
     },
   ] : [
@@ -1303,15 +1358,14 @@ function InvestHistoryDetailScreen({ onBack, nav, phase }) {
         { label: '체결 시간', value: '2026.06.01 22:21' },
         { label: '체결 금액', value: '20,000원' },
         { label: '체결 수량', value: '1주' },
-        { label: '환불 금액', value: '40,000원' },
       ],
     },
     {
       title: '신청 내역',
       rows: [
         { label: '신청 시간', value: '2026.06.01 22:21' },
-        { label: '신청 금액', value: '60,000원' },
-        { label: '신청 수량', value: '3주' },
+        { label: '신청 금액', value: '20,000원' },
+        { label: '신청 수량', value: '1주' },
         { label: '체결 예정일', value: '26.06.12' },
       ],
     },
@@ -1333,7 +1387,7 @@ function InvestHistoryDetailScreen({ onBack, nav, phase }) {
         <div style={{ padding: '12px 16px 28px', display: 'flex', flexDirection: 'column', gap: 8 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <div style={{ width: 36, height: 36, borderRadius: 12, backgroundColor: '#dae7ff', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
-              <img src="/product.png" alt="" style={{ width: 36, height: 27, objectFit: 'cover' }} />
+              <img src="/a상품커버.png" alt="" style={{ width: 36, height: 27, objectFit: 'cover' }} />
             </div>
             <span style={{ ...T.body17(), color: 'var(--color-neutral-700)' }}>A 투자 상품</span>
           </div>
@@ -1447,7 +1501,7 @@ function SettlementHistoryScreen({ onBack, phase, nav }) {
   const hasSettlement = phase === 'post_settlement'
 
   const settlementData = hasSettlement ? [
-    { date: '28년 12월 1일', name: '유전지수 높은 상품', shares: '1주 정산', amount: '22,000원', diff: '2,000', rate: '20.00%', type: 'profit' },
+    { date: '28년 12월 1일', name: 'A 투자 상품', shares: '1주 정산', amount: '22,000원', diff: '2,000', rate: '20.00%', type: 'profit', img: '/a상품커버.png', bgColor: '#dae7ff' },
   ] : []
 
   if (!hasSettlement) {
@@ -1462,7 +1516,7 @@ function SettlementHistoryScreen({ onBack, phase, nav }) {
         <SubAppBar title="" onBack={onBack} />
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
           <div style={{ width: 100, height: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0.3 }}>
-            <img src="/product.png" alt="" style={{ width: 80, height: 60, objectFit: 'cover' }} />
+            <img src="/a상품커버.png" alt="" style={{ width: 80, height: 60, objectFit: 'cover' }} />
           </div>
           <span style={{ ...T.body17(), color: 'var(--color-neutral-600)' }}>정산내역이 없어요</span>
         </div>
@@ -1526,8 +1580,8 @@ function SettlementHistoryScreen({ onBack, phase, nav }) {
               </div>
               <div onClick={() => nav('history_detail')} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: 16, cursor: 'pointer' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, flex: 1, minWidth: 0 }}>
-                  <div style={{ width: 44, height: 44, borderRadius: 16, backgroundColor: '#dae7ff', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
-                    <img src="/product.png" alt="" style={{ width: 44, height: 33, objectFit: 'cover' }} />
+                  <div style={{ width: 44, height: 44, borderRadius: 16, backgroundColor: item.bgColor || '#dae7ff', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
+                    <img src={item.img || '/a상품커버.png'} alt="" style={{ width: 44, height: 33, objectFit: 'cover' }} />
                   </div>
                   <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
                     <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{item.name}</span>
@@ -1577,10 +1631,10 @@ function MyInvestDetailScreen({ onBack, nav, phase, initialTab }) {
   const filteredCalves = calfFilter === '전체' ? calfData : calfData.filter(c => c.status === calfFilter)
 
   const investHistoryItems = isPostSettlement ? [
-    { date: '28년 12월 18일', items: [{ name: 'A 투자 상품', desc: '20,000원 정산 완료' }] },
-    { date: '26년 6월 12일', items: [{ name: 'A 투자 상품', desc: '20,000원 체결 완료' }] },
+    { date: '28년 12월 18일', items: [{ name: 'A 투자 상품', desc: '20,000원 정산 완료', img: '/a상품커버.png', bgColor: '#dae7ff' }] },
+    { date: '26년 6월 12일', items: [{ name: 'A 투자 상품', desc: '20,000원 체결 완료', img: '/a상품커버.png', bgColor: '#dae7ff' }] },
   ] : [
-    { date: '26년 6월 12일', items: [{ name: 'A 투자 상품', desc: '20,000원 체결 완료' }] },
+    { date: '26년 6월 12일', items: [{ name: 'A 투자 상품', desc: '20,000원 체결 완료', img: '/a상품커버.png', bgColor: '#dae7ff' }] },
   ]
 
   const bottomMenuItems = [
@@ -1637,7 +1691,7 @@ function MyInvestDetailScreen({ onBack, nav, phase, initialTab }) {
               </div>
             </div>
             <div style={{ width: 200, height: 200, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', flexShrink: 0 }}>
-              <img src="/product.png" alt="" style={{ width: 200, height: 200, objectFit: 'contain' }} />
+              <img src="/a상품커버.png" alt="" style={{ width: 200, height: 200, objectFit: 'contain' }} />
             </div>
           </div>
         </div>
@@ -1706,7 +1760,7 @@ function MyInvestDetailScreen({ onBack, nav, phase, initialTab }) {
         ) : (
           <div>
             {/* 내 투자금 + Progress Bar */}
-            <div style={{ padding: '24px 16px 0' }}>
+            <div style={{ padding: '24px 16px 24px' }}>
               <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>내 투자금</span>
               <div style={{ ...T.headline28('bold'), color: 'var(--color-neutral-900)', marginTop: 4 }}>20,000원</div>
               <div style={{ display: 'flex', gap: 6, marginTop: 12 }}>
@@ -1789,8 +1843,8 @@ function MyInvestDetailScreen({ onBack, nav, phase, initialTab }) {
                   </div>
                   {group.items.map((item, iIdx) => (
                     <div key={iIdx} onClick={() => nav('history_detail')} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 16, cursor: 'pointer' }}>
-                      <div style={{ width: 44, height: 44, borderRadius: 16, backgroundColor: '#dae7ff', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
-                        <img src="/product.png" alt="" style={{ width: 44, height: 33, objectFit: 'cover' }} />
+                      <div style={{ width: 44, height: 44, borderRadius: 16, backgroundColor: item.bgColor || '#dae7ff', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
+                        <img src={item.img || '/a상품커버.png'} alt="" style={{ width: 44, height: 33, objectFit: 'cover' }} />
                       </div>
                       <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
                         <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{item.name}</span>
