@@ -1434,10 +1434,10 @@ function InvestHistoryDetailScreen({ onBack, nav, phase, detailType }) {
         </div>}
 
         <div style={{ padding: '0 16px 24px', display: 'flex', gap: 8 }}>
-          <div style={{ flex: 1, backgroundColor: 'var(--color-neutral-050)', borderRadius: 16, minHeight: 56, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+          <div onClick={() => nav(isApplying ? 'product_detail' : 'my_invest_detail')} style={{ flex: 1, backgroundColor: 'var(--color-neutral-050)', borderRadius: 16, minHeight: 56, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
             <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-700)' }}>상품 정보</span>
           </div>
-          <div style={{ flex: 1, backgroundColor: 'var(--color-neutral-050)', borderRadius: 16, minHeight: 56, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+          <div onClick={() => nav(isPostSettlement ? 'my_account' : isApplying ? 'product_detail' : 'my_invest_detail')} style={{ flex: 1, backgroundColor: 'var(--color-neutral-050)', borderRadius: 16, minHeight: 56, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
             <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-700)' }}>{isPostSettlement ? '내 계좌' : '추가 투자'}</span>
           </div>
         </div>
