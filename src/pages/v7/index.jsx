@@ -116,7 +116,7 @@ export default function V7App() {
   const handleJumpToPreSettlement = () => { setScreen('push_pre_settlement'); setHistory([]) }
   const handlePushPreSettlementTap = () => { setPhase('pre_settlement'); setScreen('home'); setHistory([]); setMessageDismissed(false) }
   const handleJumpToPostSettlement = () => { setScreen('push_post_settlement'); setHistory([]) }
-  const handlePushPostSettlementTap = () => { setPhase('post_settlement'); setScreen('my_invest_detail'); setHistory(['home']); setMessageDismissed(false) }
+  const handlePushPostSettlementTap = () => { setPhase('post_settlement'); setScreen('home'); setHistory([]); setMessageDismissed(false) }
 
   const dismissMessage = useCallback(() => setMessageDismissed(true), [])
 
@@ -204,7 +204,7 @@ function DynamicMessage({ phase, dismissed, onDismiss, nav }) {
 
   const handleTap = () => {
     if (!nav) return
-    if (phase === 'pre_settlement') nav('my_invest_detail', '내 투자')
+    if (phase === 'pre_settlement' || phase === 'post_settlement') nav('my_invest_detail', '내 투자')
     else nav('history_detail')
   }
 
