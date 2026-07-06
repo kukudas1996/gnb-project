@@ -204,8 +204,7 @@ function DynamicMessage({ phase, dismissed, onDismiss, nav }) {
 
   const handleTap = () => {
     if (!nav) return
-    if (phase === 'pre_settlement') nav('my_invest_detail', '내 투자')
-    else if (phase === 'post_settlement') nav('history_detail', 'post_settlement')
+    if (phase === 'pre_settlement' || phase === 'post_settlement') nav('my_invest_detail', '내 투자')
     else nav('history_detail')
   }
 
