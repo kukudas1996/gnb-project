@@ -116,7 +116,7 @@ export default function V7App() {
   const handleJumpToPreSettlement = () => { setScreen('push_pre_settlement'); setHistory([]) }
   const handlePushPreSettlementTap = () => { setPhase('pre_settlement'); setScreen('home'); setHistory([]); setMessageDismissed(false) }
   const handleJumpToPostSettlement = () => { setScreen('push_post_settlement'); setHistory([]) }
-  const handlePushPostSettlementTap = () => { setPhase('post_settlement'); setScreen('home'); setHistory([]); setMessageDismissed(false) }
+  const handlePushPostSettlementTap = () => { setPhase('post_settlement'); setScreen('my_invest_detail'); setHistory(['home']); setMessageDismissed(false) }
 
   const dismissMessage = useCallback(() => setMessageDismissed(true), [])
 
@@ -369,7 +369,7 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
                     </div>
                   ))}
                   {/* 전체보기 slide */}
-                  <div onClick={() => nav('my_invest_detail')}
+                  <div onClick={() => nav('asset')}
                     style={{ flex: '0 0 100%', scrollSnapAlign: 'start', padding: '16px 20px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-600)' }}>전체보기 &gt;</span>
                   </div>
@@ -1214,6 +1214,8 @@ function InvestHistoryScreen({ onBack, nav, phase }) {
       { date: '26년 6월 12일', items: [{ name: 'C 투자 상품', desc: '100,000원 체결 완료', img: '/c상품커버.png', bgColor: '#96ce68' }] },
     ],
     post_settlement: [
+      { date: '28년 12월 18일', items: [{ name: 'A 투자 상품', desc: '20,000원 정산 완료', clickable: true, detailType: 'post_settlement', img: '/a상품커버.png', bgColor: '#dae7ff' }] },
+      { date: '26년 6월 12일', items: [{ name: 'A 투자 상품', desc: '20,000원 체결 완료', clickable: true, detailType: 'settled', img: '/a상품커버.png', bgColor: '#dae7ff' }] },
       { date: '26년 6월 12일', items: [{ name: 'B 투자 상품', desc: '100,000원 체결 완료', img: '/b상품커버.png', bgColor: '#e87477' }] },
       { date: '26년 6월 12일', items: [{ name: 'C 투자 상품', desc: '100,000원 체결 완료', img: '/c상품커버.png', bgColor: '#96ce68' }] },
     ],
@@ -1578,7 +1580,7 @@ function SettlementHistoryScreen({ onBack, phase, nav }) {
               <div style={{ padding: '0 16px', height: 21 }}>
                 <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>{item.date}</span>
               </div>
-              <div onClick={() => nav('history_detail')} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: 16, cursor: 'pointer' }}>
+              <div onClick={() => nav('my_invest_detail', '내 투자')} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: 16, cursor: 'pointer' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, flex: 1, minWidth: 0 }}>
                   <div style={{ width: 44, height: 44, borderRadius: 16, backgroundColor: item.bgColor || '#dae7ff', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
                     <img src={item.img || '/a상품커버.png'} alt="" style={{ width: 44, height: 33, objectFit: 'cover' }} />
