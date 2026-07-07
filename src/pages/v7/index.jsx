@@ -526,7 +526,7 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
       {/* TabBar */}
       <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, backgroundColor: 'var(--color-neutral-000)', borderTop: '1px solid var(--color-neutral-050)', zIndex: 20 }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', padding: '4px 20px 0' }}>
-          <TabBarItem icon="home" label="홈" selected />
+          <TabBarItem icon="home" label="투자" selected />
           <TabBarItem icon="shopping" label="쇼핑" onClick={() => goTab('shopping')} />
           <TabBarItem icon="feed" label="피드" onClick={() => goTab('feed')} />
           <TabBarItem icon="my" label="마이" onClick={() => goTab('my')} />
@@ -2040,7 +2040,7 @@ function FeedScreen({ goTab }) {
       {/* TabBar */}
       <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, backgroundColor: 'var(--color-neutral-000)', borderTop: '1px solid var(--color-neutral-050)', zIndex: 20 }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', padding: '4px 20px 0' }}>
-          <TabBarItem icon="home" label="홈" onClick={() => goTab('home')} />
+          <TabBarItem icon="home" label="투자" onClick={() => goTab('home')} />
           <TabBarItem icon="shopping" label="쇼핑" onClick={() => goTab('shopping')} />
           <TabBarItem icon="feed" label="피드" selected />
           <TabBarItem icon="my" label="마이" onClick={() => goTab('my')} />
@@ -2123,7 +2123,7 @@ function ShoppingScreen({ goTab }) {
       </div>
       <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, backgroundColor: 'var(--color-neutral-000)', borderTop: '1px solid var(--color-neutral-050)', zIndex: 20 }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', padding: '4px 20px 0' }}>
-          <TabBarItem icon="home" label="홈" onClick={() => goTab('home')} />
+          <TabBarItem icon="home" label="투자" onClick={() => goTab('home')} />
           <TabBarItem icon="shopping" label="쇼핑" selected />
           <TabBarItem icon="feed" label="피드" onClick={() => goTab('feed')} />
           <TabBarItem icon="my" label="마이" onClick={() => goTab('my')} />
@@ -2234,7 +2234,7 @@ function MyPageScreen({ nav, goTab }) {
       </div>
       <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, backgroundColor: 'var(--color-neutral-000)', borderTop: '1px solid var(--color-neutral-050)', zIndex: 20 }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', padding: '4px 20px 0' }}>
-          <TabBarItem icon="home" label="홈" onClick={() => goTab('home')} />
+          <TabBarItem icon="home" label="투자" onClick={() => goTab('home')} />
           <TabBarItem icon="shopping" label="쇼핑" onClick={() => goTab('shopping')} />
           <TabBarItem icon="feed" label="피드" onClick={() => goTab('feed')} />
           <TabBarItem icon="my" label="마이" selected />
