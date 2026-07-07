@@ -337,7 +337,7 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
             </div>
           )}
           {/* 빠른 접근 버튼 */}
-          <div style={{ padding: '12px 16px 0', display: 'flex', gap: 8 }}>
+          <div style={{ padding: '20px 16px 0', display: 'flex', gap: 8 }}>
             {[
               { label: '투자 내역', icon: '/icons/Graphic/calendar.svg', action: () => nav('history') },
               { label: '내 계좌', icon: '/icons/Graphic/moneyBag.svg', action: () => nav('my_account') },
@@ -357,7 +357,7 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
           {(() => {
             const products = investProducts[phase] || investProducts.pre
             return (
-              <div style={{ padding: '4px 0' }}>
+              <div style={{ padding: '8px 0' }}>
                 {products.map((item, idx) => (
                   <div key={idx} onClick={item.clickable ? () => nav('my_invest_detail') : undefined}
                     style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', cursor: item.clickable ? 'pointer' : 'default' }}>
