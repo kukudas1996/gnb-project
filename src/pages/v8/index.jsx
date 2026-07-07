@@ -238,15 +238,6 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
   const bannerCount = 5
   const [showReleaseSheet, setShowReleaseSheet] = useState(false)
   const [showReleaseToast, setShowReleaseToast] = useState(false)
-  const scrollRef = useRef(null)
-  const [activeSlide, setActiveSlide] = useState(0)
-
-  const handleScroll = useCallback(() => {
-    if (!scrollRef.current) return
-    const { scrollLeft, clientWidth } = scrollRef.current
-    const idx = Math.round(scrollLeft / clientWidth)
-    setActiveSlide(idx)
-  }, [])
 
   const investProducts = {
     pre: [
@@ -333,58 +324,9 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
               <ChevronRightIcon size={28} color="var(--color-neutral-400)" />
             </div>
           </div>
-          {/* 투자 아이템 스와이프 */}
-          {(() => {
-            const products = investProducts[phase] || investProducts.pre
-            const totalSlides = products.length + 1
-            return (
-              <>
-                <div
-                  ref={scrollRef}
-                  onScroll={handleScroll}
-                  className="v7-hide-scrollbar"
-                  style={{
-                    display: 'flex', overflowX: 'auto', scrollSnapType: 'x mandatory',
-                    WebkitOverflowScrolling: 'touch',
-                  }}
-                >
-                  {products.map((item, idx) => (
-                    <div key={idx} onClick={item.clickable ? () => nav('my_invest_detail') : undefined}
-                      style={{ flex: '0 0 100%', scrollSnapAlign: 'start', padding: '16px 20px', cursor: item.clickable ? 'pointer' : 'default' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                        <div style={{ width: 48, height: 48, borderRadius: 16, backgroundColor: item.bgColor, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
-                          <img src={item.img} alt="" style={{ width: 40, height: 30, objectFit: 'cover' }} />
-                        </div>
-                        <div style={{ display: 'flex', flex: 1, minWidth: 0, gap: 12 }}>
-                          <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
-                            <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{item.name}</span>
-                            <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>{item.remaining}</span>
-                          </div>
-                          <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'flex-end', textAlign: 'right' }}>
-                            <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{item.amount}</span>
-                            <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>{item.shares}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                  {/* 전체보기 slide */}
-                  <div onClick={() => nav('asset')}
-                    style={{ flex: '0 0 100%', scrollSnapAlign: 'start', padding: '16px 20px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-600)' }}>전체보기 &gt;</span>
-                  </div>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: 12, gap: 6 }}>
-                  {Array(totalSlides).fill(null).map((_, i) => (
-                    <div key={i} style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: i === activeSlide ? 'var(--color-neutral-800)' : 'var(--color-neutral-200)' }} />
-                  ))}
-                </div>
-              </>
-            )
-          })()}
           {/* 투자 신청중 */}
           {config.showApplying && (
-            <div style={{ padding: '0 16px' }}>
+            <div style={{ padding: '12px 16px 0' }}>
               <div onClick={() => nav('history_detail')} style={{ backgroundColor: '#e8f0ff', borderRadius: 16, height: 56, padding: '0 20px 0 12px', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
                 <div style={{ display: 'flex', alignItems: 'center', flex: 1, minWidth: 0 }}>
                   <img src="/a상품커버.png" alt="" style={{ width: 44, height: 33, objectFit: 'cover', flexShrink: 0 }} />
@@ -395,7 +337,7 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
             </div>
           )}
           {/* 빠른 접근 버튼 */}
-          <div style={{ padding: '4px 16px 12px', display: 'flex', gap: 8 }}>
+          <div style={{ padding: '20px 16px 0', display: 'flex', gap: 8 }}>
             {[
               { label: '투자 내역', icon: '/icons/Graphic/calendar.svg', action: () => nav('history') },
               { label: '내 계좌', icon: '/icons/Graphic/moneyBag.svg', action: () => nav('my_account') },
@@ -403,13 +345,43 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
             ].map((btn, idx) => (
               <div key={idx} onClick={btn.action} style={{
                 flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
-                backgroundColor: 'var(--color-neutral-050)', borderRadius: 16, padding: '16px 0',
+                backgroundColor: 'var(--color-neutral-050)', borderRadius: 16, padding: '12px 0',
                 cursor: 'pointer',
               }}>
                 <img src={btn.icon} alt="" style={{ width: 28, height: 28 }} />
                 <span style={{ ...T.label13('semibold'), color: 'var(--color-neutral-700)' }}>{btn.label}</span>
               </div>
             ))}
+          </div>
+          {/* 투자 상품 리스트 */}
+          {(() => {
+            const products = investProducts[phase] || investProducts.pre
+            return (
+              <div style={{ padding: '8px 0' }}>
+                {products.map((item, idx) => (
+                  <div key={idx} onClick={item.clickable ? () => nav('my_invest_detail') : undefined}
+                    style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', cursor: item.clickable ? 'pointer' : 'default' }}>
+                    <div style={{ width: 48, height: 48, borderRadius: 16, backgroundColor: item.bgColor, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
+                      <img src={item.img} alt="" style={{ width: 40, height: 30, objectFit: 'cover' }} />
+                    </div>
+                    <div style={{ display: 'flex', flex: 1, minWidth: 0, gap: 12 }}>
+                      <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
+                        <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{item.name}</span>
+                        <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>{item.remaining}</span>
+                      </div>
+                      <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'flex-end', textAlign: 'right' }}>
+                        <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{item.amount}</span>
+                        <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>{item.shares}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )
+          })()}
+          {/* 자세히 보기 */}
+          <div onClick={() => nav('asset')} style={{ height: 52, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+            <span style={{ ...T.body17(), color: 'var(--color-neutral-600)' }}>자세히 보기</span>
           </div>
         </div>
 
@@ -943,7 +915,7 @@ function AssetScreen({ onBack, nav, phase }) {
         )}
 
         {/* 빠른 접근 버튼 */}
-        <div style={{ padding: '16px 16px 0', display: 'flex', gap: 8 }}>
+        <div style={{ padding: '16px 16px 20px', display: 'flex', gap: 8 }}>
           {[
             { label: '투자 내역', icon: '/icons/Graphic/calendar.svg', action: () => nav('history') },
             { label: '내 계좌', icon: '/icons/Graphic/moneyBag.svg', action: () => nav('my_account') },
@@ -1768,7 +1740,7 @@ function MyInvestDetailScreen({ onBack, nav, phase, initialTab }) {
         ) : (
           <div>
             {/* 내 투자금 + Progress Bar */}
-            <div style={{ padding: '24px 16px 24px' }}>
+            <div style={{ padding: '24px 16px 32px' }}>
               <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>내 투자금</span>
               <div style={{ ...T.headline28('bold'), color: 'var(--color-neutral-900)', marginTop: 4 }}>20,000원</div>
               <div style={{ display: 'flex', gap: 6, marginTop: 12 }}>

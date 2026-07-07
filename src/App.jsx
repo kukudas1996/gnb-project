@@ -8,8 +8,7 @@ const versions = [
   { key: 'v5', label: 'V5', desc: '주문형 투자 신청 및 내역' },
   { key: 'v6', label: 'V6', desc: '모바일 웹 버전 투자 플로우' },
   { key: 'v7', label: 'V7', desc: 'UI 고도화 버전' },
-  { key: 'v8', label: 'V8', desc: '빠른 접근 버튼 추가' },
-  { key: 'v9', label: 'V9', desc: '홈 리스트형 + 퀵버튼 개선' },
+  { key: 'v8', label: 'V8', desc: '홈 리스트형 + 퀵버튼' },
 ]
 
 function HomePage() {
