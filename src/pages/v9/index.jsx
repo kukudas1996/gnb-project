@@ -339,16 +339,17 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
           {/* 빠른 접근 버튼 */}
           <div style={{ padding: '12px 16px 0', display: 'flex', gap: 8 }}>
             {[
-              { label: '투자 내역', action: () => nav('history') },
-              { label: '내 계좌', action: () => nav('my_account') },
-              { label: '정산 내역', action: () => nav('settlement_history') },
+              { label: '투자 내역', icon: '/icons/Graphic/calendar.svg', action: () => nav('history') },
+              { label: '내 계좌', icon: '/icons/Graphic/moneyBag.svg', action: () => nav('my_account') },
+              { label: '정산 내역', icon: '/icons/Graphic/flatPaper.svg', action: () => nav('settlement_history') },
             ].map((btn, idx) => (
               <div key={idx} onClick={btn.action} style={{
-                flex: 1, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                backgroundColor: 'var(--color-neutral-000)', border: '1px solid var(--color-neutral-200)',
-                borderRadius: 12, cursor: 'pointer',
+                flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
+                backgroundColor: 'var(--color-neutral-050)', borderRadius: 16, padding: '12px 0',
+                cursor: 'pointer',
               }}>
-                <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-700)' }}>{btn.label}</span>
+                <img src={btn.icon} alt="" style={{ width: 28, height: 28 }} />
+                <span style={{ ...T.label13('semibold'), color: 'var(--color-neutral-700)' }}>{btn.label}</span>
               </div>
             ))}
           </div>
@@ -914,7 +915,7 @@ function AssetScreen({ onBack, nav, phase }) {
         )}
 
         {/* 빠른 접근 버튼 */}
-        <div style={{ padding: '16px 16px 0', display: 'flex', gap: 8 }}>
+        <div style={{ padding: '16px 16px 20px', display: 'flex', gap: 8 }}>
           {[
             { label: '투자 내역', icon: '/icons/Graphic/calendar.svg', action: () => nav('history') },
             { label: '내 계좌', icon: '/icons/Graphic/moneyBag.svg', action: () => nav('my_account') },
