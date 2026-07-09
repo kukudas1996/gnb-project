@@ -254,7 +254,7 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
       { name: 'C 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/c상품커버.png', bgColor: '#96ce68' },
     ],
     pre_settlement: [
-      { name: 'A 투자 상품', amount: '20,000원', shares: '1주', remaining: '4개월 남음', img: '/a상품커버.png', bgColor: '#dae7ff', clickable: true },
+      { name: 'A 투자 상품', amount: '20,000원', shares: '1주', remaining: '7일 남음', img: '/a상품커버.png', bgColor: '#dae7ff', clickable: true },
       { name: 'B 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/b상품커버.png', bgColor: '#e87477' },
       { name: 'C 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/c상품커버.png', bgColor: '#96ce68' },
     ],
@@ -316,58 +316,49 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
 
         {/* 모집 중인 상품 or 출시 예정 상품 */}
         {(phase === 'settled' || phase === 'pre_settlement' || phase === 'post_settlement') ? (
-          <div style={{ padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: 16 }}>
-            <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>출시 예정 상품</span>
+          <div>
+            <div style={{ padding: '24px 16px 0' }}>
+              <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>출시 예정 상품</span>
+            </div>
+            <div style={{ padding: '16px 16px 24px' }}>
             {releaseAlertDone ? (
-              <div style={{ borderRadius: 20, overflow: 'hidden', backgroundColor: 'var(--color-neutral-100)', padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-                  <img src="/출시예정상품이미지.png" alt="" style={{ width: 80, height: 60, objectFit: 'cover', opacity: 0.5, flexShrink: 0 }} />
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                    <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)', lineHeight: '24px' }}>새로운 투자 상품이{'\n'}출시될 예정이에요</span>
-                    <span style={{ ...T.body15(), color: 'var(--color-neutral-500)' }}>134명 알림 신청중</span>
+              <div style={{ borderRadius: 20, overflow: 'hidden', backgroundColor: 'var(--color-neutral-050)', padding: '16px 20px 20px', display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div style={{ width: 88, height: 88, borderRadius: 0, overflow: 'hidden', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <img src="/출시예정상품이미지.png" alt="" style={{ width: 88, height: 88, objectFit: 'cover', opacity: 0.5 }} />
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 4 }}>
+                    <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)', lineHeight: '26px', whiteSpace: 'pre-line' }}>{'새로운 투자 상품이\n출시될 예정이에요'}</span>
+                    <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>134명 알림 신청중</span>
                   </div>
                 </div>
                 <div style={{
-                  width: '100%', height: 48, borderRadius: 14,
-                  backgroundColor: 'var(--color-neutral-050)', border: '1px solid var(--color-neutral-200)',
+                  width: '100%', height: 40, borderRadius: 12,
+                  backgroundColor: 'var(--color-neutral-100)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  ...T.body17('semibold'), color: 'var(--color-neutral-500)',
+                  ...T.body15('semibold'), color: 'var(--color-neutral-500)',
                 }}>출시 알림 신청 완료</div>
               </div>
             ) : (
-              <div style={{ borderRadius: 20, overflow: 'hidden', backgroundColor: 'var(--color-neutral-100)', position: 'relative', display: 'flex', flexDirection: 'column' }}>
-                {/* 출시 예정 시기 뱃지 */}
-                <div style={{ padding: '16px 16px 0', display: 'flex', alignItems: 'center', gap: 8, zIndex: 1 }}>
-                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, backgroundColor: 'var(--color-neutral-000)', borderRadius: 40, padding: '5px 12px 5px 8px' }}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-900)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    <span style={{ fontSize: 14, fontWeight: 500, lineHeight: '20px', color: 'var(--color-neutral-900)', whiteSpace: 'nowrap' }}>8월 중 출시 예정</span>
+              <div style={{ borderRadius: 20, overflow: 'hidden', backgroundColor: 'var(--color-neutral-050)', padding: '16px 20px 20px', display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div style={{ width: 88, height: 88, borderRadius: 0, overflow: 'hidden', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <img src="/출시예정상품이미지.png" alt="" style={{ width: 88, height: 88, objectFit: 'cover', opacity: 0.5 }} />
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 4 }}>
+                    <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)', lineHeight: '26px', whiteSpace: 'pre-line' }}>{'새로운 투자 상품이\n출시될 예정이에요'}</span>
+                    <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>134명 알림 신청중</span>
                   </div>
                 </div>
-                {/* 상품 이미지 placeholder */}
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '24px 0' }}>
-                  <img src="/출시예정상품이미지.png" alt="" style={{ width: 180, height: 130, objectFit: 'cover', opacity: 0.5 }} />
-                </div>
-                {/* 알림 신청 인원 뱃지 */}
-                <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '0 16px 8px' }}>
-                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, backgroundColor: 'rgba(255,255,255,0.64)', border: '1px solid rgba(255,255,255,0.8)', borderRadius: 16, padding: '5px 12px' }}>
-                    <span style={{ fontSize: 16 }}>🐮</span>
-                    <span style={{ fontSize: 14, fontWeight: 500, lineHeight: '20px', color: 'var(--color-neutral-800)', whiteSpace: 'nowrap' }}>134명 알림 신청중</span>
-                  </div>
-                </div>
-                {/* 하단 정보 카드 */}
-                <div style={{ margin: '0 8px 8px', backgroundColor: 'var(--color-neutral-000)', borderRadius: 16, padding: 20, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
-                  <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)', textAlign: 'center', lineHeight: '28px' }}>
-                    새로운 한우 투자 상품이<br />곧 출시될 예정이에요
-                  </div>
-                  <div onClick={() => setShowReleaseSheet(true)} style={{
-                    width: '100%', height: 48, borderRadius: 14,
-                    backgroundColor: 'var(--color-primary-500)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    ...T.body17('semibold'), color: '#fff', cursor: 'pointer',
-                  }}>출시 알림 받기</div>
-                </div>
+                <div onClick={() => setShowReleaseSheet(true)} style={{
+                  width: '100%', height: 40, borderRadius: 12,
+                  backgroundColor: 'var(--color-primary-500)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  ...T.body15('semibold'), color: '#fff', cursor: 'pointer',
+                }}>출시 알림 받기</div>
               </div>
             )}
+            </div>
           </div>
         ) : (
           <div style={{ padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -444,7 +435,7 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
           )}
           {/* 계좌 잔액 */}
           <div style={{ padding: '12px 16px 0' }}>
-            <div style={{ backgroundColor: 'var(--color-neutral-050)', borderRadius: 12, padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div onClick={() => nav('my_account')} style={{ backgroundColor: 'var(--color-neutral-050)', borderRadius: 12, padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}>
               <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>계좌 잔액</span>
               <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-800)' }}>{config.account}</span>
             </div>
@@ -524,7 +515,7 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
       <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, backgroundColor: 'var(--color-neutral-000)', borderTop: '1px solid var(--color-neutral-050)', zIndex: 20 }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', padding: '4px 20px 0' }}>
           <TabBarItem icon="home" label="투자" selected />
-          <TabBarItem icon="shopping" label="쇼핑" onClick={() => goTab('shopping')} />
+          <TabBarItem icon="shopping" label="상점" onClick={() => goTab('shopping')} />
           <TabBarItem icon="feed" label="피드" onClick={() => goTab('feed')} />
           <TabBarItem icon="my" label="마이" onClick={() => goTab('my')} />
         </div>
@@ -960,7 +951,7 @@ function AssetScreen({ onBack, nav, phase }) {
           const assetProducts = (() => {
             const b = { name: 'B 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/b상품커버.png', bgColor: '#e87477' }
             const c = { name: 'C 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/c상품커버.png', bgColor: '#96ce68' }
-            const a = { name: 'A 투자 상품', amount: '20,000원', shares: '1주', remaining: phase === 'pre_settlement' ? '4개월 남음' : '8개월 남음', img: '/a상품커버.png', bgColor: '#dae7ff', clickable: true }
+            const a = { name: 'A 투자 상품', amount: '20,000원', shares: '1주', remaining: phase === 'pre_settlement' ? '7일 남음' : '8개월 남음', img: '/a상품커버.png', bgColor: '#dae7ff', clickable: true }
             if (phase === 'pre' || phase === 'applying') return [b, c]
             if (phase === 'post_settlement') return [b, c]
             return [a, b, c]
@@ -1448,7 +1439,7 @@ function InvestHistoryDetailScreen({ onBack, nav, phase, detailType }) {
               <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>{section.title}</span>
               {section.hasTag && (
                 <div style={{ backgroundColor: 'var(--color-neutral-050)', borderRadius: 8, padding: '4px 8px' }}>
-                  <span style={{ ...T.label13(), color: 'var(--color-neutral-600)' }}>어떻게 계산되나요?</span>
+                  <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-700)' }}>어떻게 계산되나요?</span>
                 </div>
               )}
             </div>
@@ -1653,10 +1644,9 @@ function MyInvestDetailScreen({ onBack, nav, phase, initialTab }) {
   )
 
   const progressConfig = isPostSettlement ? {
-    chip: '정산 완료', chipColor: 'var(--color-primary-500)', chipBg: 'var(--color-primary-050)',
     label: '정산일',
     bigText: '정산 완료',
-    progress: 100, startDate: '26.06.01', endDate: '28.01 ~ 28.03',
+    progress: 100, startDate: '26.06.01', endDate: '28.03.21',
   } : isPreSettlement ? {
     chip: '정산 예정', chipColor: 'var(--color-primary-500)', chipBg: 'var(--color-primary-050)',
     chip2: '7일 남음',
@@ -1767,9 +1757,9 @@ function MyInvestDetailScreen({ onBack, nav, phase, initialTab }) {
         ) : (
           <div>
             {/* 정산일 + Progress Bar */}
-            <div style={{ padding: '24px 16px 32px' }}>
-              <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>{progressConfig.label}</span>
-              <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)', marginTop: 4 }}>{progressConfig.bigText}</div>
+            <div style={{ padding: '32px 16px 24px' }}>
+              <span style={{ ...T.body15(), color: 'var(--color-neutral-700)' }}>{progressConfig.label}</span>
+              <div style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)', marginTop: 4 }}>{progressConfig.bigText}</div>
               {progressConfig.chip && (
                 <div style={{ display: 'flex', gap: 6, marginTop: 12 }}>
                   <span style={{ ...T.label13('semibold'), color: progressConfig.chipColor, backgroundColor: progressConfig.chipBg, padding: '4px 10px', borderRadius: 6 }}>{progressConfig.chip}</span>
@@ -1779,8 +1769,8 @@ function MyInvestDetailScreen({ onBack, nav, phase, initialTab }) {
                 </div>
               )}
               <div style={{ marginTop: 16 }}>
-                <div style={{ height: 6, backgroundColor: 'var(--color-neutral-100)', borderRadius: 3, overflow: 'hidden' }}>
-                  <div style={{ width: `${progressConfig.progress}%`, height: '100%', backgroundColor: 'var(--color-primary-500)', borderRadius: 3 }} />
+                <div style={{ height: 8, backgroundColor: 'var(--color-neutral-200)', borderRadius: 100, overflow: 'hidden' }}>
+                  <div style={{ width: `${progressConfig.progress}%`, height: '100%', backgroundColor: progressConfig.progress === 100 ? 'var(--color-neutral-600)' : 'var(--color-neutral-800)', borderRadius: 7 }} />
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8 }}>
                   <span style={{ ...T.label13(), color: 'var(--color-neutral-500)' }}>{progressConfig.startDate}</span>
@@ -1809,7 +1799,7 @@ function MyInvestDetailScreen({ onBack, nav, phase, initialTab }) {
                 <div style={{ padding: '24px 16px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
                   <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>내 정산 내역</span>
                   <div style={{ backgroundColor: 'var(--color-neutral-050)', borderRadius: 8, padding: '4px 8px' }}>
-                    <span style={{ ...T.label13(), color: 'var(--color-neutral-600)' }}>어떻게 계산되나요?</span>
+                    <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-700)' }}>어떻게 계산되나요?</span>
                   </div>
                 </div>
                 <div style={{ padding: '12px 0 0' }}>
@@ -1824,8 +1814,8 @@ function MyInvestDetailScreen({ onBack, nav, phase, initialTab }) {
                   ))}
                   <div style={{ margin: '0 16px', height: 1, backgroundColor: 'var(--color-neutral-100)' }} />
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 16 }}>
-                    <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>정산금</span>
-                    <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>22,000원</span>
+                    <span style={{ ...T.body17(), color: 'var(--color-neutral-700)' }}>정산금</span>
+                    <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>22,000원</span>
                   </div>
                 </div>
                 <div style={{ padding: '0 16px 24px' }}>
@@ -2047,7 +2037,7 @@ function FeedScreen({ goTab }) {
       <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, backgroundColor: 'var(--color-neutral-000)', borderTop: '1px solid var(--color-neutral-050)', zIndex: 20 }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', padding: '4px 20px 0' }}>
           <TabBarItem icon="home" label="투자" onClick={() => goTab('home')} />
-          <TabBarItem icon="shopping" label="쇼핑" onClick={() => goTab('shopping')} />
+          <TabBarItem icon="shopping" label="상점" onClick={() => goTab('shopping')} />
           <TabBarItem icon="feed" label="피드" selected />
           <TabBarItem icon="my" label="마이" onClick={() => goTab('my')} />
         </div>
@@ -2075,8 +2065,15 @@ function ShoppingScreen({ goTab }) {
         <div style={{ fontSize: 14, fontWeight: 400, lineHeight: '20px', color: 'var(--color-neutral-800)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{product.name}</div>
         <div style={{ fontSize: 16, fontWeight: 700, lineHeight: '24px', color: 'var(--color-neutral-900)', marginTop: 2 }}>{product.price}</div>
         <div style={{ fontSize: 12, fontWeight: 400, lineHeight: '18px', color: 'var(--color-neutral-600)' }}>{product.unit}</div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 4 }}>
-          <div style={{ width: 22, height: 22, borderRadius: 11, backgroundColor: 'var(--color-primary-600)', flexShrink: 0 }} />
+        {/* Tags row */}
+        <div style={{ display: 'flex', gap: 4, marginTop: 6 }}>
+          {['뱅카우한우', '텍스트'].map(tag => (
+            <span key={tag} style={{ borderRadius: 4, padding: '2px 8px', border: '1px solid var(--color-neutral-200)', fontSize: 12, color: 'var(--color-neutral-600)', lineHeight: '18px' }}>{tag}</span>
+          ))}
+        </div>
+        {/* Farm info */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 8 }}>
+          <div style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: 'var(--color-neutral-100)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12 }}>🐄</div>
           <span style={{ fontSize: 12, fontWeight: 400, lineHeight: '18px', color: 'var(--color-neutral-700)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{product.farm}</span>
         </div>
       </div>
@@ -2114,9 +2111,27 @@ function ShoppingScreen({ goTab }) {
             </div>
           </div>
         </div>
+
+        {/* Banner */}
+        <div style={{ padding: '0 16px' }}>
+          <div style={{ width: '100%', aspectRatio: '343/120', borderRadius: 12, overflow: 'hidden', backgroundColor: 'var(--color-neutral-100)' }}>
+            <img src="/shopping.jpg" alt="프로모션 배너" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          </div>
+        </div>
+
+        {/* 뱅카우캐시 section */}
+        <div style={{ padding: '20px 16px 0' }}>
+          <div style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>뱅카우캐시</div>
+          <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', marginTop: 2 }}>
+            <span style={{ ...T.headline28('bold'), color: 'var(--color-neutral-900)' }}>20,000원</span>
+            <ChevronRightIcon size={28} color="var(--color-neutral-400)" />
+          </div>
+        </div>
+
+        {/* Buttons: 주문내역, 내 쿠폰 */}
         <div style={{ padding: '20px 16px' }}>
           <div style={{ backgroundColor: 'var(--color-neutral-050)', borderRadius: 16, padding: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
-            {['주문내역', '내 포인트', '내 쿠폰'].map((text, i) => [
+            {['주문내역', '내 쿠폰'].map((text, i) => [
               i > 0 && <div key={`d${i}`} style={{ width: 1, height: 25, backgroundColor: 'var(--color-neutral-200)' }} />,
               <div key={text} style={{ flex: 1, textAlign: 'center', ...T.body17(), color: 'var(--color-neutral-800)', cursor: 'pointer' }}>{text}</div>,
             ])}
@@ -2125,12 +2140,12 @@ function ShoppingScreen({ goTab }) {
         <div style={{ height: 10, backgroundColor: 'var(--color-neutral-050)' }} />
         <ProductSection title="전체 상품" />
         <div style={{ height: 0, borderTop: '1px solid var(--color-neutral-050)' }} />
-        <ProductSection title="추천 상품" />
+        <ProductSection title="{상품 그룹}" />
       </div>
       <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, backgroundColor: 'var(--color-neutral-000)', borderTop: '1px solid var(--color-neutral-050)', zIndex: 20 }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', padding: '4px 20px 0' }}>
           <TabBarItem icon="home" label="투자" onClick={() => goTab('home')} />
-          <TabBarItem icon="shopping" label="쇼핑" selected />
+          <TabBarItem icon="shopping" label="상점" selected />
           <TabBarItem icon="feed" label="피드" onClick={() => goTab('feed')} />
           <TabBarItem icon="my" label="마이" onClick={() => goTab('my')} />
         </div>
@@ -2188,50 +2203,58 @@ function MyPageScreen({ nav, goTab }) {
         </div>
 
         <div style={{ padding: '0 16px' }}>
-          <div style={{ backgroundColor: 'var(--color-neutral-000)', border: '1px solid var(--color-neutral-100)', borderRadius: 16, padding: '12px 20px', display: 'flex', alignItems: 'center', gap: 8 }}>
-            <img src="/Visitor.png" alt="" style={{ width: 56, height: 56, objectFit: 'cover', flexShrink: 0 }} />
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 18, fontWeight: 600, lineHeight: '26px', color: 'var(--color-neutral-800)' }}>견학생</div>
-              <div style={{ fontSize: 14, lineHeight: '20px', display: 'flex', alignItems: 'center', gap: 2 }}>
-                <span style={{ fontWeight: 500, color: 'var(--color-neutral-600)' }}>투자중</span>
-                <span style={{ fontWeight: 600, color: 'var(--color-neutral-800)' }}>0C</span>
+          <div style={{ backgroundColor: 'var(--color-neutral-000)', border: '1px solid var(--color-neutral-100)', borderRadius: 16, overflow: 'hidden' }}>
+            {/* Membership row */}
+            <div style={{ padding: '12px 20px', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <img src="/Visitor.png" alt="" style={{ width: 56, height: 56, objectFit: 'cover', flexShrink: 0 }} />
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>멤버십 등급</div>
+                <div style={{ fontSize: 18, fontWeight: 600, lineHeight: '26px', color: 'var(--color-neutral-800)' }}>견학생</div>
               </div>
+              <div style={{ backgroundColor: 'var(--color-neutral-000)', border: '1px solid var(--color-neutral-100)', borderRadius: 8, padding: '8px 12px', fontSize: 14, fontWeight: 500, color: 'var(--color-neutral-800)', flexShrink: 0, cursor: 'pointer' }}>혜택보기</div>
             </div>
-            <div style={{ backgroundColor: 'var(--color-neutral-000)', border: '1px solid var(--color-neutral-100)', borderRadius: 8, padding: '8px 12px', fontSize: 14, fontWeight: 500, color: 'var(--color-neutral-800)', flexShrink: 0, cursor: 'pointer' }}>혜택 보기</div>
+            {/* Quick buttons */}
+            <div style={{ display: 'flex', padding: '16px 0', borderTop: '1px solid var(--color-neutral-100)' }}>
+              {[
+                { label: '내 계좌', icon: '/icons/Graphic/account.svg', target: 'asset' },
+                { label: '투자내역', icon: '/icons/Graphic/calendar.svg', target: 'history' },
+                { label: '주문내역', icon: '/icons/meet.svg', target: null },
+              ].map((btn, i) => (
+                <div key={btn.label} onClick={btn.target ? () => nav(btn.target) : undefined} style={{
+                  flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
+                  cursor: btn.target ? 'pointer' : 'default',
+                  borderLeft: i > 0 ? '1px solid var(--color-neutral-100)' : 'none',
+                }}>
+                  <img src={btn.icon} alt="" style={{ width: 30, height: 30 }} />
+                  <span style={{ ...T.label13(), color: 'var(--color-neutral-700)' }}>{btn.label}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
         <div style={{ padding: '0 16px', paddingTop: 12, display: 'flex', flexDirection: 'column', gap: 12 }}>
           <div style={cardStyle}>
-            <div style={{ fontSize: 16, fontWeight: 500, lineHeight: '24px', color: 'var(--color-neutral-600)', padding: '20px 20px 4px' }}>뱅킹</div>
-            <div style={{ padding: '0 8px 16px', display: 'flex', flexDirection: 'column', gap: 4 }}>
-              {menuItem('/icons/account.svg', '내 계좌', 'asset')}
-            </div>
-          </div>
-          <div style={cardStyle}>
             <div style={{ fontSize: 16, fontWeight: 500, lineHeight: '24px', color: 'var(--color-neutral-600)', padding: '20px 20px 4px' }}>투자</div>
             <div style={{ padding: '0 8px 16px', display: 'flex', flexDirection: 'column', gap: 4 }}>
               {menuItem('/icons/icon.svg', '내 투자', 'asset')}
-              {menuItem('/icons/farm.svg', '투자 내역', 'history')}
-              {menuItem('/icons/amount-bag.svg', '정산 내역', 'settlement_history')}
+              {menuItem('/icons/amount-bag.svg', '정산내역', 'settlement_history')}
               {menuItem('/icons/shield.svg', '자산 보호 내역')}
               {menuItem('/icons/money-bag.svg', '세금')}
-              {menuItem('/icons/flat-paper.svg', '중도해지 신청 내역')}
             </div>
           </div>
           <div style={cardStyle}>
             <div style={{ fontSize: 16, fontWeight: 500, lineHeight: '24px', color: 'var(--color-neutral-600)', padding: '20px 20px 4px' }}>쇼핑</div>
             <div style={{ padding: '0 8px 16px', display: 'flex', flexDirection: 'column', gap: 4 }}>
-              {menuItem('/icons/meet.svg', '주문내역')}
-              {menuItem('/icons/point-bag.svg', '내 포인트')}
+              {menuItem('/icons/point-bag.svg', '뱅카우캐시')}
               {menuItem('/icons/coupon.svg', '내 쿠폰')}
             </div>
           </div>
           <div style={cardStyle}>
             <div style={{ fontSize: 16, fontWeight: 500, lineHeight: '24px', color: 'var(--color-neutral-600)', padding: '20px 20px 4px' }}>고객지원</div>
             <div style={{ padding: '0 8px 16px', display: 'flex', flexDirection: 'column', gap: 4 }}>
-              {menuItem('/icons/help.svg', '1:1 문의')}
               {menuItem('/icons/review.svg', '고객센터')}
+              {menuItem('/icons/help.svg', '1:1 문의')}
               {menuItem('/icons/loud-speaker.svg', '공지사항')}
               {menuItem('/icons/paper.svg', '이용약관')}
             </div>
@@ -2241,7 +2264,7 @@ function MyPageScreen({ nav, goTab }) {
       <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, backgroundColor: 'var(--color-neutral-000)', borderTop: '1px solid var(--color-neutral-050)', zIndex: 20 }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', padding: '4px 20px 0' }}>
           <TabBarItem icon="home" label="투자" onClick={() => goTab('home')} />
-          <TabBarItem icon="shopping" label="쇼핑" onClick={() => goTab('shopping')} />
+          <TabBarItem icon="shopping" label="상점" onClick={() => goTab('shopping')} />
           <TabBarItem icon="feed" label="피드" onClick={() => goTab('feed')} />
           <TabBarItem icon="my" label="마이" selected />
         </div>
