@@ -119,7 +119,7 @@ export default function V9App() {
     setHistory([])
   }
 
-  const phaseTransition = phase === 'applying' ? { label: '체결로 이동하기', onClick: handleJumpToSettled } : null
+  const phaseTransition = phase === 'applying' ? { label: '체결 당일로 이동', onClick: handleJumpToSettled } : null
 
   switch (screen) {
     case 'home':
@@ -365,19 +365,19 @@ function HomeScreen({ phase, nav, goTab, phaseTransition }) {
         </div>
       </div>
 
-      {/* Phase Transition Button */}
-      {phaseTransition && (
-        <div onClick={phaseTransition.onClick} style={{
-          position: 'fixed', bottom: 'calc(85px + env(safe-area-inset-bottom, 0px))', left: 16, right: 16,
-          height: 48, borderRadius: 14, backgroundColor: 'var(--color-neutral-800)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          ...T.body15('semibold'), color: '#fff', cursor: 'pointer', zIndex: 25,
-        }}>{phaseTransition.label}</div>
-      )}
-
       {/* TabBar */}
-      <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, backgroundColor: 'var(--color-neutral-000)', borderTop: '1px solid var(--color-neutral-050)', zIndex: 20 }}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', padding: '4px 20px 0' }}>
+      <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, backgroundColor: 'var(--color-neutral-000)', borderTop: '1px solid var(--color-neutral-050)', zIndex: 20, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        {/* Phase Transition Button */}
+        {phaseTransition && (
+          <div onClick={phaseTransition.onClick} style={{
+            marginTop: 8,
+            borderRadius: 1000, backgroundColor: 'var(--color-neutral-700)',
+            padding: '6px 12px',
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+            ...T.label13('semibold'), color: '#fff', cursor: 'pointer',
+          }}>{phaseTransition.label}</div>
+        )}
+        <div style={{ display: 'flex', alignItems: 'flex-start', padding: '4px 20px 0', width: '100%' }}>
           <TabBarItem icon="home" label="홈" selected />
           <TabBarItem icon="shopping" label="상점" onClick={() => goTab('shopping')} />
           <TabBarItem icon="my" label="마이" onClick={() => goTab('my')} />
@@ -982,23 +982,16 @@ function ShoppingScreen({ goTab }) {
 // MyPage Screen
 // ============================================================
 function MyPageScreen({ nav, goTab }) {
-  const SettingsIcon = () => (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-800)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
-    </svg>
-  )
-
   const menuItem = (icon, label, target) => (
-    <div key={label} style={{ height: 48, padding: '10px 12px', display: 'flex', alignItems: 'center', gap: 10, borderRadius: 10, cursor: target ? 'pointer' : 'default' }}
+    <div key={label} style={{ height: 50, padding: '12px', display: 'flex', alignItems: 'center', gap: 8, cursor: target ? 'pointer' : 'default' }}
       onClick={target ? () => nav(target) : undefined}>
-      <img src={icon} alt="" style={{ width: 28, height: 28 }} />
+      <img src={icon} alt="" style={{ width: 24, height: 24 }} />
       <span style={{ ...T.body17(), color: 'var(--color-neutral-800)' }}>{label}</span>
     </div>
   )
 
   const cardStyle = {
-    backgroundColor: 'var(--color-neutral-000)', borderRadius: 16,
-    boxShadow: '0px 0px 2px rgba(19,21,26,0.06), 0px 0px 7px rgba(19,21,26,0.04)',
+    backgroundColor: 'var(--color-neutral-000)', borderRadius: 16, overflow: 'hidden',
   }
 
   return (
@@ -1014,8 +1007,10 @@ function MyPageScreen({ nav, goTab }) {
         <div style={{ position: 'sticky', top: 0, zIndex: 10, backgroundColor: 'var(--color-neutral-050)' }}>
           <div style={{ height: 60, padding: '0 6px 0 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)' }}>마이페이지</div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-              <div style={{ width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}><SettingsIcon /></div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4, width: 92, justifyContent: 'flex-end' }}>
+              <div style={{ width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                <img src="/icons/Setting.svg" alt="설정" style={{ width: 24, height: 24 }} />
+              </div>
               <div style={{ width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                 <img src="/icons/appbar/notification.svg" alt="알림" style={{ width: 24, height: 24 }} />
               </div>
@@ -1023,45 +1018,48 @@ function MyPageScreen({ nav, goTab }) {
           </div>
         </div>
 
-        {/* Profile */}
-        <div style={{ padding: '20px 16px 0', display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)' }}>김한우님, 반가워요!</div>
-            <div style={{ ...T.body15(), color: 'var(--color-neutral-600)', marginTop: 2, display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-              내 정보 <ChevronRightIcon size={20} color="var(--color-neutral-600)" />
+        {/* Profile + Membership Card */}
+        <div style={{ padding: '0 16px' }}>
+          {/* Profile */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)' }}>김한우님, 반가워요!</div>
+              <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                <span style={{ fontSize: 14, fontWeight: 500, lineHeight: '22px', color: 'var(--color-neutral-600)' }}>내 정보</span>
+                <ChevronRightIcon size={20} color="var(--color-neutral-600)" />
+              </div>
+            </div>
+            <div style={{ width: 100, height: 100, flexShrink: 0 }}>
+              <img src="/myCow.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
           </div>
-          <div style={{ width: 100, height: 100, borderRadius: 50, overflow: 'hidden', flexShrink: 0 }}>
-            <img src="/images/cow.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-          </div>
-        </div>
 
-        {/* Membership Card */}
-        <div style={{ padding: '16px 16px 0' }}>
-          <div style={{ backgroundColor: 'var(--color-neutral-000)', border: '1px solid var(--color-neutral-100)', borderRadius: 16, overflow: 'hidden' }}>
+          {/* Membership Card */}
+          <div style={{ backgroundColor: 'var(--color-neutral-000)', borderRadius: 16, paddingTop: 20, paddingBottom: 24 }}>
             {/* Membership row */}
-            <div style={{ padding: '12px 20px', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{ padding: '0 20px', display: 'flex', alignItems: 'center', gap: 8 }}>
               <img src="/images/visitor.png" alt="" style={{ width: 50, height: 50, objectFit: 'cover', flexShrink: 0 }} />
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>멤버십 등급</div>
                 <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-800)' }}>견학생</div>
               </div>
-              <div style={{ backgroundColor: 'var(--color-neutral-000)', border: '1px solid var(--color-neutral-100)', borderRadius: 8, padding: '8px 12px', ...T.body15(), color: 'var(--color-neutral-800)', flexShrink: 0, cursor: 'pointer' }}>혜택보기</div>
+              <div style={{ backgroundColor: 'var(--color-neutral-050)', borderRadius: 12, padding: '9px 20px', ...T.body15('semibold'), color: 'var(--color-neutral-700)', flexShrink: 0, cursor: 'pointer', minHeight: 40, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>혜택보기</div>
             </div>
+            {/* Spacer */}
+            <div style={{ height: 32 }} />
             {/* Quick buttons */}
-            <div style={{ display: 'flex', padding: '16px 0', borderTop: '1px solid var(--color-neutral-100)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', padding: '0 8px' }}>
               {[
                 { label: '내 계좌', icon: '/icons/account.svg', target: 'my_account' },
                 { label: '투자내역', icon: '/icons/calendar.svg', target: 'investment_history' },
                 { label: '주문내역', icon: '/icons/meet.svg', target: null },
-              ].map((btn, i) => (
+              ].map((btn) => (
                 <div key={btn.label} onClick={btn.target ? () => nav(btn.target) : undefined} style={{
-                  flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
+                  flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
                   cursor: btn.target ? 'pointer' : 'default',
-                  borderLeft: i > 0 ? '1px solid var(--color-neutral-100)' : 'none',
                 }}>
                   <img src={btn.icon} alt="" style={{ width: 30, height: 30 }} />
-                  <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-700)' }}>{btn.label}</span>
+                  <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{btn.label}</span>
                 </div>
               ))}
             </div>
@@ -1072,26 +1070,26 @@ function MyPageScreen({ nav, goTab }) {
         <div style={{ padding: '12px 16px 0', display: 'flex', flexDirection: 'column', gap: 12 }}>
           {/* 투자 */}
           <div style={cardStyle}>
-            <div style={{ ...T.body15(), color: 'var(--color-neutral-600)', padding: '20px 20px 4px' }}>투자</div>
-            <div style={{ padding: '0 8px 16px', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ fontSize: 16, fontWeight: 500, lineHeight: '24px', color: 'var(--color-neutral-600)', padding: '20px 20px 4px' }}>투자</div>
+            <div style={{ padding: '0 8px 16px', display: 'flex', flexDirection: 'column', gap: 4 }}>
               {menuItem('/icons/farm.svg', '내 투자', 'asset_detail')}
               {menuItem('/icons/amountBag.svg', '정산내역', null)}
-              {menuItem('/icons/graphic/shield.svg', '자산 보호 내역', null)}
-              {menuItem('/icons/graphic/money-bag.svg', '세금', null)}
+              {menuItem('/icons/shield.svg', '자산 보호 내역', null)}
+              {menuItem('/icons/money-bag.svg', '세금', null)}
             </div>
           </div>
           {/* 쇼핑 */}
           <div style={cardStyle}>
-            <div style={{ ...T.body15(), color: 'var(--color-neutral-600)', padding: '20px 20px 4px' }}>쇼핑</div>
-            <div style={{ padding: '0 8px 16px', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ fontSize: 16, fontWeight: 500, lineHeight: '24px', color: 'var(--color-neutral-600)', padding: '20px 20px 4px' }}>쇼핑</div>
+            <div style={{ padding: '0 8px 16px', display: 'flex', flexDirection: 'column', gap: 4 }}>
               {menuItem('/icons/point-bag.svg', '뱅카우캐시', null)}
               {menuItem('/icons/coupon.svg', '내 쿠폰', null)}
             </div>
           </div>
           {/* 고객지원 */}
           <div style={cardStyle}>
-            <div style={{ ...T.body15(), color: 'var(--color-neutral-600)', padding: '20px 20px 4px' }}>고객지원</div>
-            <div style={{ padding: '0 8px 16px', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ fontSize: 16, fontWeight: 500, lineHeight: '24px', color: 'var(--color-neutral-600)', padding: '20px 20px 4px' }}>고객지원</div>
+            <div style={{ padding: '0 8px 16px', display: 'flex', flexDirection: 'column', gap: 4 }}>
               {menuItem('/icons/help.svg', '고객센터', null)}
               {menuItem('/icons/review.svg', '1:1 문의', null)}
               {menuItem('/icons/loud-speaker.svg', '공지사항', null)}
