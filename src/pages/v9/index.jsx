@@ -138,6 +138,10 @@ export default function V9App() {
       return <QuantityInputScreen onBack={goBack} onInvest={handleApply} />
     case 'apply_complete':
       return <ApplyCompleteScreen onConfirm={handleApplyConfirm} />
+    case 'shopping':
+      return <ShoppingScreen goTab={goTab} />
+    case 'my':
+      return <MyPageScreen nav={nav} goTab={goTab} />
     default:
       return <HomeScreen phase={phase} nav={nav} goTab={goTab} phaseTransition={phaseTransition} />
   }
@@ -865,6 +869,249 @@ function ApplyCompleteScreen({ onConfirm }) {
         </div>
       </div>
       <CTAButton label="확인" onClick={onConfirm} />
+    </div>
+  )
+}
+
+// ============================================================
+// Shopping Screen
+// ============================================================
+function ShoppingScreen({ goTab }) {
+  const products = Array.from({ length: 6 }, (_, i) => ({
+    id: i + 1, name: '[1++등급] 등심 로스구이 150g',
+    price: '20,000원', unit: '100g당 1,000원', farm: '뱅카우목장 1호',
+  }))
+
+  const ShopProductCard = ({ product }) => (
+    <div style={{ width: 150, flexShrink: 0 }}>
+      <div style={{ width: '100%', aspectRatio: '1/1', borderRadius: 8, overflow: 'hidden', backgroundColor: 'var(--color-neutral-100)' }}>
+        <img src="/images/shopping.jpg" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+      </div>
+      <div style={{ marginTop: 8 }}>
+        <div style={{ ...T.body15(), color: 'var(--color-neutral-800)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{product.name}</div>
+        <div style={{ ...T.body17('bold'), color: 'var(--color-neutral-900)', marginTop: 2 }}>{product.price}</div>
+        <div style={{ ...T.label13(), color: 'var(--color-neutral-600)' }}>{product.unit}</div>
+        <div style={{ display: 'flex', gap: 4, marginTop: 6 }}>
+          {['뱅카우한우', '텍스트'].map(tag => (
+            <span key={tag} style={{ borderRadius: 4, padding: '2px 8px', border: '1px solid var(--color-neutral-200)', ...T.label13(), color: 'var(--color-neutral-600)' }}>{tag}</span>
+          ))}
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 8 }}>
+          <div style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: 'var(--color-neutral-100)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12 }}>🐄</div>
+          <span style={{ ...T.label13(), color: 'var(--color-neutral-700)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{product.farm}</span>
+        </div>
+      </div>
+    </div>
+  )
+
+  const ProductSection = ({ title }) => (
+    <div style={{ padding: '28px 16px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+        <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)' }}>{title}</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 4, cursor: 'pointer' }}>
+          <span style={{ ...T.body15(), color: 'var(--color-neutral-700)' }}>전체보기</span>
+          <ChevronRightIcon size={10} color="var(--color-neutral-700)" />
+        </div>
+      </div>
+      <div className="v9-hide-scrollbar" style={{ display: 'flex', gap: 8, overflowX: 'auto' }}>
+        {products.slice(0, 3).map(p => <ShopProductCard key={p.id} product={p} />)}
+      </div>
+    </div>
+  )
+
+  return (
+    <div className="v9-screen" style={{
+      width: '100%', minHeight: '100dvh',
+      backgroundColor: 'var(--color-neutral-000)', position: 'relative',
+      fontFamily: 'Pretendard, -apple-system, sans-serif',
+    }}>
+      <div className="v9-scroll" style={{ height: '100dvh', overflowY: 'auto', paddingBottom: 'calc(77px + env(safe-area-inset-bottom, 0px))' }}>
+        <div style={{ height: 'env(safe-area-inset-top, 0px)' }} />
+        <div style={{ position: 'sticky', top: 0, zIndex: 10, backgroundColor: 'var(--color-neutral-000)' }}>
+          <div style={{ height: 60, padding: '0 6px 0 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)' }}>쇼핑</div>
+            <div style={{ width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <img src="/icons/appbar/notification.svg" alt="알림" style={{ width: 24, height: 24 }} />
+            </div>
+          </div>
+        </div>
+
+        {/* 프로모션 배너 */}
+        <div style={{ padding: '12px 16px 0' }}>
+          <div style={{ width: '100%', height: 120, borderRadius: 16, overflow: 'hidden', backgroundColor: 'var(--color-primary-050)', position: 'relative', display: 'flex', alignItems: 'center', padding: 20 }}>
+            <div style={{ flex: 1, minWidth: 0, zIndex: 1 }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, backgroundColor: 'var(--color-primary-100)', borderRadius: 6, padding: '2px 8px', marginBottom: 6 }}>
+                <span style={{ ...T.label13(), color: 'var(--color-primary-600)' }}>1C 이상 투자 성공 시</span>
+              </div>
+              <div style={{ ...T.body17('bold'), color: 'var(--color-neutral-900)', lineHeight: '26px' }}>
+                1++ 한우 구매 가능한<br />2만 포인트 지급
+              </div>
+            </div>
+            <div style={{ width: 80, height: 80, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1 }}>
+              <div style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: 'var(--color-primary-400)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ fontSize: 32, fontWeight: 700, color: '#fff' }}>P</span>
+              </div>
+            </div>
+            <div style={{ position: 'absolute', bottom: 10, right: 10, backgroundColor: 'rgba(0,0,0,0.4)', borderRadius: 100, padding: '2px 8px', display: 'flex', alignItems: 'center', gap: 2 }}>
+              <span style={{ ...T.label13(), color: 'rgba(255,255,255,0.9)' }}>1</span>
+              <span style={{ ...T.label13(), color: 'rgba(255,255,255,0.5)' }}>/</span>
+              <span style={{ ...T.label13(), color: 'rgba(255,255,255,0.5)' }}>5</span>
+            </div>
+          </div>
+        </div>
+
+        <ProductSection title="전체 상품" />
+        <div style={{ height: 0, borderTop: '1px solid var(--color-neutral-050)' }} />
+        <ProductSection title="{상품 그룹}" />
+      </div>
+
+      {/* TabBar */}
+      <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, backgroundColor: 'var(--color-neutral-000)', borderTop: '1px solid var(--color-neutral-050)', zIndex: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', padding: '4px 20px 0' }}>
+          <TabBarItem icon="home" label="홈" onClick={() => goTab('home')} />
+          <TabBarItem icon="shopping" label="상점" selected />
+          <TabBarItem icon="my" label="마이" onClick={() => goTab('my')} />
+        </div>
+        <div style={{ height: 'calc(env(safe-area-inset-bottom, 0px) + 8px)' }} />
+      </div>
+    </div>
+  )
+}
+
+// ============================================================
+// MyPage Screen
+// ============================================================
+function MyPageScreen({ nav, goTab }) {
+  const SettingsIcon = () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-800)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+    </svg>
+  )
+
+  const menuItem = (icon, label, target) => (
+    <div key={label} style={{ height: 48, padding: '10px 12px', display: 'flex', alignItems: 'center', gap: 10, borderRadius: 10, cursor: target ? 'pointer' : 'default' }}
+      onClick={target ? () => nav(target) : undefined}>
+      <img src={icon} alt="" style={{ width: 28, height: 28 }} />
+      <span style={{ ...T.body17(), color: 'var(--color-neutral-800)' }}>{label}</span>
+    </div>
+  )
+
+  const cardStyle = {
+    backgroundColor: 'var(--color-neutral-000)', borderRadius: 16,
+    boxShadow: '0px 0px 2px rgba(19,21,26,0.06), 0px 0px 7px rgba(19,21,26,0.04)',
+  }
+
+  return (
+    <div className="v9-screen" style={{
+      width: '100%', minHeight: '100dvh',
+      backgroundColor: 'var(--color-neutral-050)', position: 'relative',
+      fontFamily: 'Pretendard, -apple-system, sans-serif',
+    }}>
+      <div className="v9-scroll" style={{ height: '100dvh', overflowY: 'auto', paddingBottom: 'calc(77px + env(safe-area-inset-bottom, 0px))' }}>
+        <div style={{ height: 'env(safe-area-inset-top, 0px)', backgroundColor: 'var(--color-neutral-050)' }} />
+
+        {/* AppBar */}
+        <div style={{ position: 'sticky', top: 0, zIndex: 10, backgroundColor: 'var(--color-neutral-050)' }}>
+          <div style={{ height: 60, padding: '0 6px 0 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)' }}>마이페이지</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              <div style={{ width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}><SettingsIcon /></div>
+              <div style={{ width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                <img src="/icons/appbar/notification.svg" alt="알림" style={{ width: 24, height: 24 }} />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Profile */}
+        <div style={{ padding: '20px 16px 0', display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)' }}>김한우님, 반가워요!</div>
+            <div style={{ ...T.body15(), color: 'var(--color-neutral-600)', marginTop: 2, display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+              내 정보 <ChevronRightIcon size={20} color="var(--color-neutral-600)" />
+            </div>
+          </div>
+          <div style={{ width: 100, height: 100, borderRadius: 50, overflow: 'hidden', flexShrink: 0 }}>
+            <img src="/images/cow.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          </div>
+        </div>
+
+        {/* Membership Card */}
+        <div style={{ padding: '16px 16px 0' }}>
+          <div style={{ backgroundColor: 'var(--color-neutral-000)', border: '1px solid var(--color-neutral-100)', borderRadius: 16, overflow: 'hidden' }}>
+            {/* Membership row */}
+            <div style={{ padding: '12px 20px', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <img src="/images/visitor.png" alt="" style={{ width: 50, height: 50, objectFit: 'cover', flexShrink: 0 }} />
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>멤버십 등급</div>
+                <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-800)' }}>견학생</div>
+              </div>
+              <div style={{ backgroundColor: 'var(--color-neutral-000)', border: '1px solid var(--color-neutral-100)', borderRadius: 8, padding: '8px 12px', ...T.body15(), color: 'var(--color-neutral-800)', flexShrink: 0, cursor: 'pointer' }}>혜택보기</div>
+            </div>
+            {/* Quick buttons */}
+            <div style={{ display: 'flex', padding: '16px 0', borderTop: '1px solid var(--color-neutral-100)' }}>
+              {[
+                { label: '내 계좌', icon: '/icons/account.svg', target: 'my_account' },
+                { label: '투자내역', icon: '/icons/calendar.svg', target: 'investment_history' },
+                { label: '주문내역', icon: '/icons/meet.svg', target: null },
+              ].map((btn, i) => (
+                <div key={btn.label} onClick={btn.target ? () => nav(btn.target) : undefined} style={{
+                  flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
+                  cursor: btn.target ? 'pointer' : 'default',
+                  borderLeft: i > 0 ? '1px solid var(--color-neutral-100)' : 'none',
+                }}>
+                  <img src={btn.icon} alt="" style={{ width: 30, height: 30 }} />
+                  <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-700)' }}>{btn.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Menu Sections */}
+        <div style={{ padding: '12px 16px 0', display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {/* 투자 */}
+          <div style={cardStyle}>
+            <div style={{ ...T.body15(), color: 'var(--color-neutral-600)', padding: '20px 20px 4px' }}>투자</div>
+            <div style={{ padding: '0 8px 16px', display: 'flex', flexDirection: 'column' }}>
+              {menuItem('/icons/farm.svg', '내 투자', 'asset_detail')}
+              {menuItem('/icons/amountBag.svg', '정산내역', null)}
+              {menuItem('/icons/graphic/shield.svg', '자산 보호 내역', null)}
+              {menuItem('/icons/graphic/money-bag.svg', '세금', null)}
+            </div>
+          </div>
+          {/* 쇼핑 */}
+          <div style={cardStyle}>
+            <div style={{ ...T.body15(), color: 'var(--color-neutral-600)', padding: '20px 20px 4px' }}>쇼핑</div>
+            <div style={{ padding: '0 8px 16px', display: 'flex', flexDirection: 'column' }}>
+              {menuItem('/icons/point-bag.svg', '뱅카우캐시', null)}
+              {menuItem('/icons/coupon.svg', '내 쿠폰', null)}
+            </div>
+          </div>
+          {/* 고객지원 */}
+          <div style={cardStyle}>
+            <div style={{ ...T.body15(), color: 'var(--color-neutral-600)', padding: '20px 20px 4px' }}>고객지원</div>
+            <div style={{ padding: '0 8px 16px', display: 'flex', flexDirection: 'column' }}>
+              {menuItem('/icons/help.svg', '고객센터', null)}
+              {menuItem('/icons/review.svg', '1:1 문의', null)}
+              {menuItem('/icons/loud-speaker.svg', '공지사항', null)}
+              {menuItem('/icons/paper.svg', '이용약관', null)}
+            </div>
+          </div>
+        </div>
+
+        <div style={{ height: 20 }} />
+      </div>
+
+      {/* TabBar */}
+      <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, backgroundColor: 'var(--color-neutral-000)', borderTop: '1px solid var(--color-neutral-050)', zIndex: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', padding: '4px 20px 0' }}>
+          <TabBarItem icon="home" label="홈" onClick={() => goTab('home')} />
+          <TabBarItem icon="shopping" label="상점" onClick={() => goTab('shopping')} />
+          <TabBarItem icon="my" label="마이" selected />
+        </div>
+        <div style={{ height: 'calc(env(safe-area-inset-bottom, 0px) + 8px)' }} />
+      </div>
     </div>
   )
 }
