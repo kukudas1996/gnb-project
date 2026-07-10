@@ -148,7 +148,7 @@ function AppInstallBanner() {
           overflow: 'hidden',
           flexShrink: 0,
         }}>
-          <img src="/app-install.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <img src="/images/app-install.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         </div>
         <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-900)', flex: 1, minWidth: 0 }}>
           더 편리한 뱅카우앱을 만나보세요
@@ -182,7 +182,7 @@ function WebAppBar({ phase, onLogin }) {
       <div style={S.safeTop} />
       <div style={S.appBarRow}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <img src="/app-install.png" alt="" style={{ width: 28, height: 28, borderRadius: 6 }} />
+          <img src="/images/app-install.png" alt="" style={{ width: 28, height: 28, borderRadius: 6 }} />
           <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>bankcow</span>
         </div>
         {isGuest && (
@@ -377,7 +377,7 @@ function Footer() {
     <div style={{ padding: '40px 16px 40px' }}>
       {/* bankcow logo */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 28 }}>
-        <img src="/app-install.png" alt="" style={{ width: 24, height: 24, borderRadius: 5 }} />
+        <img src="/images/app-install.png" alt="" style={{ width: 24, height: 24, borderRadius: 5 }} />
         <span style={{ ...T.body17('bold'), color: 'var(--color-neutral-900)' }}>bankcow</span>
       </div>
 
@@ -664,7 +664,7 @@ function ShoppingScreen({ phase, goTab, onLogin, nav }) {
     name: '[1++등급] 등심 로스구이 150g',
     price: '20,000원',
     unit: '100g당 1,000원',
-    img: '/shopping.jpg',
+    img: '/images/shopping.jpg',
   }))
 
   const ShopProductCard = ({ product }) => (
@@ -796,8 +796,8 @@ function FeedScreen({ phase, goTab, onLogin, nav }) {
           </div>
           <div className="v6-hide-scrollbar" style={{ display: 'flex', gap: 12, overflowX: 'auto', marginRight: -16 }}>
             {[
-              { img: '/insight/guide-2.png', title: '초보자를 위한 한우 투자 가이드', desc: '송아지 입식부터 출하, 정산까지 처음이어도 어렵지 않아요' },
-              { img: '/insight/guide-1.png', title: '한우는 돈이 돼요', desc: '한우 시장은 언제나 수요가 항상 있었어요' },
+              { img: '/images/insight/guide-2.png', title: '초보자를 위한 한우 투자 가이드', desc: '송아지 입식부터 출하, 정산까지 처음이어도 어렵지 않아요' },
+              { img: '/images/insight/guide-1.png', title: '한우는 돈이 돼요', desc: '한우 시장은 언제나 수요가 항상 있었어요' },
             ].map((item, i) => (
               <div key={i} style={{ flexShrink: 0, width: 280, display: 'flex', flexDirection: 'column', gap: 8 }}>
                 <div style={{ width: '100%', aspectRatio: '160/90', borderRadius: 16, overflow: 'hidden' }}>
@@ -818,7 +818,7 @@ function FeedScreen({ phase, goTab, onLogin, nav }) {
         <div style={{ padding: '24px 16px' }}>
           <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)', marginBottom: 12 }}>뱅카우 숏츠</div>
           <div style={{ display: 'flex', gap: 12 }}>
-            {['/shorts-1.png', '/shorts-2.png'].map((src, i) => (
+            {['/images/shorts-1.png', '/images/shorts-2.png'].map((src, i) => (
               <div key={i} style={{
                 flex: 1, minWidth: 0, aspectRatio: '9/14', borderRadius: 12,
                 overflow: 'hidden',
@@ -848,12 +848,12 @@ function FeedScreen({ phase, goTab, onLogin, nav }) {
           {/* Content grid 2x3 */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px 12px', width: '100%', maxWidth: '100%' }}>
             {[
-              { img: '/insight/content-1.png', title: '한우 투자, 이제 시작해도 늦지 않다' },
-              { img: '/insight/content-2.png', title: '한우 투자, 이제 시작해도 늦지 않다' },
-              { img: '/insight/content-3.png', title: '한우 투자로 얻는 수익과 리스크 분석' },
-              { img: '/insight/content-4.png', title: '한우 투자로 얻는 수익과 리스크 분석' },
-              { img: '/insight/content-5.png', title: '초보자를 위한 한우 투자 가이드' },
-              { img: '/insight/content-6.png', title: '초보자를 위한 한우 투자 가이드' },
+              { img: '/images/insight/content-1.png', title: '한우 투자, 이제 시작해도 늦지 않다' },
+              { img: '/images/insight/content-2.png', title: '한우 투자, 이제 시작해도 늦지 않다' },
+              { img: '/images/insight/content-3.png', title: '한우 투자로 얻는 수익과 리스크 분석' },
+              { img: '/images/insight/content-4.png', title: '한우 투자로 얻는 수익과 리스크 분석' },
+              { img: '/images/insight/content-5.png', title: '초보자를 위한 한우 투자 가이드' },
+              { img: '/images/insight/content-6.png', title: '초보자를 위한 한우 투자 가이드' },
             ].map((item, i) => (
               <div key={i} style={{ minWidth: 0, overflow: 'hidden' }}>
                 <div style={{
@@ -884,9 +884,9 @@ function FeedScreen({ phase, goTab, onLogin, nav }) {
         <div style={{ padding: '24px 16px' }}>
           <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>언론 보도</div>
           {[
-            { img: '/insight/news-1.png', title: '한우 투자, 새로운 기회', sub: '최근 한우 시장의 변화와...' },
-            { img: '/insight/news-2.png', title: '한우 투자, 성공적인 사례', sub: '한우 투자에 성공한 사례를...' },
-            { img: '/insight/news-3.png', title: '한우 투자, 전문가의 조언', sub: '전문가들은 한우 투자를 고...' },
+            { img: '/images/insight/news-1.png', title: '한우 투자, 새로운 기회', sub: '최근 한우 시장의 변화와...' },
+            { img: '/images/insight/news-2.png', title: '한우 투자, 성공적인 사례', sub: '한우 투자에 성공한 사례를...' },
+            { img: '/images/insight/news-3.png', title: '한우 투자, 전문가의 조언', sub: '전문가들은 한우 투자를 고...' },
           ].map((item, i) => (
             <div key={i} style={{
               display: 'flex', alignItems: 'center', gap: 12,
@@ -1551,7 +1551,7 @@ function MyPageScreen({ phase, goTab, onLogin, nav }) {
                 </div>
               </div>
               <div style={{ width: 80, height: 80, borderRadius: 40, overflow: 'hidden', flexShrink: 0 }}>
-                <img src="/Cow.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src="/images/cow.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
             </div>
             {/* 견학생 badge */}
@@ -1562,7 +1562,7 @@ function MyPageScreen({ phase, goTab, onLogin, nav }) {
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <div style={{ width: 44, height: 44, borderRadius: 22, overflow: 'hidden', backgroundColor: 'var(--color-neutral-050)' }}>
-                  <img src="/Cow.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img src="/images/cow.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
                 <div>
                   <div style={{ ...T.body15('semibold'), color: 'var(--color-neutral-800)' }}>{'{견학생}'}</div>

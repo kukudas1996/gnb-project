@@ -1207,7 +1207,7 @@ function InvestScreen({ nav, phase, goTab }) {
           <div style={{ padding: '0 16px' }}>
             <div style={{ ...T.body17('semibold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>투자중 상품</div>
             <div style={{ textAlign: 'center', padding: '40px 0 60px' }}>
-              <img src="/empty.png" alt="" style={{ width: 100, height: 100, objectFit: 'contain', marginBottom: 8 }} />
+              <img src="/images/empty.png" alt="" style={{ width: 100, height: 100, objectFit: 'contain', marginBottom: 8 }} />
               <div style={{ ...T.body17('medium'), color: 'var(--color-neutral-600)' }}>투자중인 상품이 없어요</div>
             </div>
           </div>
@@ -1368,7 +1368,7 @@ function HistoryEmptyScreen({ onBack }) {
         alignItems: 'center', justifyContent: 'center',
         height: 'calc(100dvh - 120px)',
       }}>
-        <img src="/empty.png" alt="" style={{ width: 120, height: 120, objectFit: 'contain', marginBottom: 12 }} />
+        <img src="/images/empty.png" alt="" style={{ width: 120, height: 120, objectFit: 'contain', marginBottom: 12 }} />
         <div style={{ ...T.body17('medium'), color: 'var(--color-neutral-500)' }}>투자내역이 없어요</div>
       </div>
     </div>
@@ -2327,7 +2327,7 @@ function MyPageScreen({ nav, goTab }) {
             </div>
           </div>
           <div style={{ width: 100, height: 100, borderRadius: 50, overflow: 'hidden', flexShrink: 0 }}>
-            <img src="/Cow.png" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <img src="/images/cow.png" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
         </div>
 
@@ -2343,7 +2343,7 @@ function MyPageScreen({ nav, goTab }) {
             gap: 8,
             overflow: 'hidden',
           }}>
-            <img src="/Visitor.png" alt="" style={{ width: 56, height: 56, objectFit: 'cover', flexShrink: 0 }} />
+            <img src="/images/visitor.png" alt="" style={{ width: 56, height: 56, objectFit: 'cover', flexShrink: 0 }} />
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontSize: 18, fontWeight: 600, lineHeight: '26px', color: 'var(--color-neutral-800)' }}>견학생</div>
               <div style={{ fontSize: 14, lineHeight: '20px', display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -2425,7 +2425,7 @@ function ShoppingScreen({ goTab }) {
     price: '20,000원',
     unit: '100g당 1,000원',
     farm: '뱅카우목장 1호',
-    img: '/shopping.jpg',
+    img: '/images/shopping.jpg',
   }))
 
   const ProductCard = ({ product }) => (

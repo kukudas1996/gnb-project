@@ -216,14 +216,14 @@ function DynamicMessage({ phase, dismissed, onDismiss, nav }) {
         display: 'flex', alignItems: 'center', overflow: 'hidden', cursor: 'pointer',
       }}>
         <div onClick={handleTap} style={{ display: 'flex', flex: 1, alignItems: 'center', gap: 8, minWidth: 0 }}>
-          <img src="/a상품커버.png" alt="" style={{ width: 48, height: 48, objectFit: 'cover', flexShrink: 0, borderRadius: 12 }} />
+          <img src="/images/product-a.png" alt="" style={{ width: 48, height: 48, objectFit: 'cover', flexShrink: 0, borderRadius: 12 }} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: 2, flex: 1, minWidth: 0 }}>
             <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>{msg.sub}</span>
             <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{msg.text}</span>
           </div>
         </div>
         <div onClick={(e) => { e.stopPropagation(); onDismiss() }} style={{ width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}>
-          <img src="/icons/Close Button.svg" alt="닫기" style={{ width: 30, height: 30 }} />
+          <img src="/icons/close.svg" alt="닫기" style={{ width: 30, height: 30 }} />
         </div>
       </div>
     </div>
@@ -250,26 +250,26 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
 
   const investProducts = {
     pre: [
-      { name: 'B 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/b상품커버.png', bgColor: '#e87477' },
-      { name: 'C 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/c상품커버.png', bgColor: '#96ce68' },
+      { name: 'B 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/images/product-b.png', bgColor: '#e87477' },
+      { name: 'C 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/images/product-c.png', bgColor: '#96ce68' },
     ],
     applying: [
-      { name: 'B 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/b상품커버.png', bgColor: '#e87477' },
-      { name: 'C 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/c상품커버.png', bgColor: '#96ce68' },
+      { name: 'B 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/images/product-b.png', bgColor: '#e87477' },
+      { name: 'C 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/images/product-c.png', bgColor: '#96ce68' },
     ],
     settled: [
-      { name: 'A 투자 상품', amount: '20,000원', shares: '1주', remaining: '8개월 남음', img: '/a상품커버.png', bgColor: '#dae7ff', clickable: true },
-      { name: 'B 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/b상품커버.png', bgColor: '#e87477' },
-      { name: 'C 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/c상품커버.png', bgColor: '#96ce68' },
+      { name: 'A 투자 상품', amount: '20,000원', shares: '1주', remaining: '8개월 남음', img: '/images/product-a.png', bgColor: '#dae7ff', clickable: true },
+      { name: 'B 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/images/product-b.png', bgColor: '#e87477' },
+      { name: 'C 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/images/product-c.png', bgColor: '#96ce68' },
     ],
     pre_settlement: [
-      { name: 'A 투자 상품', amount: '20,000원', shares: '1주', remaining: '4개월 남음', img: '/a상품커버.png', bgColor: '#dae7ff', clickable: true },
-      { name: 'B 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/b상품커버.png', bgColor: '#e87477' },
-      { name: 'C 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/c상품커버.png', bgColor: '#96ce68' },
+      { name: 'A 투자 상품', amount: '20,000원', shares: '1주', remaining: '4개월 남음', img: '/images/product-a.png', bgColor: '#dae7ff', clickable: true },
+      { name: 'B 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/images/product-b.png', bgColor: '#e87477' },
+      { name: 'C 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/images/product-c.png', bgColor: '#96ce68' },
     ],
     post_settlement: [
-      { name: 'B 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/b상품커버.png', bgColor: '#e87477' },
-      { name: 'C 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/c상품커버.png', bgColor: '#96ce68' },
+      { name: 'B 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/images/product-b.png', bgColor: '#e87477' },
+      { name: 'C 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/images/product-c.png', bgColor: '#96ce68' },
     ],
   }
 
@@ -299,7 +299,7 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
           <div style={{ height: 60, padding: '0 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <img src="/logo.svg" alt="bankcow" style={{ height: 24, width: 120 }} />
             <div style={{ width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-              <img src="/icons/AppBarItem/Notification Icon.svg" alt="알림" style={{ width: 24, height: 24 }} />
+              <img src="/icons/appbar/notification.svg" alt="알림" style={{ width: 24, height: 24 }} />
             </div>
           </div>
         </div>
@@ -313,7 +313,7 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
         {phase === 'pre' && (
           <div style={{ padding: '12px 16px 0' }}>
             <div style={{ width: '100%', height: 120, borderRadius: 16, overflow: 'hidden', position: 'relative' }}>
-              <img src="/banner.png" alt="배너" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src="/images/banner.png" alt="배너" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               <div style={{ position: 'absolute', bottom: 10, right: 10, backgroundColor: 'rgba(0,0,0,0.4)', borderRadius: 100, padding: '0 8px', height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2, fontSize: 12, fontWeight: 500 }}>
                 <span style={{ color: 'rgba(255,255,255,0.9)', lineHeight: '18px' }}>{bannerIndex + 1}</span>
                 <span style={{ color: 'rgba(255,255,255,0.5)', lineHeight: '18px' }}>/</span>
@@ -387,7 +387,7 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
             {config.showApplying && (
               <div onClick={() => nav('history_detail')} style={{ backgroundColor: '#e8f0ff', borderRadius: 16, height: 56, padding: '0 20px 0 12px', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
                 <div style={{ display: 'flex', alignItems: 'center', flex: 1, minWidth: 0 }}>
-                  <img src="/a상품커버.png" alt="" style={{ width: 44, height: 33, objectFit: 'cover', flexShrink: 0 }} />
+                  <img src="/images/product-a.png" alt="" style={{ width: 44, height: 33, objectFit: 'cover', flexShrink: 0 }} />
                   <span style={{ ...T.body17('semibold'), color: 'var(--color-primary-400)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1, minWidth: 0 }}>투자 신청중</span>
                 </div>
                 <span style={{ ...T.body17('semibold'), color: 'var(--color-primary-500)', whiteSpace: 'nowrap', flexShrink: 0 }}>20,000원</span>
@@ -418,7 +418,7 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
                 <span style={{ fontSize: 14, fontWeight: 500, lineHeight: '20px', color: 'var(--color-neutral-900)', whiteSpace: 'nowrap' }}>8월 중 출시 예정</span>
               </div>
               {/* 상품 이미지 */}
-              <img src="/출시예정상품이미지.png" alt="" style={{ position: 'absolute', top: 51, left: '50%', transform: 'translateX(-50%)', width: 237, height: 170, objectFit: 'cover', opacity: 0.5 }} />
+              <img src="/images/release-upcoming.png" alt="" style={{ position: 'absolute', top: 51, left: '50%', transform: 'translateX(-50%)', width: 237, height: 170, objectFit: 'cover', opacity: 0.5 }} />
               {/* 알림 신청 인원 뱃지 */}
               <div style={{ position: 'absolute', top: 184, right: 22, display: 'flex', alignItems: 'center', gap: 4, backgroundColor: 'rgba(255,255,255,0.64)', border: '1px solid rgba(255,255,255,0.8)', borderRadius: 16, padding: '5px 12px' }}>
                 <span style={{ fontSize: 16 }}>🐮</span>
@@ -457,7 +457,7 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
                   <span style={{ fontSize: 14, fontWeight: 500, lineHeight: '20px', color: 'var(--color-neutral-900)', whiteSpace: 'nowrap' }}>13일 23:59:59 남음</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
-                  <img src="/a상품커버.png" alt="상품" style={{ width: 186, height: 140, objectFit: 'cover' }} />
+                  <img src="/images/product-a.png" alt="상품" style={{ width: 186, height: 140, objectFit: 'cover' }} />
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, backgroundColor: 'rgba(255,255,255,0.64)', border: '1px solid rgba(255,255,255,0.8)', borderRadius: 16, padding: '5px 12px' }}>
@@ -497,7 +497,7 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
           <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>마감된 상품</span>
           <div style={{ borderRadius: 16, overflow: 'hidden', padding: 8, backgroundColor: 'var(--color-neutral-050)', display: 'flex', flexDirection: 'column', gap: 8 }}>
             <div style={{ padding: '8px 8px 0', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', filter: 'grayscale(100%)', opacity: 0.5 }}>
-              <img src="/a상품커버.png" alt="상품" style={{ width: 186, height: 140, objectFit: 'cover' }} />
+              <img src="/images/product-a.png" alt="상품" style={{ width: 186, height: 140, objectFit: 'cover' }} />
             </div>
             <div style={{ backgroundColor: 'var(--color-neutral-000)', borderRadius: 12, padding: '16px 16px 20px', display: 'flex', flexDirection: 'column', gap: 12 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -546,7 +546,7 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
             </div>
             {/* 알림 미리보기 이미지 */}
             <div style={{ marginBottom: 24 }}>
-              <img src="/출시바텀시트이미지.png" alt="" style={{ width: '100%', borderRadius: 16 }} />
+              <img src="/images/release-sheet.png" alt="" style={{ width: '100%', borderRadius: 16 }} />
             </div>
             <div style={{ textAlign: 'center', marginBottom: 28 }}>
               <div style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>새로운 투자 상품 출시하면</div>
@@ -573,7 +573,7 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
       {showReleaseToast && (
         <div style={{ position: 'fixed', top: 'calc(env(safe-area-inset-top, 0px) + 60px)', left: 16, right: 16, zIndex: 10000, display: 'flex', justifyContent: 'center', animation: 'v7-toast-down 0.3s ease-out' }}>
           <div style={{ backgroundColor: 'var(--color-neutral-800)', borderRadius: 12, padding: '14px 20px', display: 'flex', alignItems: 'center', gap: 8 }}>
-            <img src="/icons/초록색체크아이콘.svg" alt="" style={{ width: 20, height: 20 }} />
+            <img src="/icons/check-green.svg" alt="" style={{ width: 20, height: 20 }} />
             <span style={{ ...T.body15('semibold'), color: '#fff' }}>출시 알림을 신청했어요</span>
           </div>
         </div>
@@ -713,7 +713,7 @@ function QuantityInputScreen({ onBack, onInvest }) {
             padding: '4px 12px', borderRadius: 999,
             border: '1px solid var(--color-neutral-100)',
           }}>
-            <img src="/icons/Finance/nhBank.svg" alt="" style={{ width: 24, height: 24 }} />
+            <img src="/icons/finance/nh-bank.svg" alt="" style={{ width: 24, height: 24 }} />
             <span style={{ fontSize: 14, fontWeight: 500, color: 'var(--color-neutral-800)' }}>NH농협은행 김한우</span>
             <span style={{ fontSize: 12, fontWeight: 500, color: 'var(--color-neutral-500)' }}>(5672)</span>
             <ChevronRightIcon size={20} color="var(--color-neutral-400)" />
@@ -864,7 +864,7 @@ function PushNotificationScreen({ title, message, onTap }) {
             backgroundColor: 'var(--color-primary-500)',
             display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
           }}>
-            <img src="/a상품커버.png" alt="" style={{ width: 28, height: 28, objectFit: 'contain' }} />
+            <img src="/images/product-a.png" alt="" style={{ width: 28, height: 28, objectFit: 'contain' }} />
           </div>
           <div style={{ flex: 1 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
@@ -899,14 +899,14 @@ function AssetScreen({ onBack, nav, phase }) {
   const config = phaseConfig[phase] || phaseConfig.pre
 
   const menuItems = [
-    { icon: '/icons/Graphic/calendar.svg', label: '투자내역', action: () => nav('history') },
-    { icon: '/icons/Graphic/moneyBag.svg', label: '정산내역', action: () => nav('settlement_history') },
+    { icon: '/icons/graphic/calendar.svg', label: '투자내역', action: () => nav('history') },
+    { icon: '/icons/graphic/money-bag.svg', label: '정산내역', action: () => nav('settlement_history') },
   ]
 
   const bottomMenuItems = [
-    { icon: '/icons/Graphic/shield.svg', label: '자산 보호 내역' },
-    { icon: '/icons/Graphic/paper.svg', label: '세금' },
-    { icon: '/icons/Graphic/flatPaper.svg', label: '중도해지 취소내역' },
+    { icon: '/icons/graphic/shield.svg', label: '자산 보호 내역' },
+    { icon: '/icons/graphic/paper.svg', label: '세금' },
+    { icon: '/icons/graphic/flat-paper.svg', label: '중도해지 취소내역' },
   ]
 
   return (
@@ -930,7 +930,7 @@ function AssetScreen({ onBack, nav, phase }) {
           {config.showApplying && (
             <div onClick={() => nav('history_detail')} style={{ backgroundColor: '#e8f0ff', borderRadius: 16, height: 56, padding: '0 20px 0 12px', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
               <div style={{ display: 'flex', alignItems: 'center', flex: 1, minWidth: 0 }}>
-                <img src="/a상품커버.png" alt="" style={{ width: 44, height: 33, objectFit: 'cover', flexShrink: 0 }} />
+                <img src="/images/product-a.png" alt="" style={{ width: 44, height: 33, objectFit: 'cover', flexShrink: 0 }} />
                 <span style={{ ...T.body17('semibold'), color: 'var(--color-primary-400)' }}>투자 신청중</span>
               </div>
               <span style={{ ...T.body17('semibold'), color: 'var(--color-primary-500)' }}>20,000원</span>
@@ -958,9 +958,9 @@ function AssetScreen({ onBack, nav, phase }) {
 
         {(() => {
           const assetProducts = (() => {
-            const b = { name: 'B 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/b상품커버.png', bgColor: '#e87477' }
-            const c = { name: 'C 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/c상품커버.png', bgColor: '#96ce68' }
-            const a = { name: 'A 투자 상품', amount: '20,000원', shares: '1주', remaining: phase === 'pre_settlement' ? '4개월 남음' : '8개월 남음', img: '/a상품커버.png', bgColor: '#dae7ff', clickable: true }
+            const b = { name: 'B 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/images/product-b.png', bgColor: '#e87477' }
+            const c = { name: 'C 투자 상품', amount: '100,000원', shares: '5주', remaining: '2년 8개월 남음', img: '/images/product-c.png', bgColor: '#96ce68' }
+            const a = { name: 'A 투자 상품', amount: '20,000원', shares: '1주', remaining: phase === 'pre_settlement' ? '4개월 남음' : '8개월 남음', img: '/images/product-a.png', bgColor: '#dae7ff', clickable: true }
             if (phase === 'pre' || phase === 'applying') return [b, c]
             if (phase === 'post_settlement') return [b, c]
             return [a, b, c]
@@ -1041,12 +1041,12 @@ function MyAccountScreen({ onBack, nav, phase }) {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <div style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: '#03B24B', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <img src="/icons/Finance/nhBank.svg" alt="" style={{ width: 28, height: 28 }} />
+              <img src="/icons/finance/nh-bank.svg" alt="" style={{ width: 28, height: 28 }} />
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                 <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>NH농협은행</span>
-                <img src="/icons/Graphic/help2.svg" alt="" style={{ width: 16, height: 16 }} />
+                <img src="/icons/graphic/help.svg" alt="" style={{ width: 16, height: 16 }} />
               </div>
               <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{balance}원</span>
             </div>
@@ -1132,7 +1132,7 @@ function AccountDetailScreen({ onBack, phase }) {
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <img src="/icons/Finance/nhBank.svg" alt="" style={{ width: 32, height: 32 }} />
+                  <img src="/icons/finance/nh-bank.svg" alt="" style={{ width: 32, height: 32 }} />
                   <span style={{ fontSize: 14, fontWeight: 500, color: 'var(--color-neutral-050)' }}>2123456-78-9101112</span>
                 </div>
                 <div style={{ backgroundColor: '#1652b8', borderRadius: 20, padding: '2px 10px' }}>
@@ -1199,25 +1199,25 @@ function AccountDetailScreen({ onBack, phase }) {
 function InvestHistoryScreen({ onBack, nav, phase }) {
   // 신청중인 투자 (applying phase only)
   const applyingItems = phase === 'applying' ? [
-    { name: 'A 투자 상품', desc: '20,000원 신청중', img: '/a상품커버.png', bgColor: '#dae7ff' },
+    { name: 'A 투자 상품', desc: '20,000원 신청중', img: '/images/product-a.png', bgColor: '#dae7ff' },
   ] : []
 
   // 투자내역
   const historyByPhase = {
     pre: [
-      { date: '26년 6월 12일', items: [{ name: 'B 투자 상품', desc: '100,000원 체결 완료', img: '/b상품커버.png', bgColor: '#e87477' }] },
-      { date: '26년 6월 12일', items: [{ name: 'C 투자 상품', desc: '100,000원 체결 완료', img: '/c상품커버.png', bgColor: '#96ce68' }] },
+      { date: '26년 6월 12일', items: [{ name: 'B 투자 상품', desc: '100,000원 체결 완료', img: '/images/product-b.png', bgColor: '#e87477' }] },
+      { date: '26년 6월 12일', items: [{ name: 'C 투자 상품', desc: '100,000원 체결 완료', img: '/images/product-c.png', bgColor: '#96ce68' }] },
     ],
     settled: [
-      { date: '26년 6월 12일', items: [{ name: 'A 투자 상품', desc: '20,000원 체결 완료', clickable: true, detailType: 'settled', img: '/a상품커버.png', bgColor: '#dae7ff' }] },
-      { date: '26년 6월 12일', items: [{ name: 'B 투자 상품', desc: '100,000원 체결 완료', img: '/b상품커버.png', bgColor: '#e87477' }] },
-      { date: '26년 6월 12일', items: [{ name: 'C 투자 상품', desc: '100,000원 체결 완료', img: '/c상품커버.png', bgColor: '#96ce68' }] },
+      { date: '26년 6월 12일', items: [{ name: 'A 투자 상품', desc: '20,000원 체결 완료', clickable: true, detailType: 'settled', img: '/images/product-a.png', bgColor: '#dae7ff' }] },
+      { date: '26년 6월 12일', items: [{ name: 'B 투자 상품', desc: '100,000원 체결 완료', img: '/images/product-b.png', bgColor: '#e87477' }] },
+      { date: '26년 6월 12일', items: [{ name: 'C 투자 상품', desc: '100,000원 체결 완료', img: '/images/product-c.png', bgColor: '#96ce68' }] },
     ],
     post_settlement: [
-      { date: '28년 12월 18일', items: [{ name: 'A 투자 상품', desc: '20,000원 정산 완료', clickable: true, detailType: 'post_settlement', img: '/a상품커버.png', bgColor: '#dae7ff' }] },
-      { date: '26년 6월 12일', items: [{ name: 'A 투자 상품', desc: '20,000원 체결 완료', clickable: true, detailType: 'settled', img: '/a상품커버.png', bgColor: '#dae7ff' }] },
-      { date: '26년 6월 12일', items: [{ name: 'B 투자 상품', desc: '100,000원 체결 완료', img: '/b상품커버.png', bgColor: '#e87477' }] },
-      { date: '26년 6월 12일', items: [{ name: 'C 투자 상품', desc: '100,000원 체결 완료', img: '/c상품커버.png', bgColor: '#96ce68' }] },
+      { date: '28년 12월 18일', items: [{ name: 'A 투자 상품', desc: '20,000원 정산 완료', clickable: true, detailType: 'post_settlement', img: '/images/product-a.png', bgColor: '#dae7ff' }] },
+      { date: '26년 6월 12일', items: [{ name: 'A 투자 상품', desc: '20,000원 체결 완료', clickable: true, detailType: 'settled', img: '/images/product-a.png', bgColor: '#dae7ff' }] },
+      { date: '26년 6월 12일', items: [{ name: 'B 투자 상품', desc: '100,000원 체결 완료', img: '/images/product-b.png', bgColor: '#e87477' }] },
+      { date: '26년 6월 12일', items: [{ name: 'C 투자 상품', desc: '100,000원 체결 완료', img: '/images/product-c.png', bgColor: '#96ce68' }] },
     ],
   }
 
@@ -1251,7 +1251,7 @@ function InvestHistoryScreen({ onBack, nav, phase }) {
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     overflow: 'hidden', flexShrink: 0,
                   }}>
-                    <img src={item.img || '/a상품커버.png'} alt="" style={{ width: 44, height: 33, objectFit: 'cover' }} />
+                    <img src={item.img || '/images/product-a.png'} alt="" style={{ width: 44, height: 33, objectFit: 'cover' }} />
                   </div>
                   <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
                     <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{item.name}</span>
@@ -1285,7 +1285,7 @@ function InvestHistoryScreen({ onBack, nav, phase }) {
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         overflow: 'hidden', flexShrink: 0,
                       }}>
-                        <img src={item.img || '/a상품커버.png'} alt="" style={{ width: 44, height: 33, objectFit: 'cover' }} />
+                        <img src={item.img || '/images/product-a.png'} alt="" style={{ width: 44, height: 33, objectFit: 'cover' }} />
                       </div>
                       <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
                         <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{item.name}</span>
@@ -1389,7 +1389,7 @@ function InvestHistoryDetailScreen({ onBack, nav, phase, detailType }) {
         <div style={{ padding: '12px 16px 28px', display: 'flex', flexDirection: 'column', gap: 8 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <div style={{ width: 36, height: 36, borderRadius: 12, backgroundColor: '#dae7ff', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
-              <img src="/a상품커버.png" alt="" style={{ width: 36, height: 27, objectFit: 'cover' }} />
+              <img src="/images/product-a.png" alt="" style={{ width: 36, height: 27, objectFit: 'cover' }} />
             </div>
             <span style={{ ...T.body17(), color: 'var(--color-neutral-700)' }}>A 투자 상품</span>
           </div>
@@ -1503,7 +1503,7 @@ function SettlementHistoryScreen({ onBack, phase, nav }) {
   const hasSettlement = phase === 'post_settlement'
 
   const settlementData = hasSettlement ? [
-    { date: '28년 12월 1일', name: 'A 투자 상품', shares: '1주 정산', amount: '22,000원', diff: '2,000', rate: '20.00%', type: 'profit', img: '/a상품커버.png', bgColor: '#dae7ff' },
+    { date: '28년 12월 1일', name: 'A 투자 상품', shares: '1주 정산', amount: '22,000원', diff: '2,000', rate: '20.00%', type: 'profit', img: '/images/product-a.png', bgColor: '#dae7ff' },
   ] : []
 
   if (!hasSettlement) {
@@ -1518,7 +1518,7 @@ function SettlementHistoryScreen({ onBack, phase, nav }) {
         <SubAppBar title="" onBack={onBack} />
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
           <div style={{ width: 100, height: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0.3 }}>
-            <img src="/a상품커버.png" alt="" style={{ width: 80, height: 60, objectFit: 'cover' }} />
+            <img src="/images/product-a.png" alt="" style={{ width: 80, height: 60, objectFit: 'cover' }} />
           </div>
           <span style={{ ...T.body17(), color: 'var(--color-neutral-600)' }}>정산내역이 없어요</span>
         </div>
@@ -1583,7 +1583,7 @@ function SettlementHistoryScreen({ onBack, phase, nav }) {
               <div onClick={() => nav('my_invest_detail', '내 투자')} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: 16, cursor: 'pointer' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, flex: 1, minWidth: 0 }}>
                   <div style={{ width: 44, height: 44, borderRadius: 16, backgroundColor: item.bgColor || '#dae7ff', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
-                    <img src={item.img || '/a상품커버.png'} alt="" style={{ width: 44, height: 33, objectFit: 'cover' }} />
+                    <img src={item.img || '/images/product-a.png'} alt="" style={{ width: 44, height: 33, objectFit: 'cover' }} />
                   </div>
                   <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
                     <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{item.name}</span>
@@ -1633,17 +1633,17 @@ function MyInvestDetailScreen({ onBack, nav, phase, initialTab }) {
   const filteredCalves = calfFilter === '전체' ? calfData : calfData.filter(c => c.status === calfFilter)
 
   const investHistoryItems = isPostSettlement ? [
-    { date: '28년 12월 18일', items: [{ name: 'A 투자 상품', desc: '20,000원 정산 완료', img: '/a상품커버.png', bgColor: '#dae7ff' }] },
-    { date: '26년 6월 12일', items: [{ name: 'A 투자 상품', desc: '20,000원 체결 완료', img: '/a상품커버.png', bgColor: '#dae7ff' }] },
+    { date: '28년 12월 18일', items: [{ name: 'A 투자 상품', desc: '20,000원 정산 완료', img: '/images/product-a.png', bgColor: '#dae7ff' }] },
+    { date: '26년 6월 12일', items: [{ name: 'A 투자 상품', desc: '20,000원 체결 완료', img: '/images/product-a.png', bgColor: '#dae7ff' }] },
   ] : [
-    { date: '26년 6월 12일', items: [{ name: 'A 투자 상품', desc: '20,000원 체결 완료', img: '/a상품커버.png', bgColor: '#dae7ff' }] },
+    { date: '26년 6월 12일', items: [{ name: 'A 투자 상품', desc: '20,000원 체결 완료', img: '/images/product-a.png', bgColor: '#dae7ff' }] },
   ]
 
   const bottomMenuItems = [
-    { icon: '/icons/Graphic/paper.svg', label: '공시', type: 'download' },
-    { icon: '/icons/Graphic/paper.svg', label: '투자자 명부', type: 'download' },
-    { icon: '/icons/Graphic/shield.svg', label: '자산 보호 처리 방침', type: 'link' },
-    { icon: '/icons/Graphic/farm.svg', label: '상품 정보', type: 'link' },
+    { icon: '/icons/graphic/paper.svg', label: '공시', type: 'download' },
+    { icon: '/icons/graphic/paper.svg', label: '투자자 명부', type: 'download' },
+    { icon: '/icons/graphic/shield.svg', label: '자산 보호 처리 방침', type: 'link' },
+    { icon: '/icons/graphic/farm.svg', label: '상품 정보', type: 'link' },
   ]
 
   const downloadIcon = (
@@ -1693,7 +1693,7 @@ function MyInvestDetailScreen({ onBack, nav, phase, initialTab }) {
               </div>
             </div>
             <div style={{ width: 200, height: 200, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', flexShrink: 0 }}>
-              <img src="/a상품커버.png" alt="" style={{ width: 200, height: 200, objectFit: 'contain' }} />
+              <img src="/images/product-a.png" alt="" style={{ width: 200, height: 200, objectFit: 'contain' }} />
             </div>
           </div>
         </div>
@@ -1735,7 +1735,7 @@ function MyInvestDetailScreen({ onBack, nav, phase, initialTab }) {
                 <div key={idx} style={{ border: '1px solid var(--color-neutral-100)', borderRadius: 16, padding: '16px 20px', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                     <div style={{ width: 48, height: 48, borderRadius: 24, backgroundColor: 'var(--color-primary-050)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, overflow: 'hidden' }}>
-                      <img src="/Cow.png" alt="" style={{ width: 40, height: 40, objectFit: 'cover' }} />
+                      <img src="/images/cow.png" alt="" style={{ width: 40, height: 40, objectFit: 'cover' }} />
                     </div>
                     <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
                       <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{calf.name}</span>
@@ -1846,7 +1846,7 @@ function MyInvestDetailScreen({ onBack, nav, phase, initialTab }) {
                   {group.items.map((item, iIdx) => (
                     <div key={iIdx} onClick={() => nav('history_detail')} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 16, cursor: 'pointer' }}>
                       <div style={{ width: 44, height: 44, borderRadius: 16, backgroundColor: item.bgColor || '#dae7ff', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
-                        <img src={item.img || '/a상품커버.png'} alt="" style={{ width: 44, height: 33, objectFit: 'cover' }} />
+                        <img src={item.img || '/images/product-a.png'} alt="" style={{ width: 44, height: 33, objectFit: 'cover' }} />
                       </div>
                       <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
                         <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{item.name}</span>
@@ -1934,9 +1934,9 @@ function FeedScreen({ goTab }) {
           </div>
           <div className="v7-hide-scrollbar" style={{ display: 'flex', gap: 12, overflowX: 'auto', marginRight: -16 }}>
             {[
-              { img: '/blogimage.png', title: '뱅카우는 어떤 기준으로 신규 공모 농가를 선정할까요?', desc: '까다로운 심사 기준과 선정 과정을 알려드릴게요', url: 'https://m.blog.naver.com/bancow-official/224330262729' },
-              { img: '/insight/guide-2.png', title: '초보자를 위한 한우 투자 가이드', desc: '송아지 입식부터 출하, 정산까지 처음이어도 어렵지 않아요' },
-              { img: '/insight/guide-1.png', title: '한우는 돈이 돼요', desc: '한우 시장은 언제나 수요가 항상 있었어요' },
+              { img: '/images/blog.png', title: '뱅카우는 어떤 기준으로 신규 공모 농가를 선정할까요?', desc: '까다로운 심사 기준과 선정 과정을 알려드릴게요', url: 'https://m.blog.naver.com/bancow-official/224330262729' },
+              { img: '/images/insight/guide-2.png', title: '초보자를 위한 한우 투자 가이드', desc: '송아지 입식부터 출하, 정산까지 처음이어도 어렵지 않아요' },
+              { img: '/images/insight/guide-1.png', title: '한우는 돈이 돼요', desc: '한우 시장은 언제나 수요가 항상 있었어요' },
             ].map((item, i) => (
               <div key={i} onClick={item.url ? () => setWebviewUrl(item.url) : undefined} style={{ flexShrink: 0, width: 280, display: 'flex', flexDirection: 'column', gap: 8, cursor: item.url ? 'pointer' : 'default' }}>
                 <div style={{ width: '100%', aspectRatio: '160/90', borderRadius: 16, overflow: 'hidden' }}>
@@ -1957,7 +1957,7 @@ function FeedScreen({ goTab }) {
         <div style={{ padding: '24px 16px' }}>
           <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)', marginBottom: 12 }}>뱅카우 숏츠</div>
           <div style={{ display: 'flex', gap: 12 }}>
-            {['/shorts-1.png', '/shorts-2.png'].map((src, i) => (
+            {['/images/shorts-1.png', '/images/shorts-2.png'].map((src, i) => (
               <div key={i} style={{ flex: 1, minWidth: 0, aspectRatio: '9/14', borderRadius: 12, overflow: 'hidden' }}>
                 <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
@@ -1982,12 +1982,12 @@ function FeedScreen({ goTab }) {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px 12px', width: '100%', maxWidth: '100%' }}>
             {[
-              { img: '/insight/content-1.png', title: '한우 투자, 이제 시작해도 늦지 않다' },
-              { img: '/insight/content-2.png', title: '한우 투자, 이제 시작해도 늦지 않다' },
-              { img: '/insight/content-3.png', title: '한우 투자로 얻는 수익과 리스크 분석' },
-              { img: '/insight/content-4.png', title: '한우 투자로 얻는 수익과 리스크 분석' },
-              { img: '/insight/content-5.png', title: '초보자를 위한 한우 투자 가이드' },
-              { img: '/insight/content-6.png', title: '초보자를 위한 한우 투자 가이드' },
+              { img: '/images/insight/content-1.png', title: '한우 투자, 이제 시작해도 늦지 않다' },
+              { img: '/images/insight/content-2.png', title: '한우 투자, 이제 시작해도 늦지 않다' },
+              { img: '/images/insight/content-3.png', title: '한우 투자로 얻는 수익과 리스크 분석' },
+              { img: '/images/insight/content-4.png', title: '한우 투자로 얻는 수익과 리스크 분석' },
+              { img: '/images/insight/content-5.png', title: '초보자를 위한 한우 투자 가이드' },
+              { img: '/images/insight/content-6.png', title: '초보자를 위한 한우 투자 가이드' },
             ].map((item, i) => (
               <div key={i} style={{ minWidth: 0, overflow: 'hidden' }}>
                 <div style={{ width: '100%', aspectRatio: '16/10', borderRadius: 8, overflow: 'hidden', marginBottom: 8 }}>
@@ -2014,9 +2014,9 @@ function FeedScreen({ goTab }) {
         <div style={{ padding: '24px 16px' }}>
           <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-900)', marginBottom: 16 }}>언론 보도</div>
           {[
-            { img: '/insight/news-1.png', title: '한우 투자, 새로운 기회', sub: '최근 한우 시장의 변화와...' },
-            { img: '/insight/news-2.png', title: '한우 투자, 성공적인 사례', sub: '한우 투자에 성공한 사례를...' },
-            { img: '/insight/news-3.png', title: '한우 투자, 전문가의 조언', sub: '전문가들은 한우 투자를 고...' },
+            { img: '/images/insight/news-1.png', title: '한우 투자, 새로운 기회', sub: '최근 한우 시장의 변화와...' },
+            { img: '/images/insight/news-2.png', title: '한우 투자, 성공적인 사례', sub: '한우 투자에 성공한 사례를...' },
+            { img: '/images/insight/news-3.png', title: '한우 투자, 전문가의 조언', sub: '전문가들은 한우 투자를 고...' },
           ].map((item, i) => (
             <div key={i} style={{
               display: 'flex', alignItems: 'center', gap: 12,
@@ -2063,7 +2063,7 @@ function ShoppingScreen({ goTab }) {
   const ShopProductCard = ({ product }) => (
     <div style={{ width: 150, flexShrink: 0 }}>
       <div style={{ width: '100%', aspectRatio: '1/1', borderRadius: 8, overflow: 'hidden', backgroundColor: 'var(--color-neutral-100)' }}>
-        <img src="/shopping.jpg" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        <img src="/images/shopping.jpg" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
       </div>
       <div style={{ marginTop: 8 }}>
         <div style={{ fontSize: 14, fontWeight: 400, lineHeight: '20px', color: 'var(--color-neutral-800)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{product.name}</div>
@@ -2177,13 +2177,13 @@ function MyPageScreen({ nav, goTab }) {
             </div>
           </div>
           <div style={{ width: 100, height: 100, borderRadius: 50, overflow: 'hidden', flexShrink: 0 }}>
-            <img src="/Cow.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <img src="/images/cow.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
         </div>
 
         <div style={{ padding: '0 16px' }}>
           <div style={{ backgroundColor: 'var(--color-neutral-000)', border: '1px solid var(--color-neutral-100)', borderRadius: 16, padding: '12px 20px', display: 'flex', alignItems: 'center', gap: 8 }}>
-            <img src="/Visitor.png" alt="" style={{ width: 56, height: 56, objectFit: 'cover', flexShrink: 0 }} />
+            <img src="/images/visitor.png" alt="" style={{ width: 56, height: 56, objectFit: 'cover', flexShrink: 0 }} />
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontSize: 18, fontWeight: 600, lineHeight: '26px', color: 'var(--color-neutral-800)' }}>견학생</div>
               <div style={{ fontSize: 14, lineHeight: '20px', display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -2251,10 +2251,10 @@ function MyPageScreen({ nav, goTab }) {
 function TabBarItem({ icon, label, selected = false, onClick }) {
   const color = selected ? 'var(--color-neutral-800)' : 'var(--color-neutral-600)'
   const iconMap = {
-    home: '/icons/TabBarItem/Home.svg',
-    shopping: '/icons/TabBarItem/Shopping.svg',
-    feed: '/icons/TabBarItem/Feed.svg',
-    my: '/icons/TabBarItem/My.svg',
+    home: '/icons/tab/home.svg',
+    shopping: '/icons/tab/shopping.svg',
+    feed: '/icons/tab/feed.svg',
+    my: '/icons/tab/my.svg',
   }
   // SVG 파일의 fill이 하드코딩이라 CSS filter로 선택 상태 색상 변경
   // 비선택: brightness(0) saturate(100%) + 회색 (#9DA5B6 근사) invert/sepia 조합

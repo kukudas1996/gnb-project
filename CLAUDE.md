@@ -127,6 +127,26 @@ src/
 
 ---
 
+## 리소스 관리 (public/)
+
+- 사용자가 `public/`에 파일을 추가하면, 작업 시 아래 규칙에 따라 자동으로 정리한다.
+- **이미지 파일** (png, jpg, webp 등)은 `public/images/`에 넣는다.
+- **아이콘 파일** (svg)은 `public/icons/`에 넣되, 용도별 하위 폴더로 분류한다.
+  - `icons/appbar/` — 앱바 아이콘
+  - `icons/tab/` — 탭바 아이콘
+  - `icons/graphic/` — 그래픽/일러스트 아이콘
+  - `icons/finance/` — 금융사 로고
+  - `icons/` 루트 — 범용 아이콘
+- **파일명 규칙**: 영문 소문자 kebab-case. 한글, 공백, camelCase 금지.
+  - 예: `한약재 먹으며 건강히 키우는 상품.png` → `product-herbal.png`
+  - 예: `Notification Icon.svg` → `notification.svg`
+  - 예: `moneyBag.svg` → `money-bag.svg`
+- `favicon.svg`, `logo.svg`는 루트에 유지한다.
+- 파일 이동/이름 변경 시 소스 코드의 모든 참조 경로도 함께 업데이트한다.
+- 미사용 파일은 발견 시 삭제한다.
+
+---
+
 ## 참고
 
 - `AGENTS.md`는 Codex 전용 설정 파일이다. Claude Code는 이 파일을 읽지 않으며 참고하지 않는다.

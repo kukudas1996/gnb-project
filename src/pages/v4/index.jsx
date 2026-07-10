@@ -1982,7 +1982,7 @@ function ShoppingScreen({ goTab }) {
     price: '20,000원',
     unit: '100g당 1,000원',
     farm: '뱅카우목장 1호',
-    img: '/shopping.jpg',
+    img: '/images/shopping.jpg',
   }))
 
   const ShopProductCard = ({ product }) => (
@@ -2143,7 +2143,7 @@ function MyPageScreen({ nav, goTab }) {
             </div>
           </div>
           <div style={{ width: 100, height: 100, borderRadius: 50, overflow: 'hidden', flexShrink: 0 }}>
-            <img src="/Cow.png" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <img src="/images/cow.png" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
         </div>
 
@@ -2159,7 +2159,7 @@ function MyPageScreen({ nav, goTab }) {
             gap: 8,
             overflow: 'hidden',
           }}>
-            <img src="/Visitor.png" alt="" style={{ width: 56, height: 56, objectFit: 'cover', flexShrink: 0 }} />
+            <img src="/images/visitor.png" alt="" style={{ width: 56, height: 56, objectFit: 'cover', flexShrink: 0 }} />
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontSize: 18, fontWeight: 600, lineHeight: '26px', color: 'var(--color-neutral-800)' }}>견학생</div>
               <div style={{ fontSize: 14, lineHeight: '20px', display: 'flex', alignItems: 'center', gap: 2 }}>
