@@ -1767,19 +1767,23 @@ function MyInvestDetailScreen({ onBack, nav, phase, initialTab }) {
               </div>
             </div>
 
-            {/* 내 투자금 section */}
-            <div style={{ height: 12, backgroundColor: 'var(--color-neutral-050)' }} />
-            <div style={{ padding: '24px 16px 0' }}>
-              <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>내 투자금</span>
-            </div>
-            <div style={{ padding: '12px 0 20px' }}>
-              {[{ l: '투자금', v: '20,000원' }, { l: '보유 수량', v: '1주' }].map((r, i) => (
-                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 16 }}>
-                  <span style={{ ...T.body17(), color: 'var(--color-neutral-700)' }}>{r.l}</span>
-                  <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{r.v}</span>
+            {!isPostSettlement && (
+              <>
+                {/* 내 투자금 section */}
+                <div style={{ height: 12, backgroundColor: 'var(--color-neutral-050)' }} />
+                <div style={{ padding: '24px 16px 0' }}>
+                  <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>내 투자금</span>
                 </div>
-              ))}
-            </div>
+                <div style={{ padding: '12px 0 20px' }}>
+                  {[{ l: '투자금', v: '20,000원' }, { l: '보유 수량', v: '1주' }].map((r, i) => (
+                    <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 16 }}>
+                      <span style={{ ...T.body17(), color: 'var(--color-neutral-700)' }}>{r.l}</span>
+                      <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{r.v}</span>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
 
             {isPostSettlement && (
               <>
