@@ -290,7 +290,7 @@ function HomeScreen({ phase, nav, goTab, phaseTransition }) {
             <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-600)' }}>투자 중인 상품 2</span>
           </div>
 
-          <div style={{ paddingBottom: 8 }}>
+          <div style={{ padding: '8px 0' }}>
             <ProductListItem name="한약재 먹으며 건강히 키우는 상품" remaining="1년 5개월 남음" amount="100,000원" shares="5주" img="/images/product-herbal.png" bgColor="#fcdede" />
             <ProductListItem name="5성급 축사에서 키우는 상품" remaining="1년 8개월 남음" amount="100,000원" shares="5주" img="/images/product-premium.png" bgColor="#fbe6d0" />
 
