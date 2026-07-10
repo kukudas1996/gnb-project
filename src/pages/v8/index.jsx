@@ -909,18 +909,6 @@ function AssetScreen({ onBack, nav, phase }) {
           <span style={{ ...T.headline32(), color: 'var(--color-neutral-900)' }}>{config.investAmount}</span>
         </div>
 
-        {config.showApplying && (
-          <div style={{ padding: '20px 16px 0' }}>
-            <div onClick={() => nav('history_detail')} style={{ backgroundColor: '#e8f0ff', borderRadius: 16, height: 56, padding: '0 20px 0 12px', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-              <div style={{ display: 'flex', alignItems: 'center', flex: 1, minWidth: 0 }}>
-                <img src="/a상품커버.png" alt="" style={{ width: 44, height: 33, objectFit: 'cover', flexShrink: 0 }} />
-                <span style={{ ...T.body17('semibold'), color: 'var(--color-primary-400)' }}>투자 신청중</span>
-              </div>
-              <span style={{ ...T.body17('semibold'), color: 'var(--color-primary-500)' }}>20,000원</span>
-            </div>
-          </div>
-        )}
-
         {/* 빠른 접근 버튼 */}
         <div style={{ padding: '16px 16px 20px' }}>
           <div style={{ display: 'flex', backgroundColor: 'var(--color-neutral-050)', borderRadius: 16 }}>
