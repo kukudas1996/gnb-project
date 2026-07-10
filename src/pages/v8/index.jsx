@@ -2104,32 +2104,31 @@ function ShoppingScreen({ goTab }) {
           </div>
         </div>
 
-        {/* Banner */}
-        <div style={{ padding: '0 16px' }}>
-          <div style={{ width: '100%', aspectRatio: '343/120', borderRadius: 12, overflow: 'hidden', backgroundColor: 'var(--color-neutral-100)' }}>
-            <img src="/shopping.jpg" alt="프로모션 배너" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        {/* 프로모션 배너 */}
+        <div style={{ padding: '12px 16px 0' }}>
+          <div style={{ width: '100%', height: 120, borderRadius: 16, overflow: 'hidden', backgroundColor: 'var(--color-primary-050)', position: 'relative', display: 'flex', alignItems: 'center', padding: 20 }}>
+            <div style={{ flex: 1, minWidth: 0, zIndex: 1 }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, backgroundColor: 'var(--color-primary-100)', borderRadius: 6, padding: '2px 8px', marginBottom: 6 }}>
+                <span style={{ fontSize: 12, fontWeight: 500, lineHeight: '18px', color: 'var(--color-primary-600)' }}>1C 이상 투자 성공 시</span>
+              </div>
+              <div style={{ ...T.body17('bold'), color: 'var(--color-neutral-900)', lineHeight: '26px' }}>
+                1++ 한우 구매 가능한<br />2만 포인트 지급
+              </div>
+            </div>
+            <div style={{ width: 80, height: 80, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1 }}>
+              <div style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: 'var(--color-primary-400)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ fontSize: 32, fontWeight: 700, color: '#fff' }}>P</span>
+              </div>
+            </div>
+            {/* Indicator */}
+            <div style={{ position: 'absolute', bottom: 10, right: 10, backgroundColor: 'rgba(0,0,0,0.4)', borderRadius: 100, padding: '2px 8px', display: 'flex', alignItems: 'center', gap: 2 }}>
+              <span style={{ fontSize: 12, fontWeight: 500, lineHeight: '18px', color: 'rgba(255,255,255,0.9)' }}>1</span>
+              <span style={{ fontSize: 12, fontWeight: 500, lineHeight: '18px', color: 'rgba(255,255,255,0.5)' }}>/</span>
+              <span style={{ fontSize: 12, fontWeight: 500, lineHeight: '18px', color: 'rgba(255,255,255,0.5)' }}>5</span>
+            </div>
           </div>
         </div>
 
-        {/* 뱅카우캐시 section */}
-        <div style={{ padding: '20px 16px 0' }}>
-          <div style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>뱅카우캐시</div>
-          <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', marginTop: 2 }}>
-            <span style={{ ...T.headline28('bold'), color: 'var(--color-neutral-900)' }}>20,000원</span>
-            <ChevronRightIcon size={28} color="var(--color-neutral-400)" />
-          </div>
-        </div>
-
-        {/* Buttons: 주문내역, 내 쿠폰 */}
-        <div style={{ padding: '20px 16px' }}>
-          <div style={{ backgroundColor: 'var(--color-neutral-050)', borderRadius: 16, padding: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
-            {['주문내역', '내 쿠폰'].map((text, i) => [
-              i > 0 && <div key={`d${i}`} style={{ width: 1, height: 25, backgroundColor: 'var(--color-neutral-200)' }} />,
-              <div key={text} style={{ flex: 1, textAlign: 'center', ...T.body17(), color: 'var(--color-neutral-800)', cursor: 'pointer' }}>{text}</div>,
-            ])}
-          </div>
-        </div>
-        <div style={{ height: 10, backgroundColor: 'var(--color-neutral-050)' }} />
         <ProductSection title="전체 상품" />
         <div style={{ height: 0, borderTop: '1px solid var(--color-neutral-050)' }} />
         <ProductSection title="{상품 그룹}" />
