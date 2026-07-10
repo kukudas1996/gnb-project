@@ -188,7 +188,7 @@ function HomeScreen({ nav, goTab }) {
 
           <div style={{ padding: '24px 16px 0', display: 'flex', flexDirection: 'column', gap: 8 }}>
             {/* 계좌 잔액 */}
-            <div style={{ backgroundColor: 'var(--color-neutral-050)', borderRadius: 16, height: 56, padding: '14px 12px 14px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}>
+            <div onClick={() => nav('my_account')} style={{ backgroundColor: 'var(--color-neutral-050)', borderRadius: 16, height: 56, padding: '14px 12px 14px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}>
               <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-600)' }}>계좌 잔액</span>
               <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>100,000원</span>
@@ -333,7 +333,7 @@ function AssetDetailScreen({ onBack, nav }) {
 
         {/* 계좌 잔액 */}
         <div style={{ padding: '24px 16px 0', display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <div style={{ backgroundColor: 'var(--color-neutral-050)', borderRadius: 16, height: 56, padding: '14px 12px 14px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}>
+          <div onClick={() => nav('my_account')} style={{ backgroundColor: 'var(--color-neutral-050)', borderRadius: 16, height: 56, padding: '14px 12px 14px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}>
             <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-600)' }}>계좌 잔액</span>
             <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
               <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>100,000원</span>
@@ -491,12 +491,6 @@ function MyAccountScreen({ onBack }) {
       iconBg: '#0ba744',
       icon: '/icons/finance/nh-bank.svg',
     },
-    {
-      name: '신한투자증권',
-      amount: '100,000,000원',
-      iconBg: '#2a64ff',
-      icon: null, // inline SVG
-    },
   ]
 
   return (
@@ -534,22 +528,12 @@ function MyAccountScreen({ onBack }) {
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                 {/* Icon */}
                 <div style={{ width: 48, height: 48, borderRadius: 16, backgroundColor: account.iconBg, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
-                  {account.icon ? (
-                    <img src={account.icon} alt="" style={{ width: 28, height: 28 }} />
-                  ) : (
-                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-                      <circle cx="14" cy="14" r="10" stroke="#fff" strokeWidth="1.5" />
-                      <text x="14" y="18" textAnchor="middle" fill="#fff" fontSize="13" fontWeight="700" fontFamily="Pretendard">S</text>
-                    </svg>
-                  )}
+                  <img src={account.icon} alt="" style={{ width: 28, height: 28 }} />
                 </div>
                 {/* Info */}
                 <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 4, height: 25 }}>
                     <span style={{ ...T.body17(), color: 'var(--color-neutral-600)' }}>{account.name}</span>
-                    {idx === 0 && (
-                      <img src="/icons/graphic/help.svg" alt="" style={{ width: 20, height: 20, opacity: 0.5 }} />
-                    )}
                   </div>
                   <span style={{ ...T.title20('semibold'), color: 'var(--color-neutral-800)' }}>{account.amount}</span>
                 </div>
