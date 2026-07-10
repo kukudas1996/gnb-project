@@ -547,11 +547,6 @@ function InvestmentHistoryScreen({ onBack }) {
           <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>투자 내역</span>
         </div>
 
-        {/* Underline below title */}
-        <div style={{ padding: '0 16px' }}>
-          <div style={{ width: 123, height: 2, backgroundColor: 'var(--color-neutral-900)' }} />
-        </div>
-
         {/* History List */}
         <div style={{ paddingBottom: 50 }}>
           {historyData.map((group, gi) => (
