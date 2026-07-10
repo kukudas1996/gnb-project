@@ -296,8 +296,8 @@ function HomeScreen({ phase, nav, goTab, phaseTransition }) {
 
             {/* 자세히 보기 */}
             <div onClick={() => nav('asset_detail')} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 16, cursor: 'pointer' }}>
-              <div style={{ width: 48, height: 48, borderRadius: 16, backgroundColor: 'var(--color-neutral-050)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, overflow: 'hidden' }}>
-                <span style={{ fontSize: 20, color: 'var(--color-neutral-400)', letterSpacing: 2 }}>···</span>
+              <div style={{ width: 48, height: 48, borderRadius: 16, backgroundColor: 'var(--color-neutral-050)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, flexShrink: 0, overflow: 'hidden' }}>
+                {[0,1,2].map(i => <div key={i} style={{ width: 5, height: 5, borderRadius: '50%', backgroundColor: 'var(--color-neutral-400)' }} />)}
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>자세히 보기</span>
