@@ -296,7 +296,7 @@ function HomeScreen({ nav, goTab }) {
 function AssetDetailScreen({ onBack, nav }) {
   const quickButtons = [
     { icon: '/icons/account.svg', label: '내 계좌', target: 'my_account' },
-    { icon: '/icons/graphic/calendar.svg', label: '투자내역', target: 'investment_history' },
+    { icon: '/icons/calendar.svg', label: '투자내역', target: 'investment_history' },
     { icon: '/icons/amountBag.svg', label: '정산내역', target: null },
   ]
 
@@ -311,7 +311,6 @@ function AssetDetailScreen({ onBack, nav }) {
       width: '100%', minHeight: '100dvh',
       backgroundColor: 'var(--color-neutral-000)',
       fontFamily: 'Pretendard, -apple-system, sans-serif',
-      animation: 'v9-slide-in 0.3s ease-out',
     }}>
       <div className="v9-scroll" style={{ height: '100dvh', overflowY: 'auto', overflowX: 'hidden' }}>
         <div style={{ height: 'env(safe-area-inset-top, 0px)' }} />
@@ -420,7 +419,6 @@ function InvestmentHistoryScreen({ onBack }) {
       width: '100%', minHeight: '100dvh',
       backgroundColor: 'var(--color-neutral-000)',
       fontFamily: 'Pretendard, -apple-system, sans-serif',
-      animation: 'v9-slide-in 0.3s ease-out',
     }}>
       <div className="v9-scroll" style={{ height: '100dvh', overflowY: 'auto', overflowX: 'hidden' }}>
         <div style={{ height: 'env(safe-area-inset-top, 0px)' }} />
@@ -439,17 +437,15 @@ function InvestmentHistoryScreen({ onBack }) {
           <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>투자 내역</span>
         </div>
 
+        {/* Underline below title */}
+        <div style={{ padding: '0 16px' }}>
+          <div style={{ width: 123, height: 2, backgroundColor: 'var(--color-neutral-900)' }} />
+        </div>
+
         {/* History List */}
         <div style={{ paddingBottom: 50 }}>
           {historyData.map((group, gi) => (
-            <div key={gi}>
-              {/* Underline indicator for first group */}
-              {gi === 0 && (
-                <div style={{ padding: '0 16px' }}>
-                  <div style={{ width: 123, height: 2, backgroundColor: 'var(--color-neutral-900)' }} />
-                </div>
-              )}
-
+            <div key={gi} style={{ paddingBottom: 16 }}>
               {/* Date label */}
               <div style={{ padding: '16px 16px 0' }}>
                 <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>{group.date}</span>
@@ -458,8 +454,8 @@ function InvestmentHistoryScreen({ onBack }) {
               {/* Items */}
               {group.items.map((item, ii) => (
                 <div key={ii} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 16 }}>
-                  <div style={{ width: 48, height: 48, borderRadius: 16, backgroundColor: item.bgColor, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0, padding: '0 2px' }}>
-                    <img src={item.img} alt="" style={{ width: '100%', aspectRatio: '40/30', objectFit: 'cover' }} />
+                  <div style={{ width: 48, height: 48, borderRadius: 16, backgroundColor: item.bgColor, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
+                    <img src={item.img} alt="" style={{ width: 44, height: 33, objectFit: 'cover' }} />
                   </div>
                   <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
                     <div style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.name}</div>
@@ -487,7 +483,7 @@ function MyAccountScreen({ onBack }) {
   const accounts = [
     {
       name: 'NH농협은행',
-      amount: '100,000,000원',
+      amount: '100,000원',
       iconBg: '#0ba744',
       icon: '/icons/finance/nh-bank.svg',
     },
@@ -498,7 +494,6 @@ function MyAccountScreen({ onBack }) {
       width: '100%', minHeight: '100dvh',
       backgroundColor: 'var(--color-neutral-000)',
       fontFamily: 'Pretendard, -apple-system, sans-serif',
-      animation: 'v9-slide-in 0.3s ease-out',
     }}>
       <div className="v9-scroll" style={{ height: '100dvh', overflowY: 'auto', overflowX: 'hidden' }}>
         <div style={{ height: 'env(safe-area-inset-top, 0px)' }} />
@@ -518,7 +513,7 @@ function MyAccountScreen({ onBack }) {
         {/* 총 계좌 잔액 */}
         <div style={{ padding: '16px 16px 0', display: 'flex', flexDirection: 'column', gap: 4 }}>
           <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>총 계좌 잔액</span>
-          <span style={{ ...T.headline32(), color: 'var(--color-neutral-900)' }}>1,760,000원</span>
+          <span style={{ ...T.headline32(), color: 'var(--color-neutral-900)' }}>100,000원</span>
         </div>
 
         {/* Account cards */}
