@@ -1482,7 +1482,7 @@ function SettlementHistoryScreen({ onBack, phase, nav }) {
   const hasSettlement = phase === 'post_settlement'
 
   const settlementData = hasSettlement ? [
-    { date: '28년 12월 1일', name: 'A 투자 상품', shares: '1주 정산', amount: '22,000원', diff: '2,000', rate: '20.00%', type: 'profit', img: '/a상품커버.png', bgColor: '#dae7ff' },
+    { date: '28년 12월 1일', name: 'A 투자 상품', shares: '1주 정산', amount: '22,000원', diff: '2,000', rate: '10.00%', type: 'profit', img: '/a상품커버.png', bgColor: '#dae7ff' },
   ] : []
 
   if (!hasSettlement) {
@@ -2207,7 +2207,7 @@ function MyPageScreen({ nav, goTab }) {
             {/* Quick buttons */}
             <div style={{ display: 'flex', padding: '16px 0', borderTop: '1px solid var(--color-neutral-100)' }}>
               {[
-                { label: '내 계좌', icon: '/icons/Graphic/account.svg', target: 'my_account' },
+                { label: '내 계좌', icon: '/icons/Graphic/moneyBag.svg', target: 'my_account' },
                 { label: '투자내역', icon: '/icons/Graphic/calendar.svg', target: 'history' },
                 { label: '주문내역', icon: '/icons/meet.svg', target: null },
               ].map((btn, i) => (
