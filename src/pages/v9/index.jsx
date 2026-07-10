@@ -569,10 +569,6 @@ function InvestmentHistoryScreen({ onBack }) {
                 </div>
               ))}
 
-              {/* Divider between groups */}
-              {gi < historyData.length - 1 && (
-                <div style={{ height: 1, backgroundColor: 'var(--color-neutral-100)', margin: '0 16px' }} />
-              )}
             </div>
           ))}
         </div>
