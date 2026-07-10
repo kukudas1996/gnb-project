@@ -1038,7 +1038,7 @@ function MyPageScreen({ nav, goTab }) {
           <div style={{ backgroundColor: 'var(--color-neutral-000)', borderRadius: 16, paddingTop: 20, paddingBottom: 24 }}>
             {/* Membership row */}
             <div style={{ padding: '0 20px', display: 'flex', alignItems: 'center', gap: 8 }}>
-              <img src="/images/visitor.png" alt="" style={{ width: 50, height: 50, objectFit: 'cover', flexShrink: 0 }} />
+              <img src="/images/membership.png" alt="" style={{ width: 50, height: 50, objectFit: 'cover', flexShrink: 0 }} />
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>멤버십 등급</div>
                 <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-800)' }}>견학생</div>
