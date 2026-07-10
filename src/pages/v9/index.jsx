@@ -50,7 +50,7 @@ export default function V9App() {
             <img src="/logo.svg" alt="bankcow" style={{ height: 24, width: 120 }} />
             <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
               <div style={{ width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                <img src="/icons/appbar/notification.svg" alt="알림" style={{ width: 44, height: 44 }} />
+                <img src="/icons/appbar/notification.svg" alt="알림" style={{ width: 24, height: 24 }} />
               </div>
             </div>
           </div>
@@ -172,7 +172,7 @@ export default function V9App() {
 
           {/* 투자 중인 상품 */}
           <div style={{ padding: '24px 16px 0' }}>
-            <span style={{ ...T.body15('semibold'), color: 'var(--color-neutral-600)' }}>투자 중인 상품</span>
+            <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-600)' }}>투자 중인 상품 2</span>
           </div>
 
           <div style={{ paddingBottom: 8 }}>
@@ -239,10 +239,10 @@ export default function V9App() {
                   background: 'linear-gradient(90deg, rgba(68,135,255,0.2), rgba(68,135,255,0.2)), linear-gradient(90deg, #fff, #fff)',
                 }}>
                   {/* 이미지 영역 + 오버레이 텍스트 */}
-                  <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', padding: 16 }}>
-                    <img src="/images/product-a.png" alt="" style={{ width: 159, height: 120, objectFit: 'cover' }} />
-                    <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <span style={{ ...T.title20('semibold'), color: '#fff', textAlign: 'center', textShadow: '0 1px 4px rgba(0,0,0,0.3)' }}>120% 투자 달성</span>
+                  <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 12, height: 152 }}>
+                    <img src="/images/product-a.png" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <span style={{ ...T.title20('semibold'), color: '#fff', textAlign: 'center' }}>120% 투자 달성</span>
                     </div>
                   </div>
                   {/* 정보 카드 */}
