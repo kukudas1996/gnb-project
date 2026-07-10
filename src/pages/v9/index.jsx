@@ -33,11 +33,49 @@ const ChevronLeftIcon = ({ size = 24, color = 'var(--color-neutral-800)' }) => (
 const ChevronRightIcon = ({ size = 20, color = 'var(--color-neutral-400)' }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6" /></svg>
 )
+const DeleteIcon = ({ size = 24, color = 'var(--color-neutral-700)' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/><line x1="18" y1="9" x2="12" y2="15"/><line x1="12" y1="9" x2="18" y2="15"/></svg>
+)
+
+// ============================================================
+// Shared UI
+// ============================================================
+function SubAppBar({ title, onBack }) {
+  return (
+    <div style={{ height: 60, padding: '0 6px', display: 'flex', alignItems: 'center', backgroundColor: 'var(--color-neutral-000)' }}>
+      <div style={{ width: 92, display: 'flex', alignItems: 'center' }}>
+        <div onClick={onBack} style={{ width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+          <ChevronLeftIcon />
+        </div>
+      </div>
+      <div style={{ flex: 1, textAlign: 'center' }}>
+        {title && <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{title}</span>}
+      </div>
+      <div style={{ width: 92 }} />
+    </div>
+  )
+}
+
+function CTAButton({ label, onClick, disabled = false }) {
+  return (
+    <div style={{ padding: '8px 16px', paddingBottom: 'calc(16px + env(safe-area-inset-bottom, 0px))' }}>
+      <div onClick={disabled ? undefined : onClick} style={{
+        height: 56, borderRadius: 14,
+        backgroundColor: disabled ? 'var(--color-neutral-200)' : 'var(--color-primary-500)',
+        color: disabled ? 'var(--color-neutral-400)' : '#fff',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        ...T.body17('semibold'), cursor: disabled ? 'default' : 'pointer',
+      }}>{label}</div>
+    </div>
+  )
+}
 
 // ============================================================
 // Main Router
 // ============================================================
 export default function V9App() {
+  const [phase, setPhase] = useState('pre')
+  // phases: pre -> applying -> settled
   const [screen, setScreen] = useState('home')
   const [history, setHistory] = useState([])
 
@@ -59,24 +97,56 @@ export default function V9App() {
     setHistory([])
   }, [])
 
+  const handleGoToQuantity = () => {
+    setHistory(prev => [...prev, screen])
+    setScreen('quantity_input')
+  }
+
+  const handleApply = () => {
+    setHistory(prev => [...prev, screen])
+    setScreen('apply_complete')
+  }
+
+  const handleApplyConfirm = () => {
+    setPhase('applying')
+    setScreen('product_detail_after')
+    setHistory(['home'])
+  }
+
+  const handleJumpToSettled = () => {
+    setPhase('settled')
+    setScreen('home')
+    setHistory([])
+  }
+
+  const phaseTransition = phase === 'applying' ? { label: '체결로 이동하기', onClick: handleJumpToSettled } : null
+
   switch (screen) {
     case 'home':
-      return <HomeScreen nav={nav} goTab={goTab} />
+      return <HomeScreen phase={phase} nav={nav} goTab={goTab} phaseTransition={phaseTransition} />
     case 'asset_detail':
-      return <AssetDetailScreen onBack={goBack} nav={nav} />
+      return <AssetDetailScreen phase={phase} onBack={goBack} nav={nav} phaseTransition={phaseTransition} />
     case 'investment_history':
       return <InvestmentHistoryScreen onBack={goBack} />
     case 'my_account':
       return <MyAccountScreen onBack={goBack} />
+    case 'product_detail':
+      return <InvestProductDetailScreen onBack={goBack} onApply={handleGoToQuantity} />
+    case 'product_detail_after':
+      return <InvestProductDetailAfterScreen onBack={goBack} />
+    case 'quantity_input':
+      return <QuantityInputScreen onBack={goBack} onInvest={handleApply} />
+    case 'apply_complete':
+      return <ApplyCompleteScreen onConfirm={handleApplyConfirm} />
     default:
-      return <HomeScreen nav={nav} goTab={goTab} />
+      return <HomeScreen phase={phase} nav={nav} goTab={goTab} phaseTransition={phaseTransition} />
   }
 }
 
 // ============================================================
 // Home Screen
 // ============================================================
-function HomeScreen({ nav, goTab }) {
+function HomeScreen({ phase, nav, goTab, phaseTransition }) {
   const [bannerIndex] = useState(0)
   const bannerCount = 5
 
@@ -122,7 +192,7 @@ function HomeScreen({ nav, goTab }) {
             <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>모집 중인 상품</span>
           </div>
           <div style={{ padding: '16px 16px 24px' }}>
-            <div style={{
+            <div onClick={() => nav('product_detail')} style={{
               borderRadius: 20, padding: 10, overflow: 'hidden',
               background: 'linear-gradient(90deg, rgba(68,135,255,0.2), rgba(68,135,255,0.2)), linear-gradient(90deg, #fff, #fff)',
               cursor: 'pointer',
@@ -183,15 +253,29 @@ function HomeScreen({ nav, goTab }) {
         <div>
           <div style={{ padding: '24px 16px 0' }}>
             <div style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>투자 중인 금액</div>
-            <div style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)' }}>200,000원</div>
+            <div style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)' }}>{phase === 'pre' ? '200,000원' : '200,000원'}</div>
           </div>
 
           <div style={{ padding: '24px 16px 0', display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {/* 신청 중인 투자 (applying phase only) */}
+            {phase === 'applying' && (
+              <div style={{ backgroundColor: '#e8f0ff', borderRadius: 16, padding: 12, display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                <div style={{ display: 'flex', alignItems: 'center', flex: 1, minWidth: 0 }}>
+                  <img src="/images/product-a.png" alt="" style={{ width: 43, height: 32, objectFit: 'cover', flexShrink: 0 }} />
+                  <span style={{ ...T.body17('semibold'), color: 'var(--color-primary-400)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1, minWidth: 0 }}>신청 중인 투자</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 2, flexShrink: 0 }}>
+                  <span style={{ ...T.body17('semibold'), color: 'var(--color-primary-500)', whiteSpace: 'nowrap' }}>60,000원</span>
+                  <ChevronRightIcon size={20} color="var(--color-primary-500)" />
+                </div>
+              </div>
+            )}
+
             {/* 계좌 잔액 */}
             <div onClick={() => nav('my_account')} style={{ backgroundColor: 'var(--color-neutral-050)', borderRadius: 16, height: 56, padding: '14px 12px 14px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}>
               <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-600)' }}>계좌 잔액</span>
               <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>100,000원</span>
+                <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{phase === 'applying' ? '40,000원' : '100,000원'}</span>
                 <ChevronRightIcon size={20} color="var(--color-neutral-400)" />
               </div>
             </div>
@@ -277,6 +361,16 @@ function HomeScreen({ nav, goTab }) {
         </div>
       </div>
 
+      {/* Phase Transition Button */}
+      {phaseTransition && (
+        <div onClick={phaseTransition.onClick} style={{
+          position: 'fixed', bottom: 'calc(85px + env(safe-area-inset-bottom, 0px))', left: 16, right: 16,
+          height: 48, borderRadius: 14, backgroundColor: 'var(--color-neutral-800)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          ...T.body15('semibold'), color: '#fff', cursor: 'pointer', zIndex: 25,
+        }}>{phaseTransition.label}</div>
+      )}
+
       {/* TabBar */}
       <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, backgroundColor: 'var(--color-neutral-000)', borderTop: '1px solid var(--color-neutral-050)', zIndex: 20 }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', padding: '4px 20px 0' }}>
@@ -293,7 +387,7 @@ function HomeScreen({ nav, goTab }) {
 // ============================================================
 // Asset Detail Screen (내 투자 상세)
 // ============================================================
-function AssetDetailScreen({ onBack, nav }) {
+function AssetDetailScreen({ phase, onBack, nav, phaseTransition }) {
   const quickButtons = [
     { icon: '/icons/account.svg', label: '내 계좌', target: 'my_account' },
     { icon: '/icons/calendar.svg', label: '투자내역', target: 'investment_history' },
@@ -330,12 +424,24 @@ function AssetDetailScreen({ onBack, nav }) {
           <span style={{ ...T.headline32(), color: 'var(--color-neutral-900)' }}>200,000원</span>
         </div>
 
-        {/* 계좌 잔액 */}
+        {/* 신청 중인 투자 + 계좌 잔액 */}
         <div style={{ padding: '24px 16px 0', display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {phase === 'applying' && (
+            <div style={{ backgroundColor: '#e8f0ff', borderRadius: 16, padding: 12, display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+              <div style={{ display: 'flex', alignItems: 'center', flex: 1, minWidth: 0 }}>
+                <img src="/images/product-a.png" alt="" style={{ width: 43, height: 32, objectFit: 'cover', flexShrink: 0 }} />
+                <span style={{ ...T.body17('semibold'), color: 'var(--color-primary-400)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1, minWidth: 0 }}>신청 중인 투자</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 2, flexShrink: 0 }}>
+                <span style={{ ...T.body17('semibold'), color: 'var(--color-primary-500)', whiteSpace: 'nowrap' }}>60,000원</span>
+                <ChevronRightIcon size={20} color="var(--color-primary-500)" />
+              </div>
+            </div>
+          )}
           <div onClick={() => nav('my_account')} style={{ backgroundColor: 'var(--color-neutral-050)', borderRadius: 16, height: 56, padding: '14px 12px 14px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}>
             <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-600)' }}>계좌 잔액</span>
             <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>100,000원</span>
+              <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{phase === 'applying' ? '40,000원' : '100,000원'}</span>
               <ChevronRightIcon size={20} color="var(--color-neutral-400)" />
             </div>
           </div>
@@ -548,6 +654,217 @@ function MyAccountScreen({ onBack }) {
           ))}
         </div>
       </div>
+    </div>
+  )
+}
+
+// ============================================================
+// Invest Product Detail Screen (투자 상품 상세)
+// ============================================================
+function InvestProductDetailScreen({ onBack, onApply }) {
+  return (
+    <div className="v9-screen" style={{
+      width: '100%', height: '100dvh',
+      backgroundColor: 'var(--color-neutral-000)',
+      display: 'flex', flexDirection: 'column',
+      fontFamily: 'Pretendard, -apple-system, sans-serif',
+    }}>
+      <div style={{ height: 'env(safe-area-inset-top, 0px)' }} />
+      <SubAppBar title="" onBack={onBack} />
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <span style={{ ...T.headline24('semibold'), color: 'var(--color-neutral-900)', opacity: 0.2 }}>투자 상품 상세</span>
+      </div>
+      <CTAButton label="투자하기" onClick={onApply} />
+    </div>
+  )
+}
+
+// ============================================================
+// Invest Product Detail After Screen (투자 상품 상세_신청 후)
+// ============================================================
+function InvestProductDetailAfterScreen({ onBack }) {
+  return (
+    <div className="v9-screen" style={{
+      width: '100%', height: '100dvh',
+      backgroundColor: 'var(--color-neutral-000)',
+      display: 'flex', flexDirection: 'column',
+      fontFamily: 'Pretendard, -apple-system, sans-serif',
+    }}>
+      <div style={{ height: 'env(safe-area-inset-top, 0px)' }} />
+      <SubAppBar title="A 투자 상품" onBack={onBack} />
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <span style={{ ...T.headline24('semibold'), color: 'var(--color-neutral-900)', opacity: 0.2 }}>투자 상품 상세</span>
+      </div>
+      <div style={{ padding: '8px 16px', paddingBottom: 'calc(16px + env(safe-area-inset-bottom, 0px))', display: 'flex', gap: 8 }}>
+        <div style={{
+          flex: 1, height: 56, borderRadius: 14,
+          backgroundColor: 'var(--color-neutral-100)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          ...T.body17('semibold'), color: 'var(--color-neutral-700)',
+        }}>1주 투자중</div>
+        <div style={{
+          flex: 1, height: 56, borderRadius: 14,
+          backgroundColor: 'var(--color-primary-500)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          ...T.body17('semibold'), color: '#fff', cursor: 'pointer',
+        }}>추가 투자</div>
+      </div>
+    </div>
+  )
+}
+
+// ============================================================
+// Quantity Input Screen (수량 입력)
+// ============================================================
+function QuantityInputScreen({ onBack, onInvest }) {
+  const [quantity, setQuantity] = useState(0)
+  const pricePerC = 20000
+  const maxAmount = 100000
+  const maxC = Math.floor(maxAmount / pricePerC)
+
+  const totalPrice = quantity * pricePerC
+  const formattedPrice = totalPrice.toLocaleString() + '원'
+
+  const handleNumber = (num) => {
+    const next = quantity * 10 + num
+    if (next <= maxC) setQuantity(next)
+  }
+  const handleDelete = () => setQuantity(Math.floor(quantity / 10))
+  const handleQuick = (val) => {
+    if (val === 'max') setQuantity(maxC)
+    else setQuantity(Math.min(quantity + val, maxC))
+  }
+
+  return (
+    <div className="v9-screen" style={{
+      width: '100%', height: '100dvh',
+      backgroundColor: 'var(--color-neutral-000)',
+      display: 'flex', flexDirection: 'column',
+      fontFamily: 'Pretendard, -apple-system, sans-serif',
+    }}>
+      <div style={{ height: 'env(safe-area-inset-top, 0px)' }} />
+      <SubAppBar title="A 투자 상품" onBack={onBack} />
+
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        {/* Bank info pill */}
+        <div style={{ padding: '8px 16px 0', display: 'flex', justifyContent: 'center' }}>
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: 4,
+            padding: '4px 12px', borderRadius: 999,
+            border: '1px solid var(--color-neutral-100)',
+          }}>
+            <img src="/icons/finance/nh-bank.svg" alt="" style={{ width: 24, height: 24 }} />
+            <span style={{ fontSize: 14, fontWeight: 500, color: 'var(--color-neutral-800)' }}>NH농협은행 김한우</span>
+            <span style={{ fontSize: 12, fontWeight: 500, color: 'var(--color-neutral-500)' }}>(5672)</span>
+            <ChevronRightIcon size={20} color="var(--color-neutral-400)" />
+          </div>
+        </div>
+
+        {/* Price display */}
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 24px' }}>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: 2 }}>
+            <span style={{ fontSize: 40, fontWeight: 600, letterSpacing: -0.4, color: quantity > 0 ? 'var(--color-neutral-900)' : 'var(--color-neutral-300)', lineHeight: '48px' }}>
+              {quantity > 0 ? quantity : '0'}
+            </span>
+            <span style={{ fontSize: 24, fontWeight: 600, color: quantity > 0 ? 'var(--color-neutral-900)' : 'var(--color-neutral-300)', lineHeight: '32px' }}>C</span>
+          </div>
+          <span style={{ fontSize: 18, fontWeight: 500, color: quantity > 0 ? 'var(--color-primary-500)' : 'var(--color-neutral-400)', lineHeight: '26px', marginTop: 4 }}>
+            {quantity > 0 ? formattedPrice : '0원'}
+          </span>
+        </div>
+
+        {/* Info rows */}
+        <div style={{ padding: '0 24px 10px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: 38, paddingBottom: 10 }}>
+            <span style={{ fontSize: 14, fontWeight: 500, color: 'var(--color-neutral-600)' }}>구매가능금액</span>
+            <span style={{ fontSize: 16, fontWeight: 500, color: 'var(--color-neutral-900)' }}>{maxAmount.toLocaleString()}원</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: 38, paddingBottom: 10 }}>
+            <span style={{ fontSize: 14, fontWeight: 500, color: 'var(--color-neutral-600)' }}>이용료</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span style={{ padding: '4px 8px', borderRadius: 20, backgroundColor: 'var(--color-primary-400)', fontSize: 10, fontWeight: 500, color: 'var(--color-neutral-050)' }}>수수료 뱅카우 지원</span>
+              <span style={{ fontSize: 16, fontWeight: 500, color: 'var(--color-neutral-900)' }}>0원</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Quick buttons */}
+        <div style={{ display: 'flex', gap: 8, padding: '10px 24px' }}>
+          {[{ label: '1C', val: 1 }, { label: '10C', val: 10 }, { label: '100C', val: 100 }, { label: '최대', val: 'max' }].map(({ label, val }) => (
+            <div key={label} onClick={() => handleQuick(val)} style={{
+              flex: 1, height: 36, borderRadius: 8,
+              backgroundColor: 'var(--color-neutral-050)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 14, fontWeight: 500, color: 'var(--color-neutral-800)',
+              cursor: 'pointer',
+            }}>{label}</div>
+          ))}
+        </div>
+
+        {/* Number pad */}
+        <div style={{ padding: '10px 24px' }}>
+          {[[1, 2, 3], [4, 5, 6], [7, 8, 9], ['', 0, 'del']].map((row, ri) => (
+            <div key={ri} style={{ display: 'flex' }}>
+              {row.map((key, ci) => (
+                <div key={ci} onClick={() => {
+                  if (key === 'del') handleDelete()
+                  else if (key !== '') handleNumber(key)
+                }} style={{
+                  flex: 1, height: 52, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  cursor: key !== '' ? 'pointer' : 'default',
+                  fontSize: 24, fontWeight: 500, color: 'var(--color-neutral-600)',
+                }}>
+                  {key === 'del' ? <DeleteIcon /> : key}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+
+        {/* Bottom button */}
+        <div style={{ padding: '10px 24px', paddingBottom: 'calc(50px + env(safe-area-inset-bottom, 0px))' }}>
+          <div onClick={quantity > 0 ? onInvest : undefined} style={{
+            height: 56, borderRadius: 10,
+            backgroundColor: quantity > 0 ? 'var(--color-primary-500)' : 'var(--color-neutral-200)',
+            color: quantity > 0 ? '#fff' : 'var(--color-neutral-400)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: 16, fontWeight: 600, cursor: quantity > 0 ? 'pointer' : 'default',
+          }}>투자하기</div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ============================================================
+// Apply Complete Screen (투자 신청 완료)
+// ============================================================
+function ApplyCompleteScreen({ onConfirm }) {
+  return (
+    <div className="v9-screen" style={{
+      width: '100%', height: '100dvh',
+      backgroundColor: 'var(--color-neutral-000)',
+      display: 'flex', flexDirection: 'column',
+      fontFamily: 'Pretendard, -apple-system, sans-serif',
+    }}>
+      <div style={{ height: 'env(safe-area-inset-top, 0px)' }} />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 24px', marginTop: -60 }}>
+        <div style={{
+          width: 60, height: 60, borderRadius: 30,
+          backgroundColor: 'var(--color-primary-500)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          marginBottom: 20,
+        }}>
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+            <path d="M5 13l4 4L19 7" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
+        <div style={{ ...T.headline24('bold'), color: 'var(--color-neutral-900)', marginBottom: 20 }}>투자 신청 완료</div>
+        <div style={{ fontSize: 16, fontWeight: 600, color: 'var(--color-neutral-600)', textAlign: 'center', lineHeight: '24px' }}>
+          투자 신청이 완료됐어요.<br />6월 12일에 체결 결과를 알려드릴게요.
+        </div>
+      </div>
+      <CTAButton label="확인" onClick={onConfirm} />
     </div>
   )
 }
