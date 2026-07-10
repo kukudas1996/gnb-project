@@ -1644,7 +1644,7 @@ function MyInvestDetailScreen({ onBack, nav, phase, initialTab }) {
   } : {
     label: '정산일',
     bigText: '약 1년 8개월 남음',
-    progress: 15, startDate: '26.06.01', endDate: '28.01 ~ 28.03',
+    progress: 0, startDate: '26.06.01', endDate: '28.01 ~ 28.03',
   }
 
   return (
