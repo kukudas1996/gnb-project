@@ -161,9 +161,9 @@ export default function V9App() {
     case 'settlement_history':
       return <SettlementHistoryScreen onBack={goBack} />
     case 'invest_apply_detail':
-      return <InvestApplyDetailScreen onBack={goBack} />
+      return <InvestApplyDetailScreen onBack={goBack} nav={nav} />
     case 'invest_settled_detail':
-      return <InvestSettledDetailScreen onBack={goBack} />
+      return <InvestSettledDetailScreen onBack={goBack} nav={nav} />
     case 'quantity_input':
       return <QuantityInputScreen onBack={goBack} onInvest={handleApply} />
     case 'apply_complete':
@@ -218,7 +218,7 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
         {(phase === 'settled' || phase === 'pre_settlement' || phase === 'settlement_complete') && !messageDismissed && (() => {
           const messages = {
             settled: { text: '3주 체결 완료됐어요', target: 'invest_settled_detail' },
-            pre_settlement: { text: '3월 21일 정산 예정이에요', target: null },
+            pre_settlement: { text: '3월 21일 정산 예정이에요', target: 'product_detail_pre_settlement' },
             settlement_complete: { text: '정산이 완료되었어요!', target: 'settlement_complete_detail' },
           }
           const msg = messages[phase]
@@ -488,7 +488,7 @@ function AssetDetailScreen({ phase, onBack, nav, phaseTransition }) {
   const quickButtons = [
     { icon: '/icons/account.svg', label: '내 계좌', target: 'my_account' },
     { icon: '/icons/calendar.svg', label: '투자내역', target: 'investment_history' },
-    { icon: '/icons/amountBag.svg', label: '정산내역', target: phase === 'settlement_complete' ? 'settlement_history' : null },
+    { icon: '/icons/amountBag.svg', label: '정산내역', target: (phase === 'settlement_complete' || phase === 'pre_settlement') ? 'settlement_history' : null },
   ]
 
   const bottomMenuItems = [
@@ -1386,7 +1386,7 @@ function InvestProductDetailSettledScreen({ onBack, phase }) {
 // ============================================================
 // Invest Apply Detail Screen (투자내역상세_신청 후)
 // ============================================================
-function InvestApplyDetailScreen({ onBack }) {
+function InvestApplyDetailScreen({ onBack, nav }) {
   return (
     <div className="v9-screen" style={{
       width: '100%', minHeight: '100dvh',
@@ -1472,13 +1472,13 @@ function InvestApplyDetailScreen({ onBack }) {
 
         {/* Action Buttons */}
         <div style={{ padding: '0 16px 24px', display: 'flex', gap: 8 }}>
-          <div style={{
+          <div onClick={() => nav && nav('product_detail_after')} style={{
             flex: 1, minHeight: 56, borderRadius: 16,
             backgroundColor: 'var(--color-neutral-050)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             ...T.body17('semibold'), color: 'var(--color-neutral-700)', cursor: 'pointer',
           }}>상품 정보</div>
-          <div style={{
+          <div onClick={() => nav && nav('product_detail_after')} style={{
             flex: 1, minHeight: 56, borderRadius: 16,
             backgroundColor: 'var(--color-neutral-050)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -1530,7 +1530,7 @@ function InvestApplyDetailScreen({ onBack }) {
 // ============================================================
 // Invest Settled Detail Screen (투자내역상세_체결)
 // ============================================================
-function InvestSettledDetailScreen({ onBack }) {
+function InvestSettledDetailScreen({ onBack, nav }) {
   return (
     <div className="v9-screen" style={{
       width: '100%', minHeight: '100dvh',
@@ -1607,7 +1607,7 @@ function InvestSettledDetailScreen({ onBack }) {
 
         {/* Action Button */}
         <div style={{ padding: '0 16px 24px' }}>
-          <div style={{
+          <div onClick={() => nav && nav('product_detail_settled')} style={{
             minHeight: 56, borderRadius: 16,
             backgroundColor: 'var(--color-neutral-050)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -1699,7 +1699,7 @@ function InvestSettlementCompleteDetailScreen({ onBack, nav }) {
 
         {/* Action Buttons */}
         <div style={{ padding: '0 16px 24px', display: 'flex', gap: 8 }}>
-          <div style={{
+          <div onClick={() => nav('product_detail_settlement_complete')} style={{
             flex: 1, minHeight: 56, borderRadius: 16,
             backgroundColor: 'var(--color-neutral-050)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
