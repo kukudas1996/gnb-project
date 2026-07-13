@@ -420,7 +420,7 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
           <div style={{ padding: '8px 0' }}>
             {/* 체결 이후 유전지수 높은 상품 추가 */}
             {(phase === 'settled' || phase === 'pre_settlement') && (
-              <ProductListItem onClick={() => nav(phase === 'pre_settlement' ? 'product_detail_pre_settlement' : 'product_detail_settled')} name="유전지수 높은 상품" remaining={phase === 'pre_settlement' ? '14일 남음' : '1년 2개월 남음'} amount="20,000원" shares="1주" img="/images/product-a.png" bgColor="#dae7ff" />
+              <ProductListItem onClick={() => nav(phase === 'pre_settlement' ? 'product_detail_pre_settlement' : 'product_detail_settled')} name="유전지수 높은 상품" remaining={phase === 'pre_settlement' ? '14일 남음' : '1년 2개월 남음'} remainingColor={phase === 'pre_settlement' ? 'var(--color-primary-500)' : undefined} amount="20,000원" shares="1주" img="/images/product-a.png" bgColor="#dae7ff" />
             )}
             <ProductListItem name="한약재 먹으며 건강히 키우는 상품" remaining="1년 5개월 남음" amount="100,000원" shares="5주" img="/images/product-herbal.png" bgColor="#fcdede" />
             <ProductListItem name="5성급 축사에서 키우는 상품" remaining="1년 8개월 남음" amount="100,000원" shares="5주" img="/images/product-premium.png" bgColor="#fbe6d0" />
@@ -609,7 +609,7 @@ function AssetDetailScreen({ phase, onBack, nav, phaseTransition }) {
 
         <div style={{ padding: '8px 0 16px' }}>
           {(phase === 'settled' || phase === 'pre_settlement') && (
-            <ProductListItem onClick={() => nav(phase === 'pre_settlement' ? 'product_detail_pre_settlement' : 'product_detail_settled')} name="유전지수 높은 상품" remaining={phase === 'pre_settlement' ? '14일 남음' : '1년 2개월 남음'} amount="20,000원" shares="1주" img="/images/product-a.png" bgColor="#dae7ff" />
+            <ProductListItem onClick={() => nav(phase === 'pre_settlement' ? 'product_detail_pre_settlement' : 'product_detail_settled')} name="유전지수 높은 상품" remaining={phase === 'pre_settlement' ? '14일 남음' : '1년 2개월 남음'} remainingColor={phase === 'pre_settlement' ? 'var(--color-primary-500)' : undefined} amount="20,000원" shares="1주" img="/images/product-a.png" bgColor="#dae7ff" />
           )}
           <ProductListItem name="한약재 먹으며 건강히 키우는 상품" remaining="1년 5개월 남음" amount="100,000원" shares="5주" img="/images/product-herbal.png" bgColor="#fcdede" />
           <ProductListItem name="5성급 축사에서 키우는 상품" remaining="1년 8개월 남음" amount="100,000원" shares="5주" img="/images/product-premium.png" bgColor="#fbe6d0" />
@@ -1208,7 +1208,7 @@ function InvestProductDetailSettledScreen({ onBack, phase, nav }) {
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>26.06.01</span>
-                  <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>28.03.21</span>
+                  <span style={{ ...(phase === 'pre_settlement' ? T.body15('semibold') : T.body15()), color: phase === 'pre_settlement' ? 'var(--color-primary-500)' : 'var(--color-neutral-600)' }}>28.03.21</span>
                 </div>
               </div>
             </div>
@@ -2413,7 +2413,7 @@ function MyPageScreen({ nav, goTab, phase }) {
 // ============================================================
 // Shared Components
 // ============================================================
-function ProductListItem({ name, remaining, amount, shares, img, bgColor, onClick }) {
+function ProductListItem({ name, remaining, amount, shares, img, bgColor, onClick, remainingColor }) {
   return (
     <div onClick={onClick} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 16, cursor: onClick ? 'pointer' : 'default' }}>
       <div style={{ width: 48, height: 48, borderRadius: 16, backgroundColor: bgColor, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0, padding: '0 2px' }}>
@@ -2422,7 +2422,7 @@ function ProductListItem({ name, remaining, amount, shares, img, bgColor, onClic
       <div style={{ display: 'flex', flex: 1, minWidth: 0, gap: 12 }}>
         <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
           <div style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', height: 25 }}>{name}</div>
-          <div style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>{remaining}</div>
+          <div style={{ ...(remainingColor ? T.body15('semibold') : T.body15()), color: remainingColor || 'var(--color-neutral-600)' }}>{remaining}</div>
         </div>
         <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'flex-end', textAlign: 'right' }}>
           <div style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>{amount}</div>
