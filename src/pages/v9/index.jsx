@@ -270,7 +270,7 @@ function HomeScreen({ phase, nav, goTab, phaseTransition, messageDismissed, onDi
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                     <div style={{ width: 88, height: 88, overflow: 'hidden', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <img src="/images/product-a.png" alt="" style={{ width: 88, height: 66, objectFit: 'cover', opacity: 0.5 }} />
+                      <img src="/images/release-upcoming-graphic.png" alt="" style={{ width: 88, height: 88, objectFit: 'contain' }} />
                     </div>
                     <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 4 }}>
                       <div style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)', lineHeight: '26px' }}>
