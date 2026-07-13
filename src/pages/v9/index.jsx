@@ -127,13 +127,15 @@ export default function V9App() {
     case 'asset_detail':
       return <AssetDetailScreen phase={phase} onBack={goBack} nav={nav} phaseTransition={phaseTransition} />
     case 'investment_history':
-      return <InvestmentHistoryScreen onBack={goBack} />
+      return <InvestmentHistoryScreen phase={phase} onBack={goBack} nav={nav} />
     case 'my_account':
       return <MyAccountScreen onBack={goBack} />
     case 'product_detail':
       return <InvestProductDetailScreen onBack={goBack} onApply={handleGoToQuantity} />
     case 'product_detail_after':
       return <InvestProductDetailAfterScreen onBack={goBack} />
+    case 'invest_apply_detail':
+      return <InvestApplyDetailScreen onBack={goBack} />
     case 'quantity_input':
       return <QuantityInputScreen onBack={goBack} onInvest={handleApply} />
     case 'apply_complete':
@@ -153,6 +155,7 @@ export default function V9App() {
 function HomeScreen({ phase, nav, goTab, phaseTransition }) {
   const [bannerIndex] = useState(0)
   const bannerCount = 5
+  const [messageDismissed, setMessageDismissed] = useState(false)
 
   return (
     <div className="v9-screen" style={{
@@ -177,6 +180,38 @@ function HomeScreen({ phase, nav, goTab, phaseTransition }) {
             </div>
           </div>
         </div>
+
+        {/* Dynamic Message - applying phase */}
+        {phase === 'applying' && !messageDismissed && (
+          <div style={{ padding: '16px 16px 0' }}>
+            <div onClick={() => nav('invest_apply_detail')} style={{
+              backgroundColor: 'var(--color-neutral-050)', borderRadius: 16,
+              display: 'flex', alignItems: 'center', overflow: 'hidden',
+              padding: '20px 9px 20px 20px', cursor: 'pointer',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: 1, minWidth: 0 }}>
+                <img src="/images/product-a.png" alt="" style={{ width: 48, height: 48, objectFit: 'cover', flexShrink: 0 }} />
+                <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
+                  <span style={{ ...T.body15(), color: 'var(--color-neutral-600)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>유전지수 높은 상품</span>
+                  <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)' }}>3주 신청 완료됐어요</span>
+                </div>
+              </div>
+              <div onClick={(e) => { e.stopPropagation(); setMessageDismissed(true) }} style={{
+                width: 52, height: 52, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, cursor: 'pointer',
+              }}>
+                <div style={{
+                  width: 30, height: 30, borderRadius: 999,
+                  backgroundColor: 'var(--color-neutral-100)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path d="M13.5 4.5L4.5 13.5M4.5 4.5L13.5 13.5" stroke="var(--color-neutral-600)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Banner */}
         <div style={{ padding: '16px 16px 0' }}>
@@ -263,7 +298,7 @@ function HomeScreen({ phase, nav, goTab, phaseTransition }) {
           <div style={{ padding: '24px 16px 0', display: 'flex', flexDirection: 'column', gap: 8 }}>
             {/* 신청 중인 투자 (applying phase only) */}
             {phase === 'applying' && (
-              <div style={{ backgroundColor: '#e8f0ff', borderRadius: 16, padding: 12, display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+              <div onClick={() => nav('invest_apply_detail')} style={{ backgroundColor: '#e8f0ff', borderRadius: 16, padding: 12, display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
                 <div style={{ display: 'flex', alignItems: 'center', flex: 1, minWidth: 0 }}>
                   <img src="/images/product-a.png" alt="" style={{ width: 43, height: 32, objectFit: 'cover', flexShrink: 0 }} />
                   <span style={{ ...T.body17('semibold'), color: 'var(--color-primary-400)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1, minWidth: 0 }}>신청 중인 투자</span>
@@ -365,18 +400,20 @@ function HomeScreen({ phase, nav, goTab, phaseTransition }) {
         </div>
       </div>
 
+      {/* Phase Transition Button - floating above tab bar */}
+      {phaseTransition && (
+        <div onClick={phaseTransition.onClick} style={{
+          position: 'fixed', bottom: 'calc(77px + env(safe-area-inset-bottom, 0px) + 8px)',
+          left: '50%', transform: 'translateX(-50%)', zIndex: 21,
+          borderRadius: 1000, backgroundColor: 'var(--color-neutral-700)',
+          padding: '6px 12px',
+          display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+          ...T.label13('semibold'), color: '#fff', cursor: 'pointer',
+        }}>{phaseTransition.label}</div>
+      )}
+
       {/* TabBar */}
-      <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, backgroundColor: 'var(--color-neutral-000)', borderTop: '1px solid var(--color-neutral-050)', zIndex: 20, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        {/* Phase Transition Button */}
-        {phaseTransition && (
-          <div onClick={phaseTransition.onClick} style={{
-            marginTop: 8,
-            borderRadius: 1000, backgroundColor: 'var(--color-neutral-700)',
-            padding: '6px 12px',
-            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-            ...T.label13('semibold'), color: '#fff', cursor: 'pointer',
-          }}>{phaseTransition.label}</div>
-        )}
+      <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, backgroundColor: 'var(--color-neutral-000)', borderTop: '1px solid var(--color-neutral-050)', zIndex: 20 }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', padding: '4px 20px 0', width: '100%' }}>
           <TabBarItem icon="home" label="홈" selected />
           <TabBarItem icon="shopping" label="상점" onClick={() => goTab('shopping')} />
@@ -431,7 +468,7 @@ function AssetDetailScreen({ phase, onBack, nav, phaseTransition }) {
         {/* 신청 중인 투자 + 계좌 잔액 */}
         <div style={{ padding: '24px 16px 0', display: 'flex', flexDirection: 'column', gap: 8 }}>
           {phase === 'applying' && (
-            <div style={{ backgroundColor: '#e8f0ff', borderRadius: 16, padding: 12, display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+            <div onClick={() => nav('invest_apply_detail')} style={{ backgroundColor: '#e8f0ff', borderRadius: 16, padding: 12, display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
               <div style={{ display: 'flex', alignItems: 'center', flex: 1, minWidth: 0 }}>
                 <img src="/images/product-a.png" alt="" style={{ width: 43, height: 32, objectFit: 'cover', flexShrink: 0 }} />
                 <span style={{ ...T.body17('semibold'), color: 'var(--color-primary-400)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1, minWidth: 0 }}>신청 중인 투자</span>
@@ -502,7 +539,7 @@ function AssetDetailScreen({ phase, onBack, nav, phaseTransition }) {
 // ============================================================
 // Investment History Screen (투자 내역)
 // ============================================================
-function InvestmentHistoryScreen({ onBack }) {
+function InvestmentHistoryScreen({ phase, onBack, nav }) {
   const historyData = [
     {
       date: '26년 1월 14일',
@@ -541,6 +578,28 @@ function InvestmentHistoryScreen({ onBack }) {
             </div>
           </div>
         </div>
+
+        {/* 신청 중인 투자 */}
+        {phase === 'applying' && (
+          <>
+            <div style={{ padding: '16px 16px 0' }}>
+              <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>신청 중인 투자</span>
+            </div>
+            <div style={{ paddingBottom: 16 }}>
+              <div onClick={() => nav('invest_apply_detail')} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 16, cursor: 'pointer' }}>
+                <div style={{ width: 48, height: 48, borderRadius: 16, backgroundColor: '#dae7ff', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0, padding: '0 2px' }}>
+                  <img src="/images/product-a.png" alt="" style={{ width: '100%', aspectRatio: '40/30', objectFit: 'cover' }} />
+                </div>
+                <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
+                  <div style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>유전지수 높은 상품</div>
+                  <div style={{ ...T.body15(), color: 'var(--color-primary-500)' }}>60,000원 신청중</div>
+                </div>
+                <ChevronRightIcon size={20} color="var(--color-neutral-400)" />
+              </div>
+            </div>
+            <div style={{ height: 12, backgroundColor: 'var(--color-neutral-050)' }} />
+          </>
+        )}
 
         {/* Title */}
         <div style={{ padding: '24px 16px 0' }}>
@@ -703,6 +762,150 @@ function InvestProductDetailAfterScreen({ onBack }) {
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           ...T.body17('semibold'), color: '#fff', cursor: 'pointer',
         }}>추가 투자</div>
+      </div>
+    </div>
+  )
+}
+
+// ============================================================
+// Invest Apply Detail Screen (투자내역상세_신청 후)
+// ============================================================
+function InvestApplyDetailScreen({ onBack }) {
+  return (
+    <div className="v9-screen" style={{
+      width: '100%', minHeight: '100dvh',
+      backgroundColor: 'var(--color-neutral-000)',
+      fontFamily: 'Pretendard, -apple-system, sans-serif',
+    }}>
+      <div className="v9-scroll" style={{ height: '100dvh', overflowY: 'auto', overflowX: 'hidden' }}>
+        <div style={{ height: 'env(safe-area-inset-top, 0px)' }} />
+
+        {/* AppBar */}
+        <div style={{ position: 'sticky', top: 0, zIndex: 10, backgroundColor: 'var(--color-neutral-000)' }}>
+          <SubAppBar title="" onBack={onBack} />
+        </div>
+
+        {/* Header */}
+        <div style={{ padding: '16px 16px 28px', display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{
+              width: 36, height: 36, borderRadius: 12,
+              backgroundColor: '#dae7ff',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              overflow: 'hidden', flexShrink: 0,
+            }}>
+              <img src="/images/product-a.png" alt="" style={{ width: '100%', aspectRatio: '40/30', objectFit: 'cover' }} />
+            </div>
+            <span style={{ ...T.body17(), color: 'var(--color-neutral-700)', flex: 1, minWidth: 0 }}>유전지수 높은 상품</span>
+          </div>
+          <div style={{ fontSize: 28, fontWeight: 700, lineHeight: '36px', color: 'var(--color-neutral-900)', textTransform: 'capitalize' }}>
+            3주 투자 신청
+          </div>
+        </div>
+
+        {/* Timeline */}
+        <div style={{ padding: '0 16px 28px' }}>
+          {/* Step 1 - 신청 (active) */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, flex: 1, minWidth: 0 }}>
+              {/* Check icon */}
+              <div style={{
+                width: 36, height: 36, flexShrink: 0,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+                  <circle cx="18" cy="18" r="18" fill="var(--color-primary-500)" />
+                  <path d="M12 18L16 22L24 14" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-800)' }}>신청</div>
+                <div style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>취소 가능</div>
+              </div>
+            </div>
+            <span style={{ ...T.body17(), color: 'var(--color-neutral-800)', textAlign: 'center', whiteSpace: 'nowrap' }}>26.06.01</span>
+          </div>
+
+          {/* Connector */}
+          <div style={{ padding: '4px 0', display: 'flex', alignItems: 'center', justifyContent: 'center', width: 36 }}>
+            <div style={{ width: 3, height: 24, borderRadius: 99, backgroundColor: 'var(--color-neutral-100)' }} />
+          </div>
+
+          {/* Step 2 - 체결 (inactive) */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, flex: 1, minWidth: 0 }}>
+              <div style={{
+                width: 36, height: 36, flexShrink: 0,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <div style={{
+                  width: 30, height: 30, borderRadius: 100,
+                  backgroundColor: 'var(--color-neutral-100)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  ...T.body17('semibold'), color: 'var(--color-neutral-500)',
+                }}>2</div>
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ ...T.title20('semibold'), color: 'var(--color-neutral-600)' }}>체결</div>
+                <div style={{ ...T.body15(), color: 'var(--color-neutral-500)' }}>취소 불가능</div>
+              </div>
+            </div>
+            <span style={{ ...T.body17(), color: 'var(--color-neutral-600)', textAlign: 'center', whiteSpace: 'nowrap' }}>26.06.12</span>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div style={{ padding: '0 16px 24px', display: 'flex', gap: 8 }}>
+          <div style={{
+            flex: 1, minHeight: 56, borderRadius: 16,
+            backgroundColor: 'var(--color-neutral-050)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            ...T.body17('semibold'), color: 'var(--color-neutral-700)', cursor: 'pointer',
+          }}>상품 정보</div>
+          <div style={{
+            flex: 1, minHeight: 56, borderRadius: 16,
+            backgroundColor: 'var(--color-neutral-050)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            ...T.body17('semibold'), color: 'var(--color-neutral-700)', cursor: 'pointer',
+          }}>추가 투자</div>
+        </div>
+
+        {/* Divider */}
+        <div style={{ height: 12, backgroundColor: 'var(--color-neutral-050)' }} />
+
+        {/* 신청 내역 */}
+        <div style={{ padding: '24px 16px 0', display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <span style={{ ...T.title20('bold'), color: 'var(--color-neutral-900)' }}>신청 내역</span>
+          <span style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>모집율에 따라 일부만 체결될 수 있어요</span>
+        </div>
+
+        {/* Detail rows */}
+        <div style={{ padding: '12px 0 16px' }}>
+          {[
+            { label: '최초 신청 시간', value: '2026.06.01 22:21' },
+            { label: '신청 금액', value: '60,000원' },
+            { label: '신청 수량', value: '3주' },
+            { label: '체결 예정일', value: '26.06.12' },
+          ].map((row, idx) => (
+            <div key={idx} style={{
+              display: 'flex', alignItems: 'center', gap: 12, padding: 16,
+              ...T.body17(), color: 'var(--color-neutral-700)',
+            }}>
+              <span style={{ flex: 1, minWidth: 0 }}>{row.label}</span>
+              <span style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)', textAlign: 'right', whiteSpace: 'nowrap' }}>{row.value}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* 투자 취소하기 */}
+        <div style={{ padding: '0 16px 50px' }}>
+          <div style={{
+            minHeight: 56, borderRadius: 16,
+            backgroundColor: 'var(--color-neutral-050)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            ...T.body17('semibold'), color: 'var(--color-red-500)', cursor: 'pointer',
+          }}>투자 취소하기</div>
+        </div>
       </div>
     </div>
   )
