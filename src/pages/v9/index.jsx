@@ -555,7 +555,7 @@ function AssetDetailScreen({ phase, onBack, nav, phaseTransition }) {
 
         <div style={{ padding: '8px 0 16px' }}>
           {(phase === 'settled' || phase === 'pre_settlement') && (
-            <ProductListItem onClick={() => nav('invest_settled_detail')} name="유전지수 높은 상품" remaining="1년 2개월 남음" amount="20,000원" shares="1주" img="/images/product-a.png" bgColor="#dae7ff" />
+            <ProductListItem onClick={() => nav('product_detail_settled')} name="유전지수 높은 상품" remaining="1년 2개월 남음" amount="20,000원" shares="1주" img="/images/product-a.png" bgColor="#dae7ff" />
           )}
           <ProductListItem name="한약재 먹으며 건강히 키우는 상품" remaining="1년 5개월 남음" amount="100,000원" shares="5주" img="/images/product-herbal.png" bgColor="#fcdede" />
           <ProductListItem name="5성급 축사에서 키우는 상품" remaining="1년 8개월 남음" amount="100,000원" shares="5주" img="/images/product-premium.png" bgColor="#fbe6d0" />
@@ -590,25 +590,25 @@ function InvestmentHistoryScreen({ phase, onBack, nav }) {
     ...((phase === 'settled' || phase === 'pre_settlement') ? [{
       date: '26년 6월 1일',
       items: [
-        { name: '유전지수 높은 상품', desc: '20,000원 체결 완료', img: '/images/product-a.png', bgColor: '#dae7ff' },
+        { name: '유전지수 높은 상품', desc: '20,000원 체결 완료', img: '/images/product-a.png', bgColor: '#dae7ff', target: 'invest_settled_detail' },
       ],
     }] : []),
     {
       date: '26년 1월 14일',
       items: [
-        { name: '유전지수 높은 상품', desc: '20,000원 체결 완료', img: '/images/product-herbal.png', bgColor: '#fcdede' },
+        { name: '유전지수 높은 상품', desc: '20,000원 체결 완료', img: '/images/product-herbal.png', bgColor: '#fcdede', target: null },
       ],
     },
     {
       date: '26년 1월 12일',
       items: [
-        { name: '유전지수 높은 상품', desc: '40,000원 투자 취소', img: '/images/product-herbal.png', bgColor: '#fcdede' },
+        { name: '유전지수 높은 상품', desc: '40,000원 투자 취소', img: '/images/product-herbal.png', bgColor: '#fcdede', target: null },
       ],
     },
     {
       date: '25년 12월 21일',
       items: [
-        { name: '유전지수 높은 상품', desc: '20,000원 체결 완료', img: '/images/product-premium.png', bgColor: '#fbe6d0' },
+        { name: '유전지수 높은 상품', desc: '20,000원 체결 완료', img: '/images/product-premium.png', bgColor: '#fbe6d0', target: null },
       ],
     },
   ]
@@ -669,7 +669,7 @@ function InvestmentHistoryScreen({ phase, onBack, nav }) {
 
               {/* Items */}
               {group.items.map((item, ii) => (
-                <div key={ii} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 16 }}>
+                <div key={ii} onClick={item.target ? () => nav(item.target) : undefined} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 16, cursor: item.target ? 'pointer' : 'default' }}>
                   <div style={{ width: 48, height: 48, borderRadius: 16, backgroundColor: item.bgColor, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
                     <img src={item.img} alt="" style={{ width: 44, height: 33, objectFit: 'cover' }} />
                   </div>
@@ -677,6 +677,7 @@ function InvestmentHistoryScreen({ phase, onBack, nav }) {
                     <div style={{ ...T.body17('semibold'), color: 'var(--color-neutral-800)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.name}</div>
                     <div style={{ ...T.body15(), color: 'var(--color-neutral-600)' }}>{item.desc}</div>
                   </div>
+                  {item.target && <ChevronRightIcon size={20} color="var(--color-neutral-400)" />}
                 </div>
               ))}
 
